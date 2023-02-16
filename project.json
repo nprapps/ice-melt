@@ -1,0 +1,37 @@
+{
+  "s3": {
+    "stage": {
+      "bucket": "stage-apps.npr.org",
+      "path": "artful-letter"
+    },
+    "live": {
+      "bucket": "apps.npr.org",
+      "path": "ice-melt"
+    }
+  },
+  "styles": {
+    "src/css/seed.less": "build/style.css"
+  },
+  "scripts": {
+    "src/js/main.js": "build/app.js"
+  },
+  "title": "",
+  "description": "",
+  "url": "",
+  "image": "assets/logo.png",
+  "analytics": {
+    "topicIDs": [],
+    "primaryTopic": "",
+    "secondaryTopics": []
+  },
+  "sheets": [],
+  "docs": {
+    "quiz": "1F4Lk8wpvWWYZzUMIgKCyPhbd3hm4Ix_W31TVvOnj1Vo",
+    "alaska": "1S-kxXaIekaMqa2KwPgotvkt25_7AaQMTneyW3uTwu-4",
+    "antarctica": "1UewnGInq_l8qgyABtPNGzoo0Bl2Ne06FY2Abtn9MLfg",
+    "greenland": "15iZ1hKhs22-Rr9-VozIUWnbqpLAF3d_ur3It23S7rXk",
+    "nepal": "1eMVL88MHOx_TnX4Cy88MRE6IsY5ccqX-Yr5H8wUltJg"
+  },
+  "embedded": true,
+  "production": false
+}
