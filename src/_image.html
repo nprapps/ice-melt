@@ -1,0 +1,17 @@
+<section class="image slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="image">
+  <img
+    class="backdrop"
+    data-src="./assets/synced/images/<%= slide.image %>"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor
+    }) %>"
+  >
+  <% if (slide.inset) { %>
+  <img class="inset" src="./assets/synced/<%= slide.inset%>" alt="">
+  <% } %>
+  <% if (slide.credit) { %>
+  <span class="watermark" alt=""><%=slide.credit%></span>
+  <% } %>
+  <%= t.include("partials/_text.html", { slide }) %>
+</section>

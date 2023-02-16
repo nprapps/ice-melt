@@ -10,7 +10,11 @@
     }
   },
   "styles": {
-    "src/css/seed.less": "build/style.css"
+    "src/css/seed-alaska.less": "build/alaska.css",
+    "src/css/seed-antarctica.less": "build/antarctica.css",
+    "src/css/seed-greenland.less": "build/greenland.css",
+    "src/css/seed-nepal.less": "build/nepal.css",
+    "src/css/seed-quiz.less": "build/quiz.css"
   },
   "scripts": {
     "src/js/main.js": "build/app.js"

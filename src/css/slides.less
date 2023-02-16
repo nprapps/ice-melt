@@ -1,0 +1,305 @@
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// weird flex but okay
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.slide {
+  clear: right;
+  position: relative;
+  overflow: hidden;
+
+  a, a:visited {
+    color: #ccc;
+    text-decoration: none;
+  }
+
+  a:hover, a:active, a:focus {
+    color: #ccc;
+  }
+
+  &.section-opener {
+    // .content::first-letter {
+    //   font-size: 200%;
+    //   // font-family: @serif;
+    //   line-height: 1;
+    //   vertical-align: baseline;
+    //   // float: left;
+    //   margin-right: 4px;
+    // }
+
+    b {
+      .sourceSansPro-upper();
+      font-size: 1.6rem;
+      padding-right: 2px;
+      color: #fff;
+    }
+  }
+
+  .backdrop {
+    position: absolute;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    animation: none;
+  }
+
+  @media @mobile-above {
+    &.opposing {
+
+      .content {
+        // max-width: none;
+      }
+
+      .text {
+        // margin-left: 0;
+      }
+
+      &.align-left {
+        .backdrop {
+          left: auto;
+          right: 50%;
+          transform: translateX(100%);
+        }
+
+        .text {
+          // margin-right: 0;
+          // margin-left: auto;
+        }
+      }
+
+      .image-container {
+        margin: 20px;
+      }
+    }
+
+    .align-left, .align-right {
+      .content {
+        width: 50%;
+      }
+    }
+
+    .align-left {
+      .content {
+        float: left;
+      }
+    }
+
+    .align-right {
+      .content {
+        float: right;
+      }
+    }
+  }
+
+  @media screen and (min-width: 501px) and (max-width: 800px) {
+    &.opposing {
+      .backdrop {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
+        }
+      }
+  }
+
+  @media screen and (min-width: 801px) {
+    &.opposing {
+      .backdrop {
+        width: 50%;
+        max-width: 800px;
+        left: 50%;
+        transform: translateX(-100%);
+        flex-direction: column
+      }
+    }
+  }
+
+  .inset {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    max-width: 50%;
+    display: none;
+    z-index: -1;
+    border: 3px solid white;
+  }
+
+  .watermark {
+    position: fixed;
+    display: none;
+    text-shadow: @textShadow;
+    font-style: italic;
+    padding: 5px 10px;
+    right: 0;
+    bottom: 0;
+    text-align: right;
+    background: rgba(0, 0, 0, 0.5);
+
+    @media @mobile {
+      font-size: 12px;
+    }
+  }
+
+  .boot-complete & .backdrop {
+    position: fixed;
+    opacity: 0;
+    display: none;
+  }
+
+  &.exiting {
+    .backdrop {
+      display: block;
+      animation: fade-out .2s linear;
+      opacity: 0;
+    }
+  }
+
+  &.active {
+    .backdrop {
+      display: block;
+      animation: fade-in .2s linear;
+      opacity: 1;
+    }
+
+    .watermark,
+    .inset {
+      display: block;
+    }
+  }
+
+  &.map {
+    .backdrop {
+      animation: none;
+      opacity: 1;
+      object-fit: contain !important;
+    }
+  }
+
+  .text {
+    clear: both;
+    .lato();
+    font-size: 17px;
+    padding: 24px;
+    background: fade(#222, 90%);
+    color: #eee;
+    box-shadow: 0 24px 8px -8px fade(black, 20%);
+    margin-bottom: 60px;
+    margin: 5vh 40px 90vh;
+    max-width: 500px;
+    float: right;
+
+    .align-left& {
+      float: left;
+    }
+
+    .align-center& {
+      float: none;
+      margin: 5vh auto 90vh;
+
+      @media screen and (max-width: 760px){
+        margin: 5vh 20px 90vh;
+      }
+    }
+
+    .city-locator {
+      border: 1px solid white;
+
+      & + p {
+        margin-top: 0;
+        font-size: 80%;
+      }
+    }
+
+    @media screen and (max-width: 760px){
+      width: auto;
+      font-size: 16px;
+      padding: 20px;
+      margin: 0;
+      margin: 5vh 20px 90vh;
+    }
+  }
+
+  .caption {
+    font-size: 80%;
+    padding-top: 20px;
+    font-style: italic;
+
+    i { font-style: normal; }
+
+    @media @mobile {
+      padding-top: 10px;
+    }
+  }
+
+  &.image {
+    .backdrop {
+      object-fit: cover;
+    }
+  }
+
+  .fade {
+    height: 40vh;
+    background-image: linear-gradient(to bottom, transparent, #111);
+
+    #title-the-gobi-desert& {
+      height: 90vh;
+    }
+  }
+
+
+  &.chart h1 {
+    .lato();
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    margin-top: 35px;
+    margin-bottom: 10px;
+  }
+
+  &.chart h2 {
+    .lato();
+    font-size: 13px;
+    color: white;
+  }
+
+  @media @mobile {
+    &.contain {
+      .backdrop {
+        object-fit: contain;
+      }
+    }
+  }
+
+  .pullquote {
+    border-left: 3px solid @accent-dark;
+    margin-left: 15px;
+    padding: 10px;
+  }
+
+}
+
+// cropped styles for certain img backdrops
+@media @mobile-above {
+  #melilla-naji, #intro-serigne-kayar {
+    .backdrop  {
+      object-fit: contain;
+      display: block;
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      left: auto;
+      right: 0;
+    }
+  }
+}

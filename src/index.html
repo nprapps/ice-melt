@@ -7,15 +7,124 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
 <html lang="en-US">
   <head>
     <%= t.include("partials/_head.html", grunt.data.json) %>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="quiz.css">
   </head>
   <body>
     
-    <%
-      doc.sequence.forEach(function(slide) {
-        console.log(slide);
-      });
-    %>
+    <main class="sequence">
+
+      <header class="splash image slide">
+        <img
+          src="./assets/synced/images/<%= doc.intro.image %>"
+          class="backdrop"
+          alt=""
+          <%if (doc.intro.anchor) { %>style="object-position: <%= doc.intro.anchor %>"<% } %>
+        >
+
+        <div class="darken">
+          <div class="chatter">
+            <img class="logo" src="./assets/logo-outline.svg" alt="NPR">
+            <h1><%= doc.intro.headline %></h1>
+            <%= t.renderMarkdown(doc.intro.chatter) %>
+            <div class="bylines">
+              Published <%= doc.intro.published %>
+            </div>
+          </div>
+
+          <div class="a11y-controls">
+            <input type="checkbox" checked="checked" id="autoplay-video-hdr">
+            <label for="autoplay-video-hdr">Autoplay video?</label>
+          </div>
+
+          <div class="scroll-bug" aria-hidden="true">
+            scroll
+            <svg viewBox="0 0 50 50" width="50" height="25">
+              <path
+                d="M 0,0 L 25,25 50,0"
+              ></path>
+            </svg>
+          </div>
+
+        </div>
+      </header>
+
+      <%
+        doc.sequence.forEach(function(slide) {
+          if (slide.type == "skip") return;
+          print(t.include(`_${slide.type || "image"}.html`, { slide }));
+        });
+      %>
+
+    </main>
+
+    <footer class="closing">
+      
+      <div class="more-stories">
+        <div class="constrained">
+          <h3><%= renderMarkdownText(doc.footer.outboundTitle) %></h3>
+
+          <ul class="outbound">
+            <% doc.footer.outbound.forEach(function(link) { %>
+              <li>
+                <a href="<%= link.url %>">
+                  <img src="./assets/synced/thumbnails/<%= link.thumbnail %>" alt="">
+                  <%= renderMarkdownText(link.title) %>
+                </a>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about">
+        <div class="constrained">
+
+          <div class="side-by-side">
+
+            <div class="block">
+
+              <h4><%= doc.footer.digitalCreditHeadline %></h4>
+              <ul class="credits">
+                <% doc.footer.digitalCredits.forEach(function(credit) { %>
+                <li><%= credit %></li>
+                <% }) %>
+              </ul>
+
+            </div>
+
+            <div class="block">
+
+              <h4><%= doc.footer.additionalCreditHeadline %></h4>
+              <%= t.renderMarkdown(doc.footer.additionalCredits) %>
+
+              <h4><%= doc.footer.dataCreditHeadline %></h4>
+              <ul class="credits">
+                <% doc.footer.dataSources.forEach(function(credit) { %>
+                <li><%= t.renderMarkdown(credit) %></li>
+                <% }) %>
+              </ul>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="constrained">
+        <%= typeof content != "undefined" ? content : "" %>
+        <div class="npr">
+          <ul>
+            <li><a href="https://www.npr.org/about-npr/179876898/terms-of-use" target="_blank">Terms of Use</a></li>
+            <li><a href="https://www.npr.org/about-npr/179878450/privacy-policy" target="_blank">Privacy</a></li>
+            <li><a href="https://www.npr.org/about-npr/179878450/privacy-policy#yourchoices" target="_blank">Your Privacy Choices</a></li>
+            <li><a href="https://text.npr.org/" target="_blank">Text Only</a></li>
+            <li>&copy; 2023 NPR</li>
+          </ul>
+        </div>
+      </div>
+      
+    </footer>
 
     <script>
         window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;

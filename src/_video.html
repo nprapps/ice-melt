@@ -1,0 +1,21 @@
+<section class="video slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
+  <video
+    data-src="./assets/synced/videos/<%= slide.video %>"
+    data-poster="./assets/synced/videos/<%= slide.video %>.jpg"
+    class="backdrop"
+    autoplay
+    playsinline
+    muted
+    loop
+  ></video>
+  <div class="watermark" alt="">
+    <div class="a11y-controls">
+      <input type="checkbox" checked="checked" id="autoplay-video-<%= slide.id %>">
+      <label for="autoplay-video-<%= slide.id %>">Autoplay video?</label>
+    </div>
+     <% if (slide.credit) { %>
+    <%=slide.credit%>
+    <% } %>
+  </div>
+  <%= t.include("partials/_text.html", { slide }) %>
+</section>
