@@ -36,6 +36,6 @@
     "greenland": "15iZ1hKhs22-Rr9-VozIUWnbqpLAF3d_ur3It23S7rXk",
     "nepal": "1eMVL88MHOx_TnX4Cy88MRE6IsY5ccqX-Yr5H8wUltJg"
   },
-  "embedded": true,
+  "embedded": false,
   "production": false
 }
