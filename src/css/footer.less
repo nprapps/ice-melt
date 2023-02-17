@@ -36,30 +36,17 @@ footer.closing {
 
     .constrained {
       padding: 20px;
-      // background: fade(@accent-dark, 20%);
       background: rgba(34, 34, 34, 0.9);
       border-radius: 4px;
       backdrop-filter: blur(8px);
       border: 2px solid @accent-light;
-      border-bottom: 0;
-
-      &:after {
-        content: ""; 
-        display: block; 
-        height: 15px; 
-        background-image: url("./assets/synced/images/headline-edge-yellow.png");
-        position: relative; 
-        width: calc(100% + 42px);
-        left: -20px;
-        bottom: -22px; 
-      }
     }
 
     h3 {
-      .sourceSansPro-upper();
+      .sourceSansPro-header();
       color: @white;
-      font-size: 1.4rem;
-      margin: 0 0 20px 0;
+      font-size: 1.2rem;
+      margin: 0 0 0 0;
       text-align: center;
     }
 
@@ -85,31 +72,33 @@ footer.closing {
     }
   }
 
-
   .outbound {
     .lato();
     list-style-type: none;
     padding: 0;
     margin: 0 0 11px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: center;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
 
-    @media screen and (min-width: 770px) {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      text-align: center;
-      margin-bottom: 22px;
+    @media screen and @tablet-above {
+      flex-wrap: nowrap;
     }
 
     li {
       display: block;
-      margin: 0;
+      margin: 15px 0 0 0;
+      padding: 0;
 
-      @media screen and (max-width: 769px) {
-        + li { margin-top: 6px; }
+      @media screen and @tablet {
+        width: calc(50% - 11px);
       }
 
-      @media screen and (min-width: 770px) {
-        margin: 0 16px;
+      @media screen and @tablet-above {
+        width: calc(25% - 11px);
       }
     }
 
@@ -117,18 +106,7 @@ footer.closing {
       display: block;
       margin-bottom: 14px;
       background: fade(white, 20%);
-
-      @media screen and (max-width: 769px) and (min-width: 501px) {
-        margin-right: 11px;
-        max-width: 150px;
-        float: left;
-      }
-
-      @media @mobile {
-        margin-right: 11px;
-        max-width: 100%;
-        float: left;
-      }
+      max-width: 100%;
     }
 
     a {
@@ -140,70 +118,7 @@ footer.closing {
       &:hover, &:active, &:focus {
         // color: lighten(@more-stories,40%);
       }
-
-      @media @mobile {
-        margin-bottom: 25px; 
-      }
     }
-  }
-
-    .saint-louis-promo {
-    display: flex;
-    padding: 15px;
-
-    video {
-      max-width: 500px; 
-
-      @media @mobile {
-        max-width: 100%;
-        margin-bottom: 10px;
-      }
-    }
-
-    @media @mobile {
-      display: block;
-      padding: 0px;
-      margin-bottom: 25px;
-
-      img {
-        max-width: 100%;
-      }
-    }
-
-    .saint-louis-text {
-      text-align: left;
-      margin-left: 15px; 
-
-      @media @mobile {
-        margin-left: 0; 
-      }
-
-      .saint-louis-title {
-        font-weight: bold;
-        margin-bottom: 10px; 
-        font-size: 16px; 
-      }
-
-      .saint-louis-desc {
-        margin-bottom: 10px; 
-        color: @gray-intermediate;
-      }
-
-      //  a {
-      //   color: @accent-light;
-      // }
-
-      // a[href], a[href]:visited {
-      //   color: @accent-light;
-      //   text-decoration: none;
-      // }
-
-      // a[href]:hover, a[href]:active, a[href]:focus {
-      //   color: @accent-dark;
-      // }
-
-    }
-
   }
 
   .social {
@@ -309,17 +224,6 @@ footer.closing {
     @media @mobile {
       margin-bottom: 40px;
     }
-  }
-
-  img.logo-airbus {
-    display: block;
-    height: 26px;
-    width: auto;
-    opacity: 0.5;
-    float: right;
-    margin-top: 5px;
-    border: 1px solid #454545;
-    padding: 7px;
   }
 
   .npr {
