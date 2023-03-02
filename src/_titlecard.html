@@ -1,28 +1,33 @@
-<section class="video titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
+<section class="video splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
   <% if (slide.video) { %>
   <video
-    data-src="./assets/synced/videos/<%= slide.video %>"
-    data-poster="./assets/synced/videos/<%= slide.video %>.jpg"
+    src="./assets/synced/video/resized/<%=slide.video%>"
+    poster="./assets/synced/video/resized/<%=slide.video%>.jpg"
     class="backdrop"
-    autoplay
-    playsinline
     muted
     loop
+    playsinline
+    autoplay
   ></video>
   <% } %>
-  <div class="watermark" alt="">
-    <div class="a11y-controls">
-      <input type="checkbox" checked="checked" id="autoplay-video-<%= slide.id %>">
-      <label for="autoplay-video-<%= slide.id %>">Autoplay video?</label>
+
+  <div class="darken">
+    <div class="chatter">
+      <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
+      <h1><%= slide.headline %></h1>
+      <%= t.renderMarkdown(slide.text) %>
     </div>
-     <% if (slide.credit) { %>
-    <%=slide.credit%>
-    <% } %>
+
+    <div class="scroll-bug" aria-hidden="true">
+      scroll
+      <svg viewBox="0 0 50 50" width="50" height="25">
+        <path d="M 0,0 L 25,25 50,0"></path>
+      </svg>
+    </div>
+
+    <div class="a11y-controls">
+      <input type="checkbox" checked="checked" id="autoplay-video">
+      <label for="autoplay-video">Autoplay video?</label>
+    </div>
   </div>
-  <% if (slide.headline) { %>
-    <h1><%= t.renderMarkdown(slide.headline) %></h1>
-  <% } %>
-  <% if (slide.text) { %>
-    <p><%= t.renderMarkdown(slide.text) %></p>
-  <% } %>
 </section>
