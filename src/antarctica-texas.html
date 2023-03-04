@@ -13,41 +13,6 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
     
     <main class="sequence">
 
-      <header class="splash image slide">
-        <img
-          src="./assets/synced/images/resized/<%= doc.intro.image %>"
-          class="backdrop"
-          alt=""
-          <%if (doc.intro.anchor) { %>style="object-position: <%= doc.intro.anchor %>"<% } %>
-        >
-
-        <div class="darken">
-          <div class="chatter">
-            <img class="logo" src="./assets/logo-outline.svg" alt="NPR">
-            <h1><%= doc.intro.headline %></h1>
-            <%= t.renderMarkdown(doc.intro.chatter) %>
-            <div class="bylines">
-              Published <%= doc.intro.published %>
-            </div>
-          </div>
-
-          <div class="a11y-controls">
-            <input type="checkbox" checked="checked" id="autoplay-video-hdr">
-            <label for="autoplay-video-hdr">Autoplay video?</label>
-          </div>
-
-          <div class="scroll-bug" aria-hidden="true">
-            scroll
-            <svg viewBox="0 0 50 50" width="50" height="25">
-              <path
-                d="M 0,0 L 25,25 50,0"
-              ></path>
-            </svg>
-          </div>
-
-        </div>
-      </header>
-
       <%
         doc.sequence.forEach(function(slide) {
           if (slide.type == "skip") return;
