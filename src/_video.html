@@ -1,13 +1,15 @@
-<section class="video slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
-  <video
-    data-src="./assets/synced/videos/<%= slide.video %>"
-    data-poster="./assets/synced/videos/<%= slide.video %>.jpg"
-    class="backdrop"
-    autoplay
-    playsinline
-    muted
-    loop
-  ></video>
+<section class="video slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
+  <div class="video-container">
+    <video
+      data-src="./assets/synced/video/resized/<%= slide.video %>"
+      data-poster="./assets/synced/video/resized/<%= slide.video %>.jpg"
+      class="backdrop"
+      autoplay
+      playsinline
+      muted
+      loop
+    ></video>
+  </div>
   <div class="watermark" alt="">
     <div class="a11y-controls">
       <input type="checkbox" checked="checked" id="autoplay-video-<%= slide.id %>">

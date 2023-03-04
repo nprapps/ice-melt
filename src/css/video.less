@@ -27,6 +27,20 @@
     }
   }
 
+  &.opposing {
+    .backdrop {
+      object-fit: contain;
+    }
+
+    @media @mobile-above {
+      .backdrop {
+        width: 50%;
+        left: 50%;
+        transform: translate(-100%, -50%);
+      }
+    }
+  }
+
   h2 {
     margin: auto;
     text-align: center;

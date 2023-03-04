@@ -24,9 +24,19 @@ With those installed, you can then set the project up using your terminal:
 Processing photo/video assets
 -----------------------------
 
-TKTK
+In terminal, run ``bash process_assets.sh`` from the main folder to compress photo and video assets. This script uses ffmpeg and ImageMagick.
 
-Compressed files will be saved to ``src/assets/synced/`` (sync to S3 using ``grunt sync``).
+You will need:
+
+* Put your original full-res images in ``/src/assets/synced/img/``
+* Put your original videos in ``/src/assets/synced/video/``
+
+In the filenames:
+
+* Delete any spaces or unnecessary strings like "Copy of"
+* Lower-case the file extensions (`mp4` not `MP4`)
+
+Compressed files will be saved to ``src/assets/synced/MEDIA_TYPE/resized/`` (sync to S3 using ``grunt sync``).
 
 
 Running tasks
@@ -119,6 +129,13 @@ To letterbox an image on desktop and on mobile, add this param:
 
 
 To remove letterboxing, remove that param if it's there.
+
+**Show two images side-by-side**
+
+.. code::
+
+  type: image
+  diptych: Nepal-5.jpg, Nepal-6.jpg
 
 
 Troubleshooting
