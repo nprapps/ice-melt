@@ -37,36 +37,36 @@ for img in *.jpeg; do
 done
 
 # handle silenced video
-# cd ../video
-# mkdir -p resized
-# for video in *.mp4; do
-#   echo "Processing $video..."
+cd ../video
+mkdir -p resized
+for video in *.mp4; do
+  echo "Processing $video..."
 
-#   # create the videos
-#   # if [ ! -f $video ]; then
-#     ffmpeg -n -nostats -hide_banner -loglevel $ffmpeg_log \
-#     -i $video \
-#     -an \
-#     -vcodec libx264 \
-#     -preset veryslow \
-#     -strict -2 \
-#     -pix_fmt yuv420p \
-#     -crf 29 \
-#     -vf scale=1400:-2 \
-#     -movflags +faststart \
-#     resized/$video;
-#   # fi
+  # create the videos
+  # if [ ! -f $video ]; then
+    ffmpeg -n -nostats -hide_banner -loglevel $ffmpeg_log \
+    -i $video \
+    -an \
+    -vcodec libx264 \
+    -preset veryslow \
+    -strict -2 \
+    -pix_fmt yuv420p \
+    -crf 29 \
+    -vf scale=1500:-2 \
+    -movflags +faststart \
+    resized/$video;
+  # fi
 
-#   # create posters
-#   # if [ ! -f $video.jpg ]; then
-#     ffmpeg -n -nostats -hide_banner -loglevel $ffmpeg_log \
-#     -i $video \
-#     -vf scale=1400:-2 \
-#     -qscale:v 4 \
-#     -frames:v 1 \
-#     resized/$video.jpg;
-#   # fi
-# done
+  # create posters
+  # if [ ! -f $video.jpg ]; then
+    ffmpeg -n -nostats -hide_banner -loglevel $ffmpeg_log \
+    -i $video \
+    -vf scale=1600:-2 \
+    -qscale:v 4 \
+    -frames:v 1 \
+    resized/$video.jpg;
+  # fi
+done
 
 # convert satellite images
 # cd ../map-images
