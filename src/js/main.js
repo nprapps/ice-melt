@@ -24,8 +24,6 @@ if (isOne) {
 
 // quiz setup
 var onQuizButtonClicked = function(evt) {
-  console.log(this, evt);
-
   // flag that this question has been answered
   var qParent = this.parentNode.parentNode.parentNode;
   qParent.dataset.answered = true;
@@ -50,7 +48,9 @@ var onQuizButtonClicked = function(evt) {
 
   // smoothscroll to the next slide?
   var nextSlide = document.getElementById(qParent.nextElementSibling.id);
-  nextSlide.scrollIntoView({ behavior: "smooth" });
+  setTimeout(() => {
+    nextSlide.scrollIntoView({ behavior: "smooth" })
+  }, 600);
 }
 
 var quizSlides = document.querySelectorAll(".quiz");
