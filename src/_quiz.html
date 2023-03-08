@@ -1,0 +1,55 @@
+<section class="quiz align-<%= slide.align || "center" %> <% if (slide.image) { %>image<% } %> <% if (slide.video) { %>video<% } %> slide <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>">
+  <% if (slide.image) { %>
+  <img
+    src="./assets/synced/images/resized/<%= slide.image %>"
+    class="backdrop"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"
+  >
+  <% } %>
+  <% if (slide.video) { %>
+    <div class="video-container">
+    <video
+      data-src="./assets/synced/video/resized/<%= slide.video %>"
+      data-poster="./assets/synced/video/resized/<%= slide.video %>.jpg"
+      class="backdrop"
+      autoplay
+      playsinline
+      muted
+      loop
+    ></video>
+  </div>
+  <div class="watermark" alt="">
+    <div class="a11y-controls">
+      <input type="checkbox" checked="checked" id="autoplay-video-<%= slide.id %>">
+      <label for="autoplay-video-<%= slide.id %>">Autoplay video?</label>
+    </div>
+     <% if (slide.credit) { %>
+    <%=slide.credit%>
+    <% } %>
+  </div>
+  <% } %>
+  <div class="text">
+    <!-- <div class="divider"></div> -->
+    <div class="content">
+      <%= t.renderMarkdown(slide.text) %>
+    </div>
+
+    <% if (slide.answers) { %>
+    <div class="answers">
+      <% slide.answers.forEach(function(answer) { %>
+        <button data-status="<%= answer.status %>"><%= answer.label %></button>
+      <% }); %>
+    </div>
+    <% } %>
+
+    <% if (slide.caption) { %>
+    <div class="caption">
+      <%= t.renderMarkdown(slide.caption) %>
+    </div>
+    <% } %>
+  </div>
+</section>
