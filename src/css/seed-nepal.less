@@ -1,2 +1,17 @@
 @import "base";
 @import "seed";
+
+.graphic img { pointer-events: none; }
+
+// ai2html artboard sizes
+@media screen and (min-width: 729px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium, #g-_ice-diagram-lake-small, #g-_ice-diagram-lake-medium { display: none; }
+}
+
+@media screen and (max-width: 728px) and (min-width: 410px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-wide, #g-_ice-diagram-lake-small, #g-_ice-diagram-lake-wide { display: none; }
+}
+
+@media screen and (max-width: 409px) {
+    #g-_ice-diagram-flood-medium, #g-_ice-diagram-flood-wide, #g-_ice-diagram-lake-medium, #g-_ice-diagram-lake-wide { display: none; }
+}
