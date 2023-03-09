@@ -3,6 +3,13 @@ var track = require("./lib/tracking");
 require("./video");
 require("./analytics");
 
+// setup map
+var map = require("./map");
+var magicMap =  $("div.magic-map")[0];
+
+console.log("map div is: ");
+console.log(magicMap);
+
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -68,10 +75,22 @@ var activateSlide = function(slide) {
   if (active == slide) return;
   
   if (active) {
+
     var exiting = active;
+        console.log("activateSlide exiting slide ")
+
+    console.log(exiting);
+    console.log(exiting.classList);
     active.classList.remove("active");
     active.classList.add("exiting");
     setTimeout(() => exiting.classList.remove("exiting"), 1000);
+    //also remove magic map depending on slide type
+    if(exiting.classList.contains("map-block") && !slide.classList.contains("map-block")) {
+      magicMap.classList.remove("active");
+      magicMap.classList.add("exiting");
+      setTimeout(() => magicMap.classList.remove("exiting"), 1000);
+    }
+
   } 
 
   // force video playback
@@ -95,8 +114,18 @@ var activateSlide = function(slide) {
     })
   });
 
+  console.log('activating slide ');
+  console.log(slide);
+
   slide.classList.add("active");
   slide.classList.remove("exiting");
+  console.log(slide.classList);
+  //also activate magic map depending on slide type
+  if(slide.classList.contains("map-block")) {
+    console.log('ADDING ACTIVE TO MAP-BLOCK')
+    magicMap.classList.add("active");
+    magicMap.classList.remove("exiting");
+  }
 
   active = slide;
 
