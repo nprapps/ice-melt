@@ -1,6 +1,7 @@
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
+require("./map_helpers")
 
 
 let mapdata;
@@ -8,7 +9,7 @@ let mapdata;
 let width = 800, height = 600;
 let mapX=40; // 0 / 360 = Greenwhich England, values increase to the west
 let mapY=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
-let mapscale = 300; // might be better to fit to screen
+let mapscale = 200; // might be better to fit to screen
 
 let transition_milliseconds = 1000;
 let svg;
@@ -19,6 +20,7 @@ var grid;
 var feature ;
 var land;
 var lines;
+var lines_drawn = false;
 
 var sphere = ({type: "Sphere"});
 
@@ -32,6 +34,10 @@ let geoGenerator = d3.geoPath()
 
 
 let graticule = d3.geoGraticule10()
+
+
+var oldOnload = window.onload;
+window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
 function addDiscreteListeners() {
 	console.log("addDiscreteListeners");
@@ -62,14 +68,28 @@ function addDiscreteListeners() {
 }
 
 var updateMap = {
-	zoomStepOne: function () {
-		console.log("updateMap: zoomStepOne");
-		rundemo();
+	mapStepOne: function () {
+		zoomto(300, -45, 40)
 	},
-	zoomStepOneBackwards: function () {
-		console.log("updateMap: zoomStepOneBackwards");
-		rundemo();
+	mapStepOneBackwards: function () {
+		zoomto(200, -45, 40)
 
+	},
+	mapStepTwo: function () {
+		drawlines();
+		zoomto(400, -45, 40)
+
+	},
+	mapStepTwoBackwards: function () {
+		hidelines();
+		zoomto(300, -45, 40)
+	},
+	mapStepThree: function () {
+		zoomto(500, -60, 10)
+
+	},
+	mapStepThreeBackwards: function () {
+		zoomto(400, -45, 40)
 	}
 }
 
@@ -147,17 +167,17 @@ function initialize_map() {
 
 
 
-	function geoCurvePath(curve, projection, context) {
+function geoCurvePath(curve, projection, context) {
 	  return object => {
 	    const pathContext = context === undefined ? d3.path() : context;
 	    d3.geoPath(projection, curveContext(curve(pathContext)))(object);
 	    return context === undefined ? pathContext + "" : undefined;
 	  };
-	}
+}
 
   //let path = getCurvePath(d3.curveBasisClosed, projection);
 
-	function curveContext(curve) {
+function curveContext(curve) {
 	  return {
 	    moveTo(x, y) {
 	      curve.lineStart();
@@ -170,9 +190,69 @@ function initialize_map() {
 	      curve.lineEnd();
 	    }
 	  };
-	}
-  
-// push this somewhere else eventually 
+}
+
+var path = geoCurvePath(d3.curveBasisClosed, projection);
+var path2 = geoCurvePath(d3.curveLinear, projection);
+
+function drawlines() {
+	  lines.attr("d", d => path2(d))
+	  lines_drawn = true;
+
+}
+function hidelines() {
+	  lines_drawn = false;
+	  lines.attr("d", d => 0);
+
+
+}
+
+function setmap(map_scale, map_lat, map_lng) {
+
+	//console.log("set map: scale=" + map_scale + " lat: " + map_lat + " map lng: " + map_lng);
+
+ 	projection.scale(map_scale);
+ 	projection.rotate([map_lat, map_lng])
+
+  mapX = map_lng;
+  mapY = map_lat;
+  mapscale = map_scale;
+
+  grid.attr("d", path(graticule));
+  outline.attr("d", path(sphere));
+  feature.attr("d", path(land));
+  if (lines_drawn) {
+  	lines.attr("d", d => path2(d))
+  	}
+}
+
+function interpolate(x0, x1, t) {
+  return (x0 + t*(x1-x0));
+}
+
+
+async function zoomto(mapScale, newmaplat, newmapY) {
+  currentMapX = mapX;
+  currentMapY = mapY;
+  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
+  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+  await d3.transition()
+        .duration(transition_milliseconds)
+        .tween("render", () => t => {
+          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t) );
+        })
+      .end();
+}
+
+function rundemo() {
+  console.log("\nRun transition");
+
+  var newmapY = 10+100*Math.random();
+  var newmaplat = -20-50*Math.random();
+
+  zoomto(mapscale, newmaplat, newmapY);
+
+}
 
 function applyPencilFilterTextures(svg) {
   
@@ -181,7 +261,6 @@ function applyPencilFilterTextures(svg) {
   // Add back if there are arrowheads
   //defs.html(arrowHead)
 
-  
   var roughPaper = defs.append("filter");
 
   roughPaper
@@ -351,62 +430,3 @@ function applyPencilFilterTextures(svg) {
     .attr("in2", "f6")
     .attr("result", "out2");
 }
-
-  //
-
-var path = geoCurvePath(d3.curveBasisClosed, projection);
-var path2 = geoCurvePath(d3.curveLinear, projection);
-
-function setmap(map_scale, map_lat, map_lng) {
-
-	//console.log("set map: scale=" + map_scale + " lat: " + map_lat + " map lng: " + map_lng);
-
- 	projection.scale(map_scale);
- 	projection.rotate([map_lat, map_lng])
-
-  mapX = map_lng;
-  mapY = map_lat;
-
-  grid.attr("d", path(graticule));
-  outline.attr("d", path(sphere));
-  feature.attr("d", path(land));
-
-  lines.attr("d", d => path2(d))
-
-}
-
-function interpolate(x0, x1, t) {
-  return (x0 + t*(x1-x0));
-}
-
-// function interpolatezoom(t) {
-//   return mapScale ;
-// }
-
-async function zoomto(mapScale, newmaplat, newmapY) {
-  currentMapX = mapX;
-  currentMapY = mapY;
-  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
-  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
-  await d3.transition()
-        .duration(transition_milliseconds)
-        .tween("render", () => t => {
-          setmap(mapScale, interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t) );
-        })
-      .end();
-}
-
-function rundemo() {
-  console.log("\nRun transition");
-
-  var newmapY = 10+100*Math.random();
-  var newmaplat = -20-50*Math.random();
-
-  zoomto(mapscale, newmaplat, newmapY);
-
-}
-
-
-
-var oldOnload = window.onload;
-window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
