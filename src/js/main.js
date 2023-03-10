@@ -7,9 +7,6 @@ require("./analytics");
 var map = require("./map");
 var magicMap =  $("div.magic-map")[0];
 
-console.log("map div is: ");
-console.log(magicMap);
-
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -77,10 +74,6 @@ var activateSlide = function(slide) {
   if (active) {
 
     var exiting = active;
-        console.log("activateSlide exiting slide ")
-
-    console.log(exiting);
-    console.log(exiting.classList);
     active.classList.remove("active");
     active.classList.add("exiting");
     setTimeout(() => exiting.classList.remove("exiting"), 1000);
@@ -114,15 +107,10 @@ var activateSlide = function(slide) {
     })
   });
 
-  console.log('activating slide ');
-  console.log(slide);
-
   slide.classList.add("active");
   slide.classList.remove("exiting");
-  console.log(slide.classList);
   //also activate magic map depending on slide type
   if(slide.classList.contains("map-block")) {
-    console.log('ADDING ACTIVE TO MAP-BLOCK')
     magicMap.classList.add("active");
     magicMap.classList.remove("exiting");
   }

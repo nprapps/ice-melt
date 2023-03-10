@@ -3,7 +3,7 @@ div.magic-map.outer {
 	opacity: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 1;
+	z-index: -1;
 
 	&.exiting {
 	    animation: fade-out .2s linear;
@@ -36,3 +36,27 @@ div.magic-map.outer {
 	}
 }
 
+
+svg {
+  overflow: visible !important;
+}
+
+  #earth {
+    filter: drop-shadow(0px 0px 3px #333);     
+  }
+  g#lineBox {
+    filter: url(#pencilTexture);
+  }
+  
+  .lines {
+    filter: drop-shadow(0px 10px 3px #333);         
+    stroke: #df6927;
+    stroke-width: 5px;
+    stroke-linecap: round;
+  }
+
+  .cold {
+    filter: drop-shadow(0px 2px 1px #333);
+    stroke: #6b8bec;
+  }
+    
