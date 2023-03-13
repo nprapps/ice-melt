@@ -1,4 +1,4 @@
-<section class="video splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
+<section class="<% if (slide.video) { %>video<% } %> <% if (slide.image) { %>image<% } %> splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
   <% if (slide.video) { %>
   <video
     src="./assets/synced/video/resized/<%=slide.video%>"
@@ -11,11 +11,23 @@
   ></video>
   <% } %>
 
+  <% if (slide.image) { %>
+    <img
+      class="backdrop"
+      data-src="./assets/synced/images/resized/<%= slide.image %>"
+      alt=""
+      style="<%= t.style({
+        "object-position": slide.anchor,
+        "object-fit": slide.constrain
+      }) %>"
+    >
+  <% } %>
+
+  <% if (slide.credit) { %>
   <div class="watermark" alt="">
-    <% if (slide.credit) { %>
-      <%=slide.credit%>
-    <% } %>
+    <%=slide.credit%>
   </div>
+  <% } %>
 
   <div class="darken">
     <div class="chatter">
@@ -31,9 +43,11 @@
       </svg>
     </div>
 
+    <% if (slide.video) { %>
     <div class="a11y-controls">
       <input type="checkbox" checked="checked" id="autoplay-video">
       <label for="autoplay-video">Autoplay video?</label>
     </div>
+    <% } %>
   </div>
 </section>
