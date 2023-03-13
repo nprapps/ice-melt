@@ -11,6 +11,12 @@
   ></video>
   <% } %>
 
+  <div class="watermark" alt="">
+    <% if (slide.credit) { %>
+      <%=slide.credit%>
+    <% } %>
+  </div>
+
   <div class="darken">
     <div class="chatter">
       <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
