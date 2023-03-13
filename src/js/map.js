@@ -35,6 +35,16 @@ let geoGenerator = d3.geoPath()
 
 let graticule = d3.geoGraticule10()
 
+var labels = [{
+	    Name: "Chicago",
+	    Latitude: "-41.53",
+	    Longitude: "87.38"
+	}, {
+	    Name: "Green Bay",
+	    Latitude: "-44.3",
+	    Longitude: "88.01"
+	}]
+
 
 var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
@@ -67,6 +77,8 @@ function addDiscreteListeners() {
 	});
 }
 
+
+// zoomto expects scale,lat,lng where n is lat<0
 var updateMap = {
 	mapStepOne: function () {
 		zoomto(300, -45, 40)
@@ -135,17 +147,15 @@ function initialize_map() {
 	    .attr("fill","#eeeeee")
 	    .attr("filter", "url(#pencilTexture3");
 
-	  let topology = mapdata;
 
-	  console.log("topojson is");
-	  console.log(topojson);
+	  let topology = mapdata;
 
 	  topology = topojson.presimplify(topology);
 	  topology = topojson.simplify(topology, minArea);
 
 	  land = topojson.feature(topology, topology.objects.land);
 
-	  d3.json('./assets/lines.geojson').then(function(linesRaw) {
+	  d3.json('./assets/lines2.geojson').then(function(linesRaw) {
 	    console.log('adding linesraw');
 	    console.log(linesRaw);
 	    linebox = svg.append("g").attr("id","lineBox");
@@ -155,17 +165,11 @@ function initialize_map() {
 	        .attr("class",d => `lines ${d.properties.class}`)
 	        .attr("stroke","#0789ad")
 	    setmap(mapscale, mapX, mapY);
-
 	  }); 
 
 
-
-	  });
-
+	});
 }
-
-
-
 
 function geoCurvePath(curve, projection, context) {
 	  return object => {
@@ -174,8 +178,6 @@ function geoCurvePath(curve, projection, context) {
 	    return context === undefined ? pathContext + "" : undefined;
 	  };
 }
-
-  //let path = getCurvePath(d3.curveBasisClosed, projection);
 
 function curveContext(curve) {
 	  return {
@@ -196,16 +198,66 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function drawlines() {
-	  lines.attr("d", d => path2(d))
+	
+	//lines.attr("d", d => path2(d));
+	lines.attr("d", d => d);
+
+	console.log(lines);
+
+
 	  lines_drawn = true;
 
 }
+
 function hidelines() {
 	  lines_drawn = false;
 	  lines.attr("d", d => 0);
 
 
 }
+
+////
+
+
+function transition(path) {
+    lines.transition()
+        .duration(7500)
+        .attrTween("stroke-dasharray", tweenDash)
+        .each("end", function() {
+            d3.select(this).call(transition);// infinite loop
+            ptFeatures.style("opacity", 0)
+        }); 
+
+
+} 
+
+function tweenDash() {
+
+    return function(t) {
+        // In original version of this post the next two lines of JS were
+        // outside this return which led to odd behavior on zoom
+        // Thanks to Martin Raifer for the suggested fix.
+
+        //total length of path (single value)
+        var l = line.node().getTotalLength(); 
+        interpolate = d3.interpolateString("0," + l, l + "," + l); 
+
+        //t is fraction of time 0-1 since transition began
+        var marker = d3.select("#marker");
+        
+        // p is the point on the line (coordinates) at a given length
+        // along the line. In this case if l=50 and we're midway through
+        // the time then this would 25.
+        var p = line.node().getPointAtLength(t * l);
+
+        //Move the marker to that point
+        marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); //move marker
+        return interpolate(t);
+    }
+}
+
+
+////
 
 function setmap(map_scale, map_lat, map_lng) {
 
@@ -341,10 +393,10 @@ function applyPencilFilterTextures(svg) {
     .attr("result", "f3");
 
   var pencilTexture3 = defs.append("filter")
-  .attr("x", "0%")
-  .attr("y", "0%")
-  .attr("width", "100%")
-  .attr("height", "100%")
+  .attr("x", "-40%")
+  .attr("y", "-40%")
+  .attr("width", "140%")
+  .attr("height", "140%")
   .attr("filterUnits", "objectBoundingBox")
   .attr("id", "pencilTexture3");
   pencilTexture3.append("feTurbulence")
