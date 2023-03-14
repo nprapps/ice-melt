@@ -1,0 +1,13 @@
+<figure class="audio">
+  <figcaption><%= slide.audioLabel || "" %></figcaption>
+  <audio
+    id="<%= slide.id %>-audio"
+    preload="metadata"
+    src="./assets/synced/audio/<%= slide.audio %>"
+    controls
+  >
+    <% if (slide.audioCaptions) { %>
+    <track default kind="captions" src="./assets/synced/audio/<%= slide.audioCaptions %>"></track>
+    <% } %>
+  </audio>
+</figure>
