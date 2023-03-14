@@ -7,7 +7,11 @@
     controls
   >
     <% if (slide.audioCaptions) { %>
-    <track default kind="captions" src="./assets/synced/audio/<%= slide.audioCaptions %>"></track>
+    <track default 
+      kind="captions" 
+      srclang="en"
+      src="./assets/synced/audio/<%= slide.audioCaptions %>">
+    </track>
     <% } %>
   </audio>
 </figure>

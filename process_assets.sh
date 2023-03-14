@@ -80,6 +80,13 @@ for audio in *.mp3; do
     lame -m s -b 96 $audio resized/$audio;
   fi
 done
+for audio in *.wav; do
+  # create the audio
+  if [ ! -f resized/$audio.mp3 ]; then
+    echo "Processing $audio..."
+    lame -m s -b 96 $audio resized/$audio.mp3;
+  fi
+done
 
 # convert satellite images
 # cd ../map-images

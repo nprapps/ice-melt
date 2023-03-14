@@ -1,7 +1,10 @@
 var $ = require("./lib/qsa")
 var track = require("./lib/tracking");
-require("./video");
 require("./analytics");
+
+// elements
+require("./video");
+require("./closed-captions/closed-captions");
 
 // setup map
 var map = require("./map");
