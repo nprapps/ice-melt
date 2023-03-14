@@ -97,7 +97,7 @@ var updateMap = {
 		zoomto(300, -45, 40)
 	},
 	mapStepThree: function () {
-		zoomto(500, -60, 10)
+		zoomto(500, -60, 15)
 
 	},
 	mapStepThreeBackwards: function () {
@@ -155,7 +155,7 @@ function initialize_map() {
 
 	  land = topojson.feature(topology, topology.objects.land);
 
-	  d3.json('./assets/lines2.geojson').then(function(linesRaw) {
+	  d3.json('./assets/lines.geojson').then(function(linesRaw) {
 	    console.log('adding linesraw');
 	    console.log(linesRaw);
 	    linebox = svg.append("g").attr("id","lineBox");
@@ -163,7 +163,12 @@ function initialize_map() {
 	      .data(linesRaw.features.reverse())
 	        .join("path")
 	        .attr("class",d => `lines ${d.properties.class}`)
-	        .attr("stroke","#0789ad")
+	       	//.attr("filter", "url(#f1");
+
+	        
+
+
+
 	    setmap(mapscale, mapX, mapY);
 	  }); 
 
@@ -212,8 +217,6 @@ function drawlines() {
 function hidelines() {
 	  lines_drawn = false;
 	  lines.attr("d", d => 0);
-
-
 }
 
 ////
@@ -231,6 +234,9 @@ function transition(path) {
 
 } 
 
+
+
+// not working yet
 function tweenDash() {
 
     return function(t) {
@@ -305,6 +311,20 @@ function rundemo() {
   zoomto(mapscale, newmaplat, newmapY);
 
 }
+
+
+//    .lines {
+//     filter: drop-shadow(0px 10px 3px #333);         
+//     stroke: #df6927;
+//     stroke-width: 5px;
+//     stroke-linecap: round;
+//   }
+
+//   .cold {
+//     filter: drop-shadow(0px 2px 1px #333);
+//     stroke: #6b8bec;
+//   }
+
 
 function applyPencilFilterTextures(svg) {
   
@@ -391,6 +411,36 @@ function applyPencilFilterTextures(svg) {
     .attr("in2", "f2")
     .attr("in", "SourceGraphic")
     .attr("result", "f3");
+
+  var hotShadow = defs.append("filter")
+	  .attr("x", "-100")
+	  .attr("y", "-100")
+	  .attr("width", "1000")
+	  .attr("height", "1000")
+	  .attr("filterUnits", "userSpaceOnUse")
+	  .attr("id", "hotShadow");
+
+	hotShadow.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 5)
+      .attr('result', 'blur');
+
+    hotShadow.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', 10)
+      .attr('dy', 3)
+      .attr('result', 'offOut');
+
+// <filter id="f1" x="0" y="0" width="200%" height="200%">
+//       <feOffset result="offOut" in="SourceGraphic" dx="20" dy="20" />
+//       <feBlend in="SourceGraphic" in2="offOut" mode="normal" />
+//     </filter>
+
+
+  //     filter: drop-shadow(0px 10px 3px #333);         
+//     stroke: #df6927;
+//     stroke-width: 5px;
+//     stroke-linecap: round;
 
   var pencilTexture3 = defs.append("filter")
   .attr("x", "-40%")
