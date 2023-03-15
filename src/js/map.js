@@ -387,7 +387,7 @@ function applyPencilFilterTextures(svg) {
     .attr("result", "f2");
   pencilTexture3.append("feComposite")
     .attr("operator", "in")
-    .attr("in2", "f2b")
+    .attr("in2", "f2")
     .attr("in", "SourceGraphic")
     .attr("result", "f3");
   pencilTexture3.append("feTurbulence")
