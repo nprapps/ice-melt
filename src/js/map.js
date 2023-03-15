@@ -9,7 +9,7 @@ let mapdata;
 let width = 800, height = 600;
 let mapX=40; // 0 / 360 = Greenwhich England, values increase to the west
 let mapY=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
-let mapscale = 200; // might be better to fit to screen
+let mapscale = 200; // Initial scale, might be better to fit to screen
 
 let transition_milliseconds = 1000;
 let svg;
@@ -31,7 +31,6 @@ let projection = d3.geoOrthographic().precision(0.1);
 
 let geoGenerator = d3.geoPath()
 .projection(projection);
-
 
 let graticule = d3.geoGraticule10()
 
@@ -97,7 +96,7 @@ var updateMap = {
 		zoomto(300, -45, 40)
 	},
 	mapStepThree: function () {
-		zoomto(500, -60, 15)
+		zoomto(500, -60, 20)
 
 	},
 	mapStepThreeBackwards: function () {
@@ -109,12 +108,8 @@ var updateMap = {
 
 
 function initialize_map() {
-	console.log("initialize_map");
 
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
-
-		console.log("mapdata returned: ");
-		console.log(mapdata);
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])
 		    .attr("fill", "none")
@@ -156,19 +151,11 @@ function initialize_map() {
 	  land = topojson.feature(topology, topology.objects.land);
 
 	  d3.json('./assets/lines.geojson').then(function(linesRaw) {
-	    console.log('adding linesraw');
-	    console.log(linesRaw);
 	    linebox = svg.append("g").attr("id","lineBox");
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
 	        .attr("class",d => `lines ${d.properties.class}`)
-	       	//.attr("filter", "url(#f1");
-
-	        
-
-
-
 	    setmap(mapscale, mapX, mapY);
 	  }); 
 
@@ -203,15 +190,8 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function drawlines() {
-	
-	//lines.attr("d", d => path2(d));
 	lines.attr("d", d => d);
-
-	console.log(lines);
-
-
-	  lines_drawn = true;
-
+	lines_drawn = true;
 }
 
 function hidelines() {
@@ -219,9 +199,7 @@ function hidelines() {
 	  lines.attr("d", d => 0);
 }
 
-////
-
-
+// not working yet
 function transition(path) {
     lines.transition()
         .duration(7500)
@@ -233,8 +211,6 @@ function transition(path) {
 
 
 } 
-
-
 
 // not working yet
 function tweenDash() {
@@ -262,13 +238,7 @@ function tweenDash() {
     }
 }
 
-
-////
-
 function setmap(map_scale, map_lat, map_lng) {
-
-	//console.log("set map: scale=" + map_scale + " lat: " + map_lat + " map lng: " + map_lng);
-
  	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
 
@@ -287,7 +257,6 @@ function setmap(map_scale, map_lat, map_lng) {
 function interpolate(x0, x1, t) {
   return (x0 + t*(x1-x0));
 }
-
 
 async function zoomto(mapScale, newmaplat, newmapY) {
   currentMapX = mapX;
@@ -313,19 +282,7 @@ function rundemo() {
 }
 
 
-//    .lines {
-//     filter: drop-shadow(0px 10px 3px #333);         
-//     stroke: #df6927;
-//     stroke-width: 5px;
-//     stroke-linecap: round;
-//   }
-
-//   .cold {
-//     filter: drop-shadow(0px 2px 1px #333);
-//     stroke: #6b8bec;
-//   }
-
-
+// MUCH OF THIS CAN BE REMOVED 
 function applyPencilFilterTextures(svg) {
   
   const defs = svg.append("defs");
@@ -411,37 +368,6 @@ function applyPencilFilterTextures(svg) {
     .attr("in2", "f2")
     .attr("in", "SourceGraphic")
     .attr("result", "f3");
-
-  var hotShadow = defs.append("filter")
-	  .attr("x", "-100")
-	  .attr("y", "-100")
-	  .attr("width", "1000")
-	  .attr("height", "1000")
-	  .attr("filterUnits", "userSpaceOnUse")
-	  .attr("id", "hotShadow");
-
-	hotShadow.append('feGaussianBlur')
-      .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 5)
-      .attr('result', 'blur');
-
-    hotShadow.append('feOffset')
-      .attr('in', 'blur')
-      .attr('dx', 10)
-      .attr('dy', 3)
-      .attr('result', 'offOut');
-
-// <filter id="f1" x="0" y="0" width="200%" height="200%">
-//       <feOffset result="offOut" in="SourceGraphic" dx="20" dy="20" />
-//       <feBlend in="SourceGraphic" in2="offOut" mode="normal" />
-//     </filter>
-
-
-  //     filter: drop-shadow(0px 10px 3px #333);         
-//     stroke: #df6927;
-//     stroke-width: 5px;
-//     stroke-linecap: round;
-
   var pencilTexture3 = defs.append("filter")
   .attr("x", "-40%")
   .attr("y", "-40%")
