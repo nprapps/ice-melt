@@ -1,0 +1,20 @@
+<section class="ai2html slide <%= slide.id %>" id="<%= slide.id %>">
+
+  <div class="backdrop">
+        <div class="frame"><%= t.include(`ai2html/_${slide.id}-0.html`, { slide }) %></div>
+        <div class="frame"><%= t.include(`ai2html/_${slide.id}-1.html`, { slide }) %></div>
+        <div class="frame"><%= t.include(`ai2html/_${slide.id}-2.html`, { slide }) %></div>
+  </div>
+
+  <div class="text">
+    <div class="content">
+      <%= t.renderMarkdown(slide.text) %>
+    </div>
+    <% if (slide.caption) { %>
+    <div class="caption">
+      <%= slide.caption %>
+    </div>
+    <% } %>
+  </div>
+
+</section>

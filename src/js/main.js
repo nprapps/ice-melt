@@ -7,6 +7,11 @@ require("./analytics");
 var map = require("./map");
 var magicMap =  $("div.magic-map")[0];
 
+// setup ice illo animation
+var lakeAnimSlide = $.one(".ice-diagram-lake.slide");
+var lakeAnimFrames = $(".ice-diagram-lake.slide .frame");
+console.log(lakeAnimFrames)
+
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -130,6 +135,26 @@ var onScroll = function() {
     var slide = slides[i];    
     var bounds = slide.getBoundingClientRect();
     if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
+
+      // trigger nepal ice illo animation
+      if (slide == lakeAnimSlide && !reducedMotion.matches) {
+        lakeAnimFrames = lakeAnimFrames.filter(function(frame, n) {
+          var bounds = frame.getBoundingClientRect();
+          if (bounds.top < window.innerHeight  * .8) {
+            setTimeout(function(){ 
+                frame.classList.add('show'); 
+              }, n == 0 ? 100 : n * 600);
+
+            if (n < 2) {
+              setTimeout(function(){ 
+                  frame.classList.remove('show'); 
+                }, n == 0 ? 600 : n * 1200);
+            }
+            return false;
+          }
+          return true; 
+        })
+      }
 
       var complete = ((slides.length - i) / slides.length * 100) | 0;
       if (complete > completion) {
