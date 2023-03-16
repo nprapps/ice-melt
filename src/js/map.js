@@ -263,10 +263,16 @@ async function zoomto(mapScale, newmaplat, newmapY) {
   currentMapY = mapY;
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+  var steps = 0;
+  var start = performance.now();
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
           setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t) );
+          var elapsed = performance.now() - start;
+          var avg = elapsed / steps;
+          console.log("tween step " +  steps + " time: " + elapsed + " avg: " + avg);
+          steps++;
         })
       .end();
 }
