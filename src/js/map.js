@@ -150,7 +150,7 @@ function initialize_map() {
 
 	  land = topojson.feature(topology, topology.objects.land);
 
-	  d3.json('./assets/lines.geojson').then(function(linesRaw) {
+	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
 	    linebox = svg.append("g").attr("id","lineBox");
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
