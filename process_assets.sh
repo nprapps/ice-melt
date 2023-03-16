@@ -58,6 +58,21 @@ for video in *.mp4; do
     resized/$video;
   fi
 
+  if [ ! -f resized/mobile-$video ]; then
+    echo "Processing mobile version of $video..."
+    ffmpeg -n -nostats -hide_banner -loglevel $ffmpeg_log \
+    -i $video \
+    -an \
+    -vcodec libx264 \
+    -preset veryslow \
+    -strict -2 \
+    -pix_fmt yuv420p \
+    -crf 29 \
+    -vf scale=800:-2 \
+    -movflags +faststart \
+    resized/mobile-$video;
+  fi
+
   # create posters
   if [ ! -f resized/$video.jpg ]; then
     echo "Processing poster image for $video..."
