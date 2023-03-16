@@ -32,11 +32,23 @@
     #g-_ice-diagram-lake-2-medium, #g-_ice-diagram-lake-2-wide { display: none; }
 }
 
+  @keyframes post-appear {
+    from {
+      display: none;
+    }
+    to {
+      display: block;
+    }
+  }
+
 #ice-diagram-lake {
     .frame {
         display: none;
 
-        &.show { display: block; }
+        &.show { 
+            display: block;
+            animation: post-appear 0.5s ease-in;
+        }
     }
 }
 
