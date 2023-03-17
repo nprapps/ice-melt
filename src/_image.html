@@ -17,6 +17,19 @@
   >
   <% } %>
 
+  <% if (slide.illo) { %>
+  <img
+    class="backdrop"
+    data-src="./assets/synced/illos/<%= slide.illo %>"
+    alt=""
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"
+  >
+  <% } %>
+
+
   <% if (slide.diptych) { %>
     <div class="diptych backdrop">
       <% diptych.forEach(function(img) { %>
