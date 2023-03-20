@@ -133,14 +133,14 @@ function initialize_map() {
 	  
 	  grid = svg.append("path")
 	    .attr("stroke-width","0.5px")
-	    .attr("stroke","#eee")
-	    .attr("filter", "url(#pencilTexture4");
+	    .attr("stroke","#ddd")
+	    //.attr("filter", "url(#pencilTexture4");
 	  
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
 	    .attr("stroke-width", "3px")
 	    .attr("fill","#eeeeee")
-	    .attr("filter", "url(#pencilTexture3");
+	    //.attr("filter", "url(#pencilTexture3");
 
 
 	  let topology = mapdata;
