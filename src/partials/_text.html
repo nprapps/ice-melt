@@ -5,11 +5,17 @@
     <div class="content">
       <%= t.renderMarkdown(d.text) %>
     </div>
+
+    <% if (d.audio) { %>
+      <%= t.include(`partials/_audio.html`, { "slide": d }) %>
+    <% } %>
+
     <% if (d.caption) { %>
     <div class="caption">
       <span class="sr-only">Caption:</span> <%= d.caption %>
     </div>    
     <% } %>
+
     <% if (slide.legend) { %>
       <%= t.include(`legends/_${slide.id}.html`, { slide }) %>
     <% } %>
