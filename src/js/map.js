@@ -121,7 +121,7 @@ function initialize_map() {
 		svg.append("rect")
     		.style("fill", "white")
     		.attr('x', -400) 
-            .attr('y', -400) 
+        .attr('y', -400) 
     		.attr("width", 5000)
     		.attr("height", 5000);
 		
@@ -241,6 +241,7 @@ function tweenDash() {
 function setmap(map_scale, map_lat, map_lng) {
  	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
+  projection.translate([width / 2, height / 2]) 
 
   mapX = map_lng;
   mapY = map_lat;
