@@ -215,7 +215,7 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 			var desired_coordinate_count = Math.floor(num_coords * tween_arg);
 			// can we afford this? 
 			var arg_copy = JSON.parse(JSON.stringify(arg));
-			arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(1, desired_coordinate_count);
+			arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(0, desired_coordinate_count);
 
 			return path2(arg_copy);
 		} else {
