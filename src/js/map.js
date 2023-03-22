@@ -21,6 +21,7 @@ var feature ;
 var land;
 var lines;
 var lines_drawn = false;
+let segments_visible = [1,];
 
 var sphere = ({type: "Sphere"});
 
@@ -87,6 +88,7 @@ var updateMap = {
 
 	},
 	mapStepTwo: function () {
+		segments_visible = [1];
 		drawlines();
 		zoomto(400, -45, 40)
 
@@ -96,11 +98,37 @@ var updateMap = {
 		zoomto(300, -45, 40)
 	},
 	mapStepThree: function () {
+		segments_visible = [1,2];
 		zoomto(500, -60, 20)
-
 	},
 	mapStepThreeBackwards: function () {
+		segments_visible = [1];
 		zoomto(400, -45, 40)
+	},
+	mapStepFour: function () {
+		segments_visible = [1,2,3];
+		zoomto(500, -65, 25)
+	},
+	mapStepFourBackwards: function () {
+		segments_visible = [1,2];
+		zoomto(500, -60, 20)
+	},
+	mapStepFive: function () {
+		segments_visible = [1,2,3,4];
+		zoomto(500, -40, 30)
+	},
+	mapStepFiveBackwards: function () {
+		segments_visible = [1,2,3];
+		zoomto(500, -65, 25)
+	},
+	mapStepSix: function () {
+		segments_visible = [1,2,3,4,5];
+		zoomto(500, -40, 30)
+	},
+	mapStepSixBackwards: function () {
+		segments_visible = [1,2,3,4];
+		zoomto(500, -60, 20)
+
 	}
 }
 
@@ -189,6 +217,12 @@ function curveContext(curve) {
 var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
+function linepath(arg) {
+	if (segments_visible.includes(arg.properties.id)) {
+		return path2(arg);
+	} 
+}
+
 function drawlines() {
 	lines.attr("d", d => d);
 	lines_drawn = true;
@@ -250,7 +284,7 @@ function setmap(map_scale, map_lat, map_lng) {
   outline.attr("d", path(sphere));
   feature.attr("d", path(land));
   if (lines_drawn) {
-  	lines.attr("d", d => path2(d))
+  	lines.attr("d", d => linepath(d, segments_visible))
   	}
 }
 
@@ -266,7 +300,7 @@ async function zoomto(mapScale, newmaplat, newmapY) {
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
-          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t) );
+          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t));
         })
       .end();
 }
