@@ -237,20 +237,19 @@ function hidelines() {
 
 function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
 
-	console.log("setmap, tween arg = " + tween_arg)
- projection.scale(map_scale);
+	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
 
-  mapX = map_lng;
-  mapY = map_lat;
-  mapscale = map_scale;
+  	mapX = map_lng;
+ 	 mapY = map_lat;
+  	mapscale = map_scale;
 
-  grid.attr("d", path(graticule));
-  outline.attr("d", path(sphere));
-  feature.attr("d", path(land));
-  if (lines_drawn) {
-  	lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
-  	}
+  	grid.attr("d", path(graticule));
+  	outline.attr("d", path(sphere));
+  	feature.attr("d", path(land));
+  	if (lines_drawn) {
+  		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
+  		}
 }
 
 function interpolate(x0, x1, t) {
