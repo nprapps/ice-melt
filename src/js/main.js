@@ -156,6 +156,20 @@ var onScroll = function() {
         })
       }
 
+      // galveston sea level estimate charts
+      if (slide.id == "chart-estimate") {
+        var textBlocks = $("#chart-estimate .text");
+        textBlocks.forEach(function(frame, n) {
+          var bounds = frame.getBoundingClientRect();
+          if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
+            console.log("galveston sea level rise chart: " + frame.id + " is visible");
+            frame.classList.add("active");
+          } else {
+            frame.classList.remove("active");
+          }
+        });
+      }
+
       var complete = ((slides.length - i) / slides.length * 100) | 0;
       if (complete > completion) {
         completion = complete;
