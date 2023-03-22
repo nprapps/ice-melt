@@ -35,17 +35,6 @@ let geoGenerator = d3.geoPath()
 
 let graticule = d3.geoGraticule10()
 
-var labels = [{
-	    Name: "Chicago",
-	    Latitude: "-41.53",
-	    Longitude: "87.38"
-	}, {
-	    Name: "Green Bay",
-	    Latitude: "-44.3",
-	    Longitude: "88.01"
-	}]
-
-
 var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
@@ -84,50 +73,50 @@ var updateMap = {
 		zoomto(300, -45, 40)
 	},
 	mapStepOneBackwards: function () {
-		zoomto(200, -45, 40)
+		zoomto(200, -45, 40, -1)
 
 	},
 	mapStepTwo: function () {
 		segments_visible = [1];
 		drawlines();
-		zoomto(400, -45, 40)
+		zoomto(400, -45, 40, 1)
 
 	},
 	mapStepTwoBackwards: function () {
 		hidelines();
-		zoomto(300, -45, 40)
+		zoomto(300, -45, 40, -1)
 	},
 	mapStepThree: function () {
 		segments_visible = [1,2];
-		zoomto(500, -60, 20)
+		zoomto(500, -60, 20, 2)
 	},
 	mapStepThreeBackwards: function () {
 		segments_visible = [1];
-		zoomto(400, -45, 40)
+		zoomto(400, -45, 40, -1)
 	},
 	mapStepFour: function () {
 		segments_visible = [1,2,3];
-		zoomto(500, -65, 25)
+		zoomto(500, -65, 25, 3)
 	},
 	mapStepFourBackwards: function () {
 		segments_visible = [1,2];
-		zoomto(500, -60, 20)
+		zoomto(500, -60, 20, -1)
 	},
 	mapStepFive: function () {
 		segments_visible = [1,2,3,4];
-		zoomto(500, -40, 30)
+		zoomto(500, -40, 30, 4)
 	},
 	mapStepFiveBackwards: function () {
 		segments_visible = [1,2,3];
-		zoomto(500, -65, 25)
+		zoomto(500, -65, 25, -1)
 	},
 	mapStepSix: function () {
 		segments_visible = [1,2,3,4,5];
-		zoomto(500, -40, 30)
+		zoomto(500, -40, 30, 5)
 	},
 	mapStepSixBackwards: function () {
 		segments_visible = [1,2,3,4];
-		zoomto(500, -60, 20)
+		zoomto(500, -60, 20, -1)
 
 	}
 }
@@ -217,9 +206,21 @@ function curveContext(curve) {
 var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
-function linepath(arg) {
+function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
+
 	if (segments_visible.includes(arg.properties.id)) {
-		return path2(arg);
+
+		if ( arg.properties.id == segment_tweened_in_id) {
+			var num_coords = arg.geometry.coordinates.length;
+			var desired_coordinate_count = Math.floor(num_coords * tween_arg);
+			// can we afford this? 
+			var arg_copy = JSON.parse(JSON.stringify(arg));
+			arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(1, desired_coordinate_count);
+
+			return path2(arg_copy);
+		} else {
+			return path2(arg);	
+		}
 	} 
 }
 
@@ -233,47 +234,11 @@ function hidelines() {
 	  lines.attr("d", d => 0);
 }
 
-// not working yet
-function transition(path) {
-    lines.transition()
-        .duration(7500)
-        .attrTween("stroke-dasharray", tweenDash)
-        .each("end", function() {
-            d3.select(this).call(transition);// infinite loop
-            ptFeatures.style("opacity", 0)
-        }); 
 
+function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
 
-} 
-
-// not working yet
-function tweenDash() {
-
-    return function(t) {
-        // In original version of this post the next two lines of JS were
-        // outside this return which led to odd behavior on zoom
-        // Thanks to Martin Raifer for the suggested fix.
-
-        //total length of path (single value)
-        var l = line.node().getTotalLength(); 
-        interpolate = d3.interpolateString("0," + l, l + "," + l); 
-
-        //t is fraction of time 0-1 since transition began
-        var marker = d3.select("#marker");
-        
-        // p is the point on the line (coordinates) at a given length
-        // along the line. In this case if l=50 and we're midway through
-        // the time then this would 25.
-        var p = line.node().getPointAtLength(t * l);
-
-        //Move the marker to that point
-        marker.attr("transform", "translate(" + p.x + "," + p.y + ")"); //move marker
-        return interpolate(t);
-    }
-}
-
-function setmap(map_scale, map_lat, map_lng) {
- 	projection.scale(map_scale);
+	console.log("setmap, tween arg = " + tween_arg)
+ projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
 
   mapX = map_lng;
@@ -284,7 +249,7 @@ function setmap(map_scale, map_lat, map_lng) {
   outline.attr("d", path(sphere));
   feature.attr("d", path(land));
   if (lines_drawn) {
-  	lines.attr("d", d => linepath(d, segments_visible))
+  	lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
   	}
 }
 
@@ -292,7 +257,7 @@ function interpolate(x0, x1, t) {
   return (x0 + t*(x1-x0));
 }
 
-async function zoomto(mapScale, newmaplat, newmapY) {
+async function zoomto(mapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
@@ -300,7 +265,7 @@ async function zoomto(mapScale, newmaplat, newmapY) {
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
-          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t));
+          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
         })
       .end();
 }
