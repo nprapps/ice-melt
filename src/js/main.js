@@ -12,6 +12,9 @@ var lakeAnimSlide = $.one(".ice-diagram-lake.slide");
 var lakeAnimFrames = $(".ice-diagram-lake.slide .frame");
 console.log(lakeAnimFrames)
 
+// setup galveston chart
+require("./chart-galveston.js");
+
 var slides = $(".sequence .slide").reverse();
 var autoplayWrapper = $.one(".a11y-controls");
 
@@ -159,11 +162,13 @@ var onScroll = function() {
       // galveston sea level estimate charts
       if (slide.id == "chart-estimate") {
         var textBlocks = $("#chart-estimate .text");
+        var chartWrapper = $.one("#chart-estimate #line-chart");
         textBlocks.forEach(function(frame, n) {
           var bounds = frame.getBoundingClientRect();
           if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
             console.log("galveston sea level rise chart: " + frame.id + " is visible");
             frame.classList.add("active");
+            chartWrapper.dataset.frame = frame.id;
           } else {
             frame.classList.remove("active");
           }

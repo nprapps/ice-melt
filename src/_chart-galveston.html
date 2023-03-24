@@ -1,0 +1,14 @@
+<section class="graphic slide" id="<%= slide.id %>">
+
+  <div class="backdrop">
+    <div id="line-chart" role="img"></div>
+  </div>
+
+  <%= t.include("partials/_text.html", { slide }) %>
+
+  <script>
+    // data for this graphic
+    CHART_GALVESTON = <%= JSON.stringify(grunt.data.json.data) %>;
+    console.log('CHART_GALVESTON', CHART_GALVESTON);
+  </script>
+</section>
