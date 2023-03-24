@@ -17,7 +17,7 @@ With those installed, you can then set the project up using your terminal:
 #. Pull the code - ``git clone git@github.com:nprapps/ice-melt``
 #. Enter the project folder - ``cd ice-melt``
 #. Install dependencies from NPM - ``npm install``
-#. Sync assets and pull content - ``grunt sync docs``
+#. Sync assets and pull content - ``grunt sync docs sheets``
 #. Start the server - ``grunt``
 
 
@@ -58,7 +58,7 @@ Common tasks that you may want to run include:
   * ``publish:simulated`` does a dry run of uploaded files and their compressed sizes
 
 You can also chain commands and pass flags for the deploy target:
-* ``grunt sync docs static publish`` - publish to stage
+* ``grunt sync docs sheets static publish`` - publish to stage
 * ``grunt sync:live docs static publish:live`` - publish to production
 
 
