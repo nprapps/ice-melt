@@ -320,16 +320,18 @@ var formatData = function(data) {
   return series;
 };
 
-// Render the graphic(s). Called by pym with the container width.
+// Render the graphic(s)
 var renderChartGalveston = function(data) {
-  // Render the chart!
   var container = "#line-chart";
-  var element = chartGalvestonSlide.querySelector(container);
-  var width = element.offsetWidth;
+  // var element = chartGalvestonSlide.querySelector(container);
+  var width = document.body.offsetWidth;
+  var height = document.body.offsetHeight;
+  // console.log("window width", width);
 
   renderLineChart({
     container,
     width,
+    height,
     data,
     dateColumn: "date",
     valueColumn: "amt"
