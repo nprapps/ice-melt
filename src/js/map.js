@@ -239,6 +239,7 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg
 
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
+  projection.translate([width / 2, height / 2]) 
 
   	mapX = map_lng;
  	 mapY = map_lat;
