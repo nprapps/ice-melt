@@ -3,6 +3,8 @@ var enterView = require("enter-view");
 var topojson = require("topojson");
 require("./map_helpers")
 
+console.log(MAP_DATA)
+console.log(MAP_LABELS)
 
 let mapdata;
 
@@ -48,6 +50,7 @@ function addDiscreteListeners() {
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
+      console.log(el)
 			const index = d3.select(el).attr('forward');
 			updateMap[index]();
 		},
@@ -159,6 +162,13 @@ function initialize_map() {
 	    .attr("fill","#eeeeee")
 	    //.attr("filter", "url(#pencilTexture3");
 
+    labelBox = svg.append("g")
+      .attr("id","labelBox");
+
+    labels = labelBox.selectAll(".label")
+      .data(MAP_LABELS).join("text")
+        .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
+        .text(d => d.label)        
 
 	  let topology = mapdata;
 
@@ -166,6 +176,9 @@ function initialize_map() {
 	  topology = topojson.simplify(topology, minArea);
 
 	  land = topojson.feature(topology, topology.objects.land);
+
+
+
 
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
 	    linebox = svg.append("g").attr("id","lineBox");
@@ -235,7 +248,7 @@ function hidelines() {
 }
 
 
-function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
+function  setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
 
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
@@ -248,6 +261,11 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg
   	grid.attr("d", path(graticule));
   	outline.attr("d", path(sphere));
   	feature.attr("d", path(land));
+
+    labels.attr("transform", d => `translate(${projection([d.lon,d.lat])})`)
+      .attr("dy", ".35em")
+
+
   	if (lines_drawn) {
   		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
   		}
