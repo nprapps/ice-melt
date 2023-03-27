@@ -1,0 +1,53 @@
+@import "base-graphics";
+
+#chart-estimate {
+  #line-chart {
+    .lines {
+      fill: none;
+      stroke-width: 3px;
+      stroke: #ccc;
+    }
+    
+    .value text {
+      font-size: 12px;
+      font-weight: bold;
+      fill: #ccc;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    @media screen and (max-width: 500px) {
+      .value text {
+        font-size: 10px;
+      }
+    }
+    
+    @media screen and (min-width: 500px) {
+      .key {
+        display: none;
+      }
+    }
+    
+    @media screen and (max-width: 500px) {
+      .key.one-line {
+        display: none;
+      }
+    }
+  }
+
+  // toggle which chart elements are visible at each stage
+  #line-chart[data-frame="galveston-chart-1"] {
+    // background: #454545;
+  }
+  #line-chart[data-frame="galveston-chart-2"] {
+    // background: #454545;
+  }
+  #line-chart[data-frame="galveston-chart-3"] {
+    // background: #666;
+  }
+  #line-chart[data-frame="galveston-chart-4"] {
+    // background: #454545;
+  }
+}
