@@ -14,8 +14,21 @@
       fill: #ccc;
     }
     
-    .hidden {
-      display: none;
+    .noShow {
+      visibility: hidden;
+    }
+
+    .show {
+      visibility: visible;
+      stroke-dasharray: 1300;
+      stroke-dashoffset: 1300;
+      animation: dash 2s linear forwards;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
     
     @media screen and (max-width: 500px) {

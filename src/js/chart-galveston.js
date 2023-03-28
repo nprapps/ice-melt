@@ -248,7 +248,7 @@ var renderLineChart = function(config) {
     console.log(values)
   var lastItem = d => d.values[d.values.length - 1];
   
-  //Add event listener for second line part
+  /*Add event listener for second line part
   var chart = document.querySelector("#line-chart");
   var line2 = document.getElementsByClassName("line2")
   chart.addEventListener("click", (e) => {
@@ -258,7 +258,7 @@ var renderLineChart = function(config) {
     console.log(line2[0].classList);
     //e.stopPropagation();
     //e.preventDefault();
-})
+})*/
 
   //Display final values
   chartElement

@@ -126,15 +126,32 @@ var onScroll = function() {
       if (slide.id == "chart-estimate") {
         var textBlocks = $("#chart-estimate .text");
         var chartWrapper = $.one("#chart-estimate #line-chart");
+        var line2 = document.getElementsByClassName("line2");
         textBlocks.forEach(function(frame, n) {
           var bounds = frame.getBoundingClientRect();
           if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
-            console.log("galveston sea level rise chart: " + frame.id + " is visible");
+            //console.log("galveston sea level rise chart: " + frame.id + " is visible");
             frame.classList.add("active");
             chartWrapper.dataset.frame = frame.id;
-          } else {
-            frame.classList.remove("active");
+            if (frame.id == "galveston-chart-1") {
+              for (let i = 0; i < 3; i++) {
+                line2[i].classList.remove("show");
+                line2[i].classList.add("noShow");
+              }
+            }
+            else if (frame.id == "galveston-chart-2") {
+              for (let i = 0; i < 3; i++) {
+                line2[i].classList.remove("noShow");
+                line2[i].classList.add("show");
+              }
+              //console.log('active', line2[0].classList);
+            }
           }
+        else {
+            frame.classList.remove("active");
+            //console.log('remove', line2[0].classList);
+            //console.log('remove active')
+        }
         });
       }
 
