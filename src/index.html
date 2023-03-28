@@ -42,40 +42,7 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
         </div>
       </div>
 
-      <div class="about">
-        <div class="constrained">
-
-          <div class="side-by-side">
-
-            <div class="block">
-
-              <h4><%= doc.footer.digitalCreditHeadline %></h4>
-              <ul class="credits">
-                <% doc.footer.digitalCredits.forEach(function(credit) { %>
-                <li><%= credit %></li>
-                <% }) %>
-              </ul>
-
-            </div>
-
-            <div class="block">
-
-              <h4><%= doc.footer.additionalCreditHeadline %></h4>
-              <%= t.renderMarkdown(doc.footer.additionalCredits) %>
-
-              <h4><%= doc.footer.dataCreditHeadline %></h4>
-              <ul class="credits">
-                <% doc.footer.dataSources.forEach(function(credit) { %>
-                <li><%= t.renderMarkdown(credit) %></li>
-                <% }) %>
-              </ul>
-
-            </div>
-
-          </div>
-
-        </div>
-      </div>
+      <%= t.include("partials/_credits.html", { "credits": grunt.data.json.credits, "thisStory": "quiz" }) %>
 
       <div class="constrained">
         <%= typeof content != "undefined" ? content : "" %>

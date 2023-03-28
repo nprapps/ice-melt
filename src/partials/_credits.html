@@ -1,0 +1,55 @@
+<div class="about">
+  <div class="constrained">
+
+    <div class="side-by-side">
+
+      <div class="block">
+
+        <h4><%= credits["hed_credits"]["all"] %></h4>
+        <ul class="credits">
+          <% [ "reporting", "field_production", "photography", "editing", "illustration", "maps", "dev" ].forEach(credit => {
+            var thisCredit = null;
+            if (typeof credits[credit][thisStory] != "undefined") {
+              thisCredit = credits[credit][thisStory];
+            } else if (typeof credits[credit]["all"] != "undefined") {
+              thisCredit = credits[credit]["all"];
+            }
+          %>
+
+          <% if (thisCredit) { %><li><%= thisCredit %></li><% } %>
+
+          <% }); %>
+        </ul>
+
+      </div>
+
+      <div class="block">
+
+        <h4><%= credits["hed_acknowledgements"]["all"] %></h4>
+        <% 
+          var ackCredit = null;
+          if (typeof credits["acknowledgements"][thisStory] != "undefined") {
+            ackCredit = credits["acknowledgements"][thisStory];
+          } else if (typeof credits["acknowledgements"]["all"] != "undefined") {
+            ackCredit = credits["acknowledgements"]["all"];
+          }
+        %>
+        <% if (ackCredit) { %><%= t.renderMarkdown(ackCredit) %><% } %>
+
+        <h4><%= credits["hed_data"]["all"] %></h4>
+        <% 
+          var dataCredit = null;
+          if (typeof credits["data"][thisStory] != "undefined") {
+            dataCredit = credits["data"][thisStory];
+          } else if (typeof credits["data"]["all"] != "undefined") {
+            dataCredit = credits["data"]["all"];
+          }
+        %>
+        <% if (dataCredit) { %><%= t.renderMarkdown(dataCredit) %><% } %>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
