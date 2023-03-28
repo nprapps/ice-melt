@@ -19,14 +19,14 @@
   "scripts": {
     "src/js/main.js": "build/app.js"
   },
-  "title": "",
+  "title": "Ice Melt",
   "description": "",
-  "url": "",
+  "url": "https://apps.npr.org/ice-melt/",
   "image": "assets/logo.png",
   "analytics": {
-    "topicIDs": [],
-    "primaryTopic": "",
-    "secondaryTopics": []
+    "topicIDs": ["p1167","1001","1003","1004","1007","1025","1165"],
+    "primaryTopic": "climate",
+    "secondaryTopics": ["1001","1003","1004","1007","1025","1165","1167"]
   },
   "sheets": [ "1QI8gMLlZfuPGXgUWpal3ZSnU8KhNEmTpDHAAoq4H26k" ],
   "docs": {
