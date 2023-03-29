@@ -57,7 +57,8 @@ if ("addEventListener" in reducedMotion) {
 } else {
   reducedMotion.addListener(() => toggleAutoplay(!reducedMotion.matches));
 }
-
-toggleAutoplay(!reducedMotion.matches && autoplayChecks[0].checked);
+if (autoplayChecks[0]) {
+  toggleAutoplay(!reducedMotion.matches && autoplayChecks[0].checked);
+}
 
 track("prefers-reduced-motion", reducedMotion.matches);
