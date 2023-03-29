@@ -51,6 +51,7 @@ function addDiscreteListeners() {
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
+      console.log('in enter')
       console.log(el)
       console.log("---------------------")
 			const index = d3.select(el).attr('forward');
@@ -62,9 +63,11 @@ function addDiscreteListeners() {
 			updateMap[index]();
 		},
 		exit: el => {
-      console.log(el)
+      console.log('in exit')
+      console.log(el)      
+      
 			let index = d3.select(el).attr('backward');
-      activeSlide = prevSlide;
+      activeSlide = el.parentNode.previousElementSibling.id;
       prevSlide = d3.select(el).attr("slide");      
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
