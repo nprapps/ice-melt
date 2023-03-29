@@ -25,10 +25,10 @@ var renderLineChart = function(config) {
   var aspectHeight = isMobile.matches ? 3 : 9;
 
   var margins = {
-    top: 5,
-    right: 85,
-    bottom: 20,
-    left: 30
+    top: 100,
+    right: 300,
+    bottom: 100,
+    left: 300
   };
 
   var ticksX = 10;
@@ -44,8 +44,7 @@ var renderLineChart = function(config) {
 
   // Calculate actual chart dimensions
   var chartWidth = config.width - margins.left - margins.right;
-  var chartHeight =
-    Math.ceil((config.width * aspectHeight) / aspectWidth) -
+  var chartHeight = window.innerHeight -
     margins.top -
     margins.bottom;
 
@@ -94,9 +93,9 @@ var renderLineChart = function(config) {
       })
     )
     .range([
-      COLORS.red3,
-      COLORS.yellow3,
-      COLORS.blue3,
+      COLORS.blue6,
+      COLORS.blue4,
+      COLORS.blue2,
       COLORS.orange3,
       COLORS.teal3
     ]);
@@ -277,9 +276,39 @@ var renderLineChart = function(config) {
 
       return label;
     })
+    .attr("id", d => d.name)
     .call(wrapText, 40, 20);
-};
 
+//Display annotations on side
+chartElement
+    .append("g")
+    .attr("class", "annotations")
+    .selectAll("text")
+    .data(config.data)
+    .enter()
+    .append("text")
+    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 40)
+    .attr("y", function(d) {
+      if (d.name == 'High') {
+        return yScale(lastItem(d)[valueColumn]) - 60;
+      }
+      else {
+        return yScale(lastItem(d)[valueColumn]) + 60;
+      }
+    })
+    .text(function(d) {
+      var annot;
+      if (d.name == 'High') {
+        annot = "Higher emissions, faster ice melt";
+      }
+      else if (d.name == 'Low') {
+        annot = "Lower emissions, slower ice melt";
+      }
+      return annot;
+    })
+    .attr("id", d => d.name)
+    //.call(wrapText, 40, 20);
+  };
 
 /*
  setup

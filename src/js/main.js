@@ -127,16 +127,23 @@ var onScroll = function() {
         var textBlocks = $("#chart-estimate .text");
         var chartWrapper = $.one("#chart-estimate #line-chart");
         var line2 = document.getElementsByClassName("line2");
+        var annot = document.getElementsByClassName("annotations");
         textBlocks.forEach(function(frame, n) {
           var bounds = frame.getBoundingClientRect();
           if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
             frame.classList.add("active");
             chartWrapper.dataset.frame = frame.id;
-            //hide second line part
+            
             if (frame.id == "galveston-chart-1") {
+              //hide second line part
               for (let i = 0; i < 3; i++) {
                 line2[i].classList.remove("show");
                 line2[i].classList.add("noShow");
+              }
+              //hide annotations
+              for (let i = 0; i < 2; i++) {
+                annot[i].classList.remove("show");
+                annot[i].classList.add("noShow");
               }
             }
             //show second line part and continue showing 
@@ -146,6 +153,13 @@ var onScroll = function() {
                 line2[i].classList.add("show");
               }
               //console.log('active', line2[0].classList);
+            }
+            //show annotations
+            else if (frame.id == "galveston-chart-3") {
+              for (let i = 0; i < 2; i++) {
+                annot[i].classList.remove("noShow");
+                annot[i].classList.add("show");
+              }
             }
           }
         else {

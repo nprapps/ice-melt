@@ -13,6 +13,11 @@
       font-weight: bold;
       fill: #ccc;
     }
+
+    .annotations text {
+      font-size: 16px;
+      fill: #ccc;
+    }
     
     .noShow {
       visibility: hidden;
@@ -22,13 +27,23 @@
       visibility: visible;
       stroke-dasharray: 1300;
       stroke-dashoffset: 1300;
-      animation: dash 2s linear forwards;
+      animation: dash 1s linear forwards;
     }
 
     @keyframes dash {
       to {
         stroke-dashoffset: 0;
       }
+    }
+
+    #High {
+      fill: @blue4;
+    }
+    #Intermediate {
+      fill: @blue5;
+    }
+    #Low {
+      fill: @blue6;
     }
     
     @media screen and (max-width: 500px) {
