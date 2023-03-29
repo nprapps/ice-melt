@@ -137,28 +137,28 @@ var onScroll = function() {
             if (frame.id == "galveston-chart-1") {
               //hide second line part
               for (let i = 0; i < 3; i++) {
-                line2[i].classList.remove("show");
-                line2[i].classList.add("noShow");
+                // line2[i].classList.remove("show");
+                // line2[i].classList.add("noShow");
               }
               //hide annotations
               for (let i = 0; i < 2; i++) {
-                annot[i].classList.remove("show");
-                annot[i].classList.add("noShow");
+                // annot[i].classList.remove("show");
+                // annot[i].classList.add("noShow");
               }
             }
             //show second line part and continue showing 
             else if (frame.id == "galveston-chart-2") {
               for (let i = 0; i < 3; i++) {
-                line2[i].classList.remove("noShow");
-                line2[i].classList.add("show");
+                // line2[i].classList.remove("noShow");
+                // line2[i].classList.add("show");
               }
               //console.log('active', line2[0].classList);
             }
             //show annotations
             else if (frame.id == "galveston-chart-3") {
               for (let i = 0; i < 2; i++) {
-                annot[i].classList.remove("noShow");
-                annot[i].classList.add("show");
+                // annot[i].classList.remove("noShow");
+                // annot[i].classList.add("show");
               }
             }
           }

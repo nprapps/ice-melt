@@ -67,9 +67,23 @@
 
   // toggle which chart elements are visible at each stage
   #line-chart[data-frame="galveston-chart-1"] {
+    .line2,
+    .value,
+    .annotations { 
+      visibility: hidden;
+    }
     // background: #454545;
   }
   #line-chart[data-frame="galveston-chart-2"] {
+    .line2 {
+      visibility: visible;
+      stroke-dasharray: 1300;
+      stroke-dashoffset: 1300;
+      animation: dash 1s linear forwards;
+    }
+    .annotations { 
+      visibility: hidden;
+    }
     // background: #454545;
   }
   #line-chart[data-frame="galveston-chart-3"] {
