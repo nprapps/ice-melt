@@ -291,13 +291,13 @@ chartElement
     .data(config.data)
     .enter()
     .append("text")
-    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 40)
+    .attr("x", d => xScale(lastItem(d)[dateColumn]) - 240)
     .attr("y", function(d) {
       if (d.name == 'High') {
         return yScale(lastItem(d)[valueColumn]) - 60;
       }
       else {
-        return yScale(lastItem(d)[valueColumn]) + 60;
+        return yScale(lastItem(d)[valueColumn]) + 130;
       }
     })
     .text(function(d) {
