@@ -1,7 +1,6 @@
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
-require("./map_helpers")
 
 console.log(MAP_DATA)
 console.log(MAP_LABELS)
@@ -16,6 +15,8 @@ let mapscale = 200; // Initial scale, might be better to fit to screen
 let transition_milliseconds = 1000;
 let svg;
 let linebox;
+let activeSlide;
+let prevSlide;
 
 var outline;
 var grid;
@@ -51,11 +52,23 @@ function addDiscreteListeners() {
 		offset: 0,
 		enter: el => {
       console.log(el)
+      console.log("---------------------")
 			const index = d3.select(el).attr('forward');
+      prevSlide = activeSlide;
+      activeSlide = d3.select(el).attr("slide");
+
+      console.log("leaving " + prevSlide )
+      console.log("entering " + activeSlide)
 			updateMap[index]();
 		},
 		exit: el => {
+      console.log(el)
 			let index = d3.select(el).attr('backward');
+      activeSlide = prevSlide;
+      prevSlide = d3.select(el).attr("slide");      
+      console.log("leaving " + prevSlide )
+      console.log("entering " + activeSlide)
+
 			//check for multiple
 			if (!index.includes(" ")) {
 				updateMap[index]();
@@ -144,9 +157,6 @@ function initialize_map() {
         .attr('y', -400) 
     		.attr("width", 5000)
     		.attr("height", 5000);
-		
-
-	applyPencilFilterTextures(svg);  
 
 	  outline = svg.append("path")  
 	    .attr("fill","white")
@@ -154,13 +164,11 @@ function initialize_map() {
 	  grid = svg.append("path")
 	    .attr("stroke-width","0.5px")
 	    .attr("stroke","#ddd")
-	    //.attr("filter", "url(#pencilTexture4");
 	  
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
 	    .attr("stroke-width", "3px")
 	    .attr("fill","#eeeeee")
-	    //.attr("filter", "url(#pencilTexture3");
 
     labelBox = svg.append("g")
       .attr("id","labelBox");
@@ -181,11 +189,12 @@ function initialize_map() {
 
 
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
-	    linebox = svg.append("g").attr("id","lineBox");
+      linebox = svg.append("g").attr("id","lineBox");
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
 	        .attr("class",d => `lines ${d.properties.class}`)
+
 	    setmap(mapscale, mapX, mapY);
 	  }); 
 
@@ -255,7 +264,7 @@ function  setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_ar
   projection.translate([width / 2, height / 2]) 
 
   	mapX = map_lng;
- 	 mapY = map_lat;
+ 	  mapY = map_lat;
   	mapscale = map_scale;
 
   	grid.attr("d", path(graticule));
@@ -278,8 +287,8 @@ function interpolate(x0, x1, t) {
 async function zoomto(mapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
-  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
-  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+  // console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
+  // console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
@@ -296,33 +305,4 @@ function rundemo() {
 
   zoomto(mapscale, newmaplat, newmapY);
 
-}
-
-
-// MUCH OF THIS CAN BE REMOVED 
-function applyPencilFilterTextures(svg) {
-  
-  const defs = svg.append("defs");
-
-  // Add back if there are arrowheads
-  //defs.html(arrowHead)
-
-  var pencilTexture = defs.append("filter")
-  .attr("x", "-2%")
-  .attr("y", "-2%")
-  .attr("width", "104%")
-  .attr("height", "104%")
-  .attr("filterUnits", "objectBoundingBox")
-  .attr("id", "pencilTexture")
-  pencilTexture.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", "1.2")
-    .attr("numOctaves", "3")
-    .attr("result", "noise")
-  pencilTexture.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", "3")
-    .attr("in", "SourceGraphic")
-    .attr("result", "newSource");
 }
