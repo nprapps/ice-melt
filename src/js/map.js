@@ -7,7 +7,7 @@ require("./map_helpers")
 let mapdata;
 
 let width = 800, height = 600;
-let mapX=40; // 0 / 360 = Greenwhich England, values increase to the west
+let mapX=40; // 0 / 360 = Greenwich England, values increase to the west
 let mapY=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
 let mapscale = 200; // Initial scale, might be better to fit to screen
 
@@ -32,20 +32,16 @@ var minArea = 1;
 
 let projection = d3.geoOrthographic().precision(0.1);
 
-let geoGenerator = d3.geoPath()
-.projection(projection);
+let geoGenerator = d3.geoPath().projection(projection);
 
-let graticule = d3.geoGraticule10()
+let graticule = d3.geoGraticule10();
 
 var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
 function addDiscreteListeners() {
-	console.log("addDiscreteListeners");
 	initialize_map();
-
 	var stepSel = d3.selectAll(".discrete");
-
 	enterView({
 		selector: stepSel.nodes(),
 		offset: 0,
@@ -82,7 +78,6 @@ var updateMap = {
 		segments_visible = [1];
 		drawlines();
 		zoomto(400, -45, 40, 1)
-
 	},
 	mapStepTwoBackwards: function () {
 		hidelines();
@@ -119,11 +114,8 @@ var updateMap = {
 	mapStepSixBackwards: function () {
 		segments_visible = [1,2,3,4];
 		zoomto(500, -60, 20, -1)
-
 	}
 }
-
-
 
 function runManualTransition() {
 	var newlat = document.getElementById('control_lat').value;
@@ -143,11 +135,9 @@ function runManualTransition() {
 	if (!showlines && lines_drawn) {
 		hidelines();
 	}
-
 }
 
 function initialize_map() {
-
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])
@@ -156,14 +146,12 @@ function initialize_map() {
 		    .attr("width", "100%")
 		    .attr("height", "100%");
 
-
 		svg.append("rect")
     		.style("fill", "white")
     		.attr('x', -400) 
             .attr('y', -400) 
     		.attr("width", 5000)
     		.attr("height", 5000);
-		
 
 	  outline = svg.append("path")  
 	    .attr("fill","white")
@@ -171,20 +159,15 @@ function initialize_map() {
 	  grid = svg.append("path")
 	    .attr("stroke-width","0.5px")
 	    .attr("stroke","#ddd")
-	    //.attr("filter", "url(#pencilTexture4");
-	  
+
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
 	    .attr("stroke-width", "3px")
 	    .attr("fill","#eeeeee")
-	    //.attr("filter", "url(#pencilTexture3");
-
 
 	  let topology = mapdata;
-
 	  topology = topojson.presimplify(topology);
 	  topology = topojson.simplify(topology, minArea);
-
 	  land = topojson.feature(topology, topology.objects.land);
 
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
@@ -195,11 +178,9 @@ function initialize_map() {
 	        .attr("class",d => `lines ${d.properties.class}`)
 	    setmap(mapscale, mapX, mapY);
 	  }); 
-
-
 	});
 
-	// Setup tooling
+	// Setup tooling if the controls are present only
 	var controldiv = document.getElementById("controls");
 	if(controldiv) {
 	    controlbutton = document.getElementById("controlsubmit");
@@ -235,7 +216,6 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
-
 	if (segments_visible.includes(arg.properties.id)) {
 
 		if ( arg.properties.id == segment_tweened_in_id) {
@@ -268,15 +248,13 @@ function hidelines() {
 	  }
 }
 
-
 function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
-
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
-  projection.translate([width / 2, height / 2]) 
+  	projection.translate([width / 2, height / 2]) 
 
   	mapX = map_lng;
- 	 mapY = map_lat;
+ 	mapY = map_lat;
   	mapscale = map_scale;
 
   	grid.attr("d", path(graticule));
@@ -284,8 +262,7 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg
   	feature.attr("d", path(land));
   	if (lines_drawn) {
   		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
-  		}
-
+  	}
 }
 
 function interpolate(x0, x1, t) {
@@ -295,7 +272,7 @@ function interpolate(x0, x1, t) {
 async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
-  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY + " scale: " + mapscale); 
+  console.log("Zoomfrom currentMapX " + currentMapX + " currentMapY " + currentMapY + " scale: " + mapscale); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY + " scale: " + newmapScale); 
   await d3.transition()
         .duration(transition_milliseconds)
@@ -309,12 +286,4 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 		document.getElementById('control_zoom').value = newmapScale;
 
    }
-}
-
-function override_with_user_input() {
-  console.log("\nRun transition");
-  var newmapY = 10+100*Math.random();
-  var newmaplat = -20-50*Math.random();
-  zoomto(mapscale, newmaplat, newmapY, -1);
-
 }
