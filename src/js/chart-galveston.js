@@ -228,12 +228,8 @@ var renderLineChart = function(config) {
     .append("path")
     .attr("class", d => "line1 " + classify(d.name))
     .attr("stroke", d => colorScale(d.name))
-    .attr("d", function(d) {
-      if (d.name == 'Intermediate') {
-        return line(d.values.slice(0, 3))
-      }
-      return
-    });
+    //First line part until 2050
+    .attr("d", d => line(d.values.slice(0, 4)));
   // Second line part 
   chartElement
     .append("g")
@@ -244,7 +240,7 @@ var renderLineChart = function(config) {
     .append("path")
     .attr("class", d => "line2") //+ classify(d.name)
     .attr("stroke", d => colorScale(d.name))
-    .attr("d", d => line(d.values.slice(2, d.values.length)));
+    .attr("d", d => line(d.values.slice(3, d.values.length)));
     console.log(values)
   var lastItem = d => d.values[d.values.length - 1];
   

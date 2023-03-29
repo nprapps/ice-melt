@@ -130,15 +130,16 @@ var onScroll = function() {
         textBlocks.forEach(function(frame, n) {
           var bounds = frame.getBoundingClientRect();
           if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
-            //console.log("galveston sea level rise chart: " + frame.id + " is visible");
             frame.classList.add("active");
             chartWrapper.dataset.frame = frame.id;
+            //hide second line part
             if (frame.id == "galveston-chart-1") {
               for (let i = 0; i < 3; i++) {
                 line2[i].classList.remove("show");
                 line2[i].classList.add("noShow");
               }
             }
+            //show second line part and continue showing 
             else if (frame.id == "galveston-chart-2") {
               for (let i = 0; i < 3; i++) {
                 line2[i].classList.remove("noShow");
@@ -149,8 +150,6 @@ var onScroll = function() {
           }
         else {
             frame.classList.remove("active");
-            //console.log('remove', line2[0].classList);
-            //console.log('remove active')
         }
         });
       }
