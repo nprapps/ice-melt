@@ -1,41 +1,36 @@
 @import "base-graphics";
 
 #chart-estimate {
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
   #line-chart {
     .lines {
       fill: none;
       stroke-width: 3px;
       stroke: #ccc;
     }
+    .line1,
+    .line2 {
+      transition: stroke-opacity 1s ease;
+    }
     
     .value text {
       font-size: 12px;
       font-weight: bold;
       fill: #ccc;
+      transition: opacity 1s ease;
     }
 
     .annotations text {
       font-size: 16px;
       fill: #ccc;
+      transition: opacity 1s ease;
     }
     
-    .noShow {
-      visibility: hidden;
-    }
-
-    .show {
-      visibility: visible;
-      stroke-dasharray: 1300;
-      stroke-dashoffset: 1300;
-      animation: dash 1s linear forwards;
-    }
-
-    @keyframes dash {
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-
     #High {
       fill: @blue4;
     }
@@ -67,29 +62,51 @@
 
   // toggle which chart elements are visible at each stage
   #line-chart[data-frame="galveston-chart-1"] {
-    .line2,
-    .value,
-    .annotations { 
+    .line1 {
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: dash 1s linear forwards;
+      stroke-opacity: 1;
+    }
+    .line2 {
+      stroke-opacity: 0;
       visibility: hidden;
+    }
+    .value text,
+    .annotations text {
+      opacity: 0;
     }
     // background: #454545;
   }
   #line-chart[data-frame="galveston-chart-2"] {
+    .line1 {
+      stroke-opacity: 1;
+    }
     .line2 {
-      visibility: visible;
       stroke-dasharray: 1300;
       stroke-dashoffset: 1300;
       animation: dash 1s linear forwards;
+      stroke-opacity: 1;
+      visibility: visible;
     }
-    .annotations { 
-      visibility: hidden;
+    .value text {
+      opacity: 1;
     }
-    // background: #454545;
+    .annotations text {
+      opacity: 0;
+    }
   }
   #line-chart[data-frame="galveston-chart-3"] {
-    // background: #666;
+    .annotations text { 
+      opacity: 1;
+    }
+    .line1, .line2 {
+      stroke-opacity: 1;
+    }
   }
   #line-chart[data-frame="galveston-chart-4"] {
-    // background: #454545;
+    .line1, .line2 {
+      stroke-opacity: 1;
+    }
   }
 }

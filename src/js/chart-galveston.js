@@ -21,32 +21,34 @@ var renderLineChart = function(config) {
   // Setup
   var { dateColumn, valueColumn } = config;
 
-  var aspectWidth = isMobile.matches ? 4 : 16;
-  var aspectHeight = isMobile.matches ? 3 : 9;
-
+  // figure out chart dimensions and margins
   var margins = {
-    top: 100,
+    top: 75,
     right: 300,
     bottom: 100,
     left: 300
   };
-
-  var ticksX = 10;
-  var ticksY = 10;
-  var roundTicksFactor = 5;
-
-  // Mobile
   if (isMobile.matches) {
-    ticksX = 5;
-    ticksY = 5;
-    margins.right = 25;
+    margins = {
+      top: 50,
+      right: 50,
+      bottom: 50,
+      left: 50
+    }
   }
 
-  // Calculate actual chart dimensions
   var chartWidth = config.width - margins.left - margins.right;
-  var chartHeight = window.innerHeight -
-    margins.top -
-    margins.bottom;
+  if (chartWidth < config.minWidth) {
+    chartWidth = config.minWidth;
+    margins.left = Math.floor((config.width - chartWidth) / 2);
+    margins.right = margins.left;
+  }
+  var chartHeight = config.height - margins.top - margins.bottom;
+
+  // set up ticks and rounding
+  var ticksX = isMobile.matches ? 5 : 10;
+  var ticksY = isMobile.matches ? 5 : 5;
+  var roundTicksFactor = 2;
 
   // Clear existing graphic (for redraw)
   var containerElement = d3.select(config.container);
@@ -64,7 +66,7 @@ var renderLineChart = function(config) {
     (acc, d) => acc.concat(d.values.map(v => v[valueColumn])),
     []
   );
-  console.log(values);
+  // console.log(values);
 
   var floors = values.map(
     v => Math.floor(v / roundTicksFactor) * roundTicksFactor
@@ -95,27 +97,24 @@ var renderLineChart = function(config) {
     .range([
       COLORS.blue6,
       COLORS.blue4,
-      COLORS.blue2,
-      COLORS.orange3,
-      COLORS.teal3
+      COLORS.blue2
     ]);
 
   // Render the HTML legend.
+  // var oneLine = config.data.length > 1 ? "" : " one-line";
 
-  var oneLine = config.data.length > 1 ? "" : " one-line";
+  // var legend = containerElement
+  //   .append("ul")
+  //   .attr("class", "key" + oneLine)
+  //   .selectAll("g")
+  //   .data(config.data)
+  //   .enter()
+  //   .append("li")
+  //   .attr("class", d => "key-item " + classify(d.name));
 
-  var legend = containerElement
-    .append("ul")
-    .attr("class", "key" + oneLine)
-    .selectAll("g")
-    .data(config.data)
-    .enter()
-    .append("li")
-    .attr("class", d => "key-item " + classify(d.name));
+  // legend.append("b").style("background-color", d => colorScale(d.name));
 
-  legend.append("b").style("background-color", d => colorScale(d.name));
-
-  legend.append("label").text(d => d.name);
+  // legend.append("label").text(d => d.name);
 
   // Create the root SVG element.
 
@@ -149,12 +148,17 @@ var renderLineChart = function(config) {
     .scale(yScale)
     .ticks(ticksY)
     .tickFormat(function(d, i) {
-      if (d == '14') {
-        return "14 ft";
+      if (d == 0) {
+        return d;
+      } else {
+        return "+" + d + " ft.";
       }
-      else {
-        return d
-      }
+      // if (d == '14') {
+      //   return "14 ft.";
+      // }
+      // else {
+      //   return d
+      // }
   });
 
   // Render axes to chart.
@@ -240,7 +244,7 @@ var renderLineChart = function(config) {
     .attr("class", d => "line2") //+ classify(d.name)
     .attr("stroke", d => colorScale(d.name))
     .attr("d", d => line(d.values.slice(3, d.values.length)));
-    console.log(values)
+    // console.log(values)
   var lastItem = d => d.values[d.values.length - 1];
   
   /*Add event listener for second line part
@@ -263,7 +267,7 @@ var renderLineChart = function(config) {
     .data(config.data)
     .enter()
     .append("text")
-    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 5)
+    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 10)
     .attr("y", d => yScale(lastItem(d)[valueColumn]) + 3)
     .text(function(d) {
       var item = lastItem(d);
@@ -277,7 +281,7 @@ var renderLineChart = function(config) {
       return label;
     })
     .attr("id", d => d.name)
-    .call(wrapText, 40, 20);
+    .call(wrapText, (margins.right - 10), 20);
 
 //Display annotations on side
 chartElement
@@ -349,9 +353,8 @@ var formatData = function(data) {
 var renderChartGalveston = function(data) {
   var container = "#line-chart";
   // var element = chartGalvestonSlide.querySelector(container);
-  var width = document.body.offsetWidth;
-  var height = document.body.offsetHeight;
-  // console.log("window width", width);
+  var width = window.innerWidth;
+  var height = window.innerHeight;
 
   renderLineChart({
     container,
@@ -359,7 +362,8 @@ var renderChartGalveston = function(data) {
     height,
     data,
     dateColumn: "date",
-    valueColumn: "amt"
+    valueColumn: "amt",
+    minWidth: 250
   });
 };
 
