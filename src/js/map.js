@@ -127,9 +127,23 @@ var updateMap = {
 
 function runManualTransition() {
 	var newlat = document.getElementById('control_lat').value;
+	if (newlat < -90 || newlat > 90) {
+		alert("Latitude must be between -90 (north) and 90 (south)");
+		return false;
+	}
 	var newlng = document.getElementById('control_lng').value;
 	var newzoom = document.getElementById('control_zoom').value;
 	zoomto(newzoom, newlat, newlng, -1)
+
+	var showlines = document.getElementById('control_overlays').value == 'lines';
+
+	if (showlines && !lines_drawn) {
+		drawlines();
+	}
+	if (!showlines && lines_drawn) {
+		hidelines();
+	}
+
 }
 
 function initialize_map() {
@@ -241,11 +255,17 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 function drawlines() {
 	lines.attr("d", d => d);
 	lines_drawn = true;
+	if (showTools) {
+	  document.getElementById('control_overlays').value = 'lines';
+	 }
 }
 
 function hidelines() {
 	  lines_drawn = false;
 	  lines.attr("d", d => 0);
+	  if (showTools) {
+	  	document.getElementById('control_overlays').value = 'none';
+	  }
 }
 
 
@@ -286,7 +306,8 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
    if (showTools) {
    		document.getElementById('control_lat').value = newmaplat;
 		document.getElementById('control_lng').value = newmapY;
-		document.getElementById('control_zoom').value = newmapScale
+		document.getElementById('control_zoom').value = newmapScale;
+
    }
 }
 
@@ -295,4 +316,5 @@ function override_with_user_input() {
   var newmapY = 10+100*Math.random();
   var newmaplat = -20-50*Math.random();
   zoomto(mapscale, newmaplat, newmapY, -1);
+
 }

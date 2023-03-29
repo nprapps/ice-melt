@@ -6,7 +6,7 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
 %>
 <html lang="en-US">
   <head>
-    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <%= t.include("partials/_head.html",  { "project": grunt.data.json.project, "social": doc.social }) %>
     <link rel="stylesheet" type="text/css" href="alaska.css">
   </head>
   <body>
@@ -20,7 +20,15 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
           <label for="lat">Latitude&nbsp;</label><input type="text" id="control_lat" minlength="1" maxlength="5" size="5">
           <br><label for="lat">Longitude&nbsp;</label><input type="text" id="control_lng" minlength="1" maxlength="5" size="5">
           <br><label for="lat">Zoom&nbsp;</label><input type="text" id="control_zoom" minlength="1" maxlength="5" size="5">
+          <br><label for="lat">Overlays&nbsp;</label>
+          <select type="select" id="control_overlays">
+          <option value="none">None</option>  
+          <option value="lines">Lines</option>  
+          </select>
+
+
           <br><input type="button" value="Submit" id="controlsubmit">
+
         </form>
 
       </div>
