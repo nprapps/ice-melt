@@ -23,6 +23,8 @@ var lines;
 var lines_drawn = false;
 let segments_visible = [1,];
 
+let showTools = false;
+
 var sphere = ({type: "Sphere"});
 
 // parameter for simplification, slider at https://observablehq.com/d/bb265e5f8575d2b6 
@@ -123,6 +125,12 @@ var updateMap = {
 
 
 
+function runManualTransition() {
+	var newlat = document.getElementById('control_lat').value;
+	var newlng = document.getElementById('control_lng').value;
+	var newzoom = document.getElementById('control_zoom').value;
+	zoomto(newzoom, newlat, newlng, -1)
+}
 
 function initialize_map() {
 
@@ -142,8 +150,6 @@ function initialize_map() {
     		.attr("width", 5000)
     		.attr("height", 5000);
 		
-
-	applyPencilFilterTextures(svg);  
 
 	  outline = svg.append("path")  
 	    .attr("fill","white")
@@ -178,6 +184,14 @@ function initialize_map() {
 
 
 	});
+
+	// Setup tooling
+	var controldiv = document.getElementById("controls");
+	if(controldiv) {
+	    controlbutton = document.getElementById("controlsubmit");
+	    controlbutton.onclick = runManualTransition;
+	    showTools = true;
+	}
 }
 
 function geoCurvePath(curve, projection, context) {
@@ -251,209 +265,34 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg
   	if (lines_drawn) {
   		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
   		}
+
 }
 
 function interpolate(x0, x1, t) {
   return (x0 + t*(x1-x0));
 }
 
-async function zoomto(mapScale, newmaplat, newmapY, segment_tweened_in_id) {
+async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
-  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
-  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY + " scale: " + mapscale); 
+  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY + " scale: " + newmapScale); 
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
-          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
+          setmap(interpolate(mapscale, newmapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
         })
       .end();
+   if (showTools) {
+   		document.getElementById('control_lat').value = newmaplat;
+		document.getElementById('control_lng').value = newmapY;
+		document.getElementById('control_zoom').value = newmapScale
+   }
 }
 
-function rundemo() {
+function override_with_user_input() {
   console.log("\nRun transition");
-
   var newmapY = 10+100*Math.random();
   var newmaplat = -20-50*Math.random();
-
-  zoomto(mapscale, newmaplat, newmapY);
-
-}
-
-
-// MUCH OF THIS CAN BE REMOVED 
-function applyPencilFilterTextures(svg) {
-  
-  const defs = svg.append("defs");
-
-  // Add back if there are arrowheads
-  //defs.html(arrowHead)
-
-  var roughPaper = defs.append("filter");
-
-  roughPaper
-    .attr("x", "0%")
-    .attr("y", "0%")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("filterUnits", "objectBoundingBox")
-    .attr("id", "roughPaper");
-  roughPaper.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", "128")
-    .attr("numOctaves", "1")
-    .attr("result", "noise");
-  var diffLight = roughPaper.append("feDiffuseLighting");
-  diffLight
-    .attr("in", "noise")
-    .attr("lighting-color", "white")
-    .attr("surfaceScale", "1")
-    .attr("result", "diffLight");
-  diffLight.append("feDistantLight")
-    .attr("azimuth", "45")
-    .attr("elevation", "55");
-  roughPaper.append("feGaussianBlur")
-    .attr("in", "diffLight")
-    .attr("stdDeviation", "0.75")
-    .attr("result", "dlblur");
-  roughPaper.append("feComposite")
-    .attr("operator", "arithmetic")
-    .attr("k1", "1.2")
-    .attr("k2", "0")
-    .attr("k3", "0")
-    .attr("k4", "0")
-    .attr("in", "dlblur")
-    .attr("in2", "SourceGraphic")
-    .attr("result", "out");
-
-  var pencilTexture = defs.append("filter")
-  .attr("x", "-2%")
-  .attr("y", "-2%")
-  .attr("width", "104%")
-  .attr("height", "104%")
-  .attr("filterUnits", "objectBoundingBox")
-  .attr("id", "pencilTexture")
-  pencilTexture.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", "1.2")
-    .attr("numOctaves", "3")
-    .attr("result", "noise")
-  pencilTexture.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", "3")
-    .attr("in", "SourceGraphic")
-    .attr("result", "newSource");
-
-  var pencilTexture2 = defs.append("filter")
-  .attr("x", "0%")
-  .attr("y", "0%")
-  .attr("width", "100%")
-  .attr("height", "100%")
-  .attr("filterUnits", "objectBoundingBox")
-  .attr("id", "pencilTexture2");
-  pencilTexture2.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 2)
-    .attr("numOctaves", 5)
-    .attr("stitchTiles", "stitch")
-    .attr("result", "f1");
-  pencilTexture2.append("feColorMatrix")
-    .attr("type", "matrix")
-    .attr("values", "0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5")
-    .attr("result", "f2");
-  pencilTexture2.append("feComposite")
-    .attr("operator", "in")
-    .attr("in2", "f2")
-    .attr("in", "SourceGraphic")
-    .attr("result", "f3");
-  var pencilTexture3 = defs.append("filter")
-  .attr("x", "-40%")
-  .attr("y", "-40%")
-  .attr("width", "140%")
-  .attr("height", "140%")
-  .attr("filterUnits", "objectBoundingBox")
-  .attr("id", "pencilTexture3");
-  pencilTexture3.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 0.5)
-    .attr("numOctaves", 5)
-    .attr("stitchTiles", "stitch")
-    .attr("result", "f1");
-  pencilTexture3.append("feColorMatrix")
-    .attr("type", "matrix")
-    .attr("values", "0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5")
-    .attr("result", "f2");
-  pencilTexture3.append("feComposite")
-    .attr("operator", "in")
-    .attr("in2", "f2")
-    .attr("in", "SourceGraphic")
-    .attr("result", "f3");
-  pencilTexture3.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 1.2)
-    .attr("numOctaves", 3)
-    .attr("result", "noise");
-  pencilTexture3.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", 2.5)
-    .attr("in", "f3")
-    .attr("result", "f4");
-  var pencilTexture4 = defs.append("filter")
-  .attr("x", "-20%")
-  .attr("y", "-20%")
-  .attr("width", "140%")
-  .attr("height", "140%")
-  .attr("filterUnits", "objectBoundingBox")
-  .attr("id", "pencilTexture4");
-  pencilTexture4.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 0.03)
-    .attr("numOctaves", 3)
-    .attr("seed", 1)
-    .attr("result", "f1");
-  pencilTexture4.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", 5)
-    .attr("in", "SourceGraphic")
-    .attr("in2", "f1")
-    .attr("result", "f4");
-  pencilTexture4.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 0.03)
-    .attr("numOctaves", 3)
-    .attr("seed", 10)
-    .attr("result", "f2");
-  pencilTexture4.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", 5)
-    .attr("in", "SourceGraphic")
-    .attr("in2", "f2")
-    .attr("result", "f5");
-  pencilTexture4.append("feTurbulence")
-    .attr("type", "fractalNoise")
-    .attr("baseFrequency", 1.2)
-    .attr("numOctaves", 2)
-    .attr("seed", 100)
-    .attr("result", "f3");
-  pencilTexture4.append("feDisplacementMap")
-    .attr("xChannelSelector", "R")
-    .attr("yChannelSelector", "G")
-    .attr("scale", 3)
-    .attr("in", "SourceGraphic")
-    .attr("in2", "f3")
-    .attr("result", "f6");
-  pencilTexture4.append("feBlend")
-    .attr("mode", "multiply")
-    .attr("in2", "f4")
-    .attr("in", "f5")
-    .attr("result", "out1");
-  pencilTexture4.append("feBlend")
-    .attr("mode", "multiply")
-    .attr("in", "out1")
-    .attr("in2", "f6")
-    .attr("result", "out2");
+  zoomto(mapscale, newmaplat, newmapY, -1);
 }
