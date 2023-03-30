@@ -1,3 +1,17 @@
+<% 
+  var processCredit = function(c) {
+    var thisCredit = null;
+
+    if (typeof credits[c][thisStory] != "undefined" && credits[c][thisStory].length > 0) {
+      thisCredit = credits[c][thisStory];
+    } else if (typeof credits[c]["all"] != "undefined" && credits[c]["all"].length > 0) {
+      thisCredit = credits[c]["all"];
+    }
+
+    return thisCredit;
+  }
+%>
+
 <div class="about">
   <div class="constrained">
 
@@ -8,12 +22,7 @@
         <h4><%= credits["hed_credits"]["all"] %></h4>
         <ul class="credits">
           <% [ "reporting", "field_production", "photography", "editing", "illustration", "maps", "dev" ].forEach(credit => {
-            var thisCredit = null;
-            if (typeof credits[credit][thisStory] != "undefined") {
-              thisCredit = credits[credit][thisStory];
-            } else if (typeof credits[credit]["all"] != "undefined") {
-              thisCredit = credits[credit]["all"];
-            }
+            var thisCredit = processCredit(credit);
           %>
 
           <% if (thisCredit) { %><li><%= thisCredit %></li><% } %>
@@ -25,27 +34,21 @@
 
       <div class="block">
 
-        <h4><%= credits["hed_acknowledgements"]["all"] %></h4>
         <% 
-          var ackCredit = null;
-          if (typeof credits["acknowledgements"][thisStory] != "undefined") {
-            ackCredit = credits["acknowledgements"][thisStory];
-          } else if (typeof credits["acknowledgements"]["all"] != "undefined") {
-            ackCredit = credits["acknowledgements"]["all"];
-          }
+          var ackCredit = processCredit("acknowledgements");
         %>
-        <% if (ackCredit) { %><%= t.renderMarkdown(ackCredit) %><% } %>
+        <% if (ackCredit) { %>
+          <h4><%= credits["hed_acknowledgements"]["all"] %></h4>
+          <%= t.renderMarkdown(ackCredit) %>
+        <% } %>
 
-        <h4><%= credits["hed_data"]["all"] %></h4>
         <% 
-          var dataCredit = null;
-          if (typeof credits["data"][thisStory] != "undefined") {
-            dataCredit = credits["data"][thisStory];
-          } else if (typeof credits["data"]["all"] != "undefined") {
-            dataCredit = credits["data"]["all"];
-          }
+          var dataCredit = processCredit("data");
         %>
-        <% if (dataCredit) { %><%= t.renderMarkdown(dataCredit) %><% } %>
+        <% if (dataCredit) { %>
+          <h4><%= credits["hed_data"]["all"] %></h4>
+          <%= t.renderMarkdown(dataCredit) %>
+        <% } %>
 
       </div>
 
