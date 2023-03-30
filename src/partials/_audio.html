@@ -21,7 +21,7 @@
     </div>
     <div class="meta">
       <figcaption><%= slide.audioLabel || "" %></figcaption>
-      <div class="counter"></div>
+      <div class="counter"><% if (slide.audioDuration) { %><%= slide.audioDuration %><% } %></div>
     </div>
   </div>
   <div class="caption"></div>
