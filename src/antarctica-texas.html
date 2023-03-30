@@ -1,3 +1,4 @@
+<% var thisStory = "antarctica"; %>
 <!doctype html>
 <%
 var doc = grunt.data.archieml.antarctica;
@@ -6,7 +7,7 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 <html lang="en-US">
   <head>
     <%= t.include("partials/_head.html", { "project": grunt.data.json.project, "social": doc.social }) %>
-    <link rel="stylesheet" type="text/css" href="antarctica.css">
+    <link rel="stylesheet" type="text/css" href="<%= thisStory %>.css">
   </head>
   <body>
     
@@ -25,24 +26,9 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 
     <footer class="closing">
       
-      <div class="more-stories" <% if (doc.footer.outboundImage) { %> style="background: url('./assets/synced/images/resized/<%= doc.footer.outboundImage %>') no-repeat; background-size: cover;"<% } %>>
-        <div class="constrained">
-          <h3><%= renderMarkdownText(doc.footer.outboundTitle) %></h3>
+      <%= t.include("partials/_footer_nav.html", { "data": grunt.data.json.footer_nav, "bgImage": doc.footer.outboundImage || null, "thisStory": thisStory }) %>
 
-          <ul class="outbound">
-            <% doc.footer.outbound.forEach(function(link) { %>
-              <li>
-                <a href="<%= link.url %>">
-                  <img src="./assets/synced/images/resized/<%= link.thumbnail %>" alt="">
-                  <%= renderMarkdownText(link.title) %>
-                </a>
-              </li>
-            <% }) %>
-          </ul>
-        </div>
-      </div>
-
-      <%= t.include("partials/_credits.html", { "credits": grunt.data.json.credits, "thisStory": "antarctica" }) %>
+      <%= t.include("partials/_credits.html", { "credits": grunt.data.json.credits, "thisStory": thisStory }) %>
 
       <div class="constrained">
         <%= typeof content != "undefined" ? content : "" %>
