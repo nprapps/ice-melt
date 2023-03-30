@@ -14,7 +14,7 @@
     <!-- <div class="divider"></div> -->
     <div class="content">
       <% if (slide.locator) { %>
-        <img src="./assets/synced/locators/<%= slide.locator %>" alt="" class="locator">
+        <img data-src="./assets/locators/<%= slide.locator %>" alt="Locator map" class="locator">
       <% } %>
 
       <%= t.renderMarkdown(slide.text) %>
