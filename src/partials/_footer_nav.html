@@ -2,7 +2,7 @@
   var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 %>
 
-<div class="more-stories" <% if (bgImage) { %> style="background: url('./assets/synced/images/resized/<%= bgImage %>') no-repeat; background-size: cover;"<% } %>>
+<div class="more-stories" <% if (data[thisStory].bgimage) { %> style="background: url('./assets/synced/images/resized/<%= data[thisStory].bgimage %>') no-repeat; background-size: cover;"<% } %>>
   <div class="constrained">
     <h3><%= renderMarkdownText(data.overall.headline) %></h3>
 
