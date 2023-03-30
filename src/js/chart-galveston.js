@@ -14,7 +14,7 @@ var d3 = {
 
 var { COLORS, classify, makeTranslate, wrapText } = require("./lib/helpers");
 var { yearFull, yearAbbrev } = require("./lib/helpers/formatDate");
-var { isMobile } = require("./lib/helpers/breakpoints");
+var { isMobile, isDesktop, isTablet } = require("./lib/helpers/breakpoints");
 
 // Render a line chart.
 var renderLineChart = function(config) {
@@ -24,9 +24,9 @@ var renderLineChart = function(config) {
   // figure out chart dimensions and margins
   var margins = {
     top: 75,
-    right: 300,
+    right: 200,
     bottom: 100,
-    left: 300
+    left: 200
   };
   if (isMobile.matches) {
     margins = {
@@ -49,6 +49,39 @@ var renderLineChart = function(config) {
   var ticksX = isMobile.matches ? 5 : 10;
   var ticksY = isMobile.matches ? 5 : 5;
   var roundTicksFactor = 2;
+
+  var tickValues = [
+    new Date(2020, 0, 1),
+    new Date(2050, 0, 1),
+    new Date(2070, 0, 1),
+    new Date(2090, 0, 1),
+    new Date(2110, 0, 1),
+    new Date(2130, 0, 1)
+  ];
+  if (isMobile.matches) {
+    tickValues = [
+      new Date(2020, 0, 1),
+      new Date(2050, 0, 1),
+      new Date(2090, 0, 1),
+      new Date(2130, 0, 1)
+    ]; 
+  }
+  if (isTablet.matches) {
+    tickValues = [
+      new Date(2020, 0, 1),
+      new Date(2030, 0, 1),
+      new Date(2040, 0, 1),
+      new Date(2050, 0, 1),
+      new Date(2060, 0, 1),
+      new Date(2070, 0, 1),
+      new Date(2080, 0, 1),
+      new Date(2090, 0, 1),
+      new Date(2100, 0, 1),
+      new Date(2110, 0, 1),
+      new Date(2120, 0, 1),
+      new Date(2130, 0, 1)
+    ];
+  }
 
   // Clear existing graphic (for redraw)
   var containerElement = d3.select(config.container);
@@ -134,13 +167,11 @@ var renderLineChart = function(config) {
   var xAxis = d3
     .axisBottom()
     .scale(xScale)
-    .ticks(ticksX)
-    .tickFormat(function(d, i) {
-      if (isMobile.matches) {
-        return "\u2019" + yearAbbrev(d);
-      } else {
-        return yearFull(d);
-      }
+    // .ticks(ticksX)
+    .tickValues(tickValues)
+    .tickFormat(function(d) {
+      var thisYr = yearFull(d);
+      return thisYr;
     });
 
   var yAxis = d3
@@ -153,12 +184,6 @@ var renderLineChart = function(config) {
       } else {
         return "+" + d + " ft.";
       }
-      // if (d == '14') {
-      //   return "14 ft.";
-      // }
-      // else {
-      //   return d
-      // }
   });
 
   // Render axes to chart.
@@ -272,10 +297,10 @@ var renderLineChart = function(config) {
     .text(function(d) {
       var item = lastItem(d);
       var value = item[valueColumn];
-      var label = value.toFixed(1);
+      var label = value.toFixed(1) + " ft.";
 
       if (!isMobile.matches) {
-        label = d.name + ": " + label + ' ft';
+        label = d.name + ": " + label;
       }
 
       return label;
@@ -363,7 +388,7 @@ var renderChartGalveston = function(data) {
     data,
     dateColumn: "date",
     valueColumn: "amt",
-    minWidth: 250
+    minWidth: 270
   });
 };
 

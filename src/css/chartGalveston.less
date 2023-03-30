@@ -41,20 +41,17 @@
       fill: @blue6;
     }
     
-    @media screen and (max-width: 500px) {
+    @media screen and @mobile {
       .value text {
-        font-size: 10px;
+        font-size: 11px;
       }
-    }
-    
-    @media screen and (min-width: 500px) {
-      .key {
+      .key.one-line {
         display: none;
       }
     }
     
-    @media screen and (max-width: 500px) {
-      .key.one-line {
+    @media screen and @mobile-above {
+      .key {
         display: none;
       }
     }
