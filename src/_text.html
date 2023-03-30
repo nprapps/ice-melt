@@ -13,6 +13,10 @@
   <div class="text">
     <!-- <div class="divider"></div> -->
     <div class="content">
+      <% if (slide.locator) { %>
+        <img src="./assets/synced/locators/<%= slide.locator %>" alt="" class="locator">
+      <% } %>
+
       <%= t.renderMarkdown(slide.text) %>
     </div>
     <% if (slide.caption) { %>

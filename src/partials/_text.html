@@ -3,6 +3,10 @@
     slide.textSections.forEach(function(d) { %>
     <div class="text" id="<%= d.id %>">
     <div class="content">
+      <% if (slide.locator) { %>
+        <img src="./assets/synced/locators/<%= slide.locator %>" alt="" class="locator">
+      <% } %>
+
       <%= t.renderMarkdown(d.text) %>
     </div>
 
@@ -23,6 +27,10 @@
   <% }) } else if (slide.text) { %>
   <div class="text">
     <div class="content">
+      <% if (slide.locator) { %>
+        <img src="./assets/synced/locators/<%= slide.locator %>" alt="" class="locator">
+      <% } %>
+
       <%= t.renderMarkdown(slide.text) %>
     </div>
 
