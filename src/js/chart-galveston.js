@@ -32,7 +32,7 @@ var renderLineChart = function(config) {
     margins = {
       top: 50,
       right: 50,
-      bottom: 50,
+      bottom: 75,
       left: 50
     }
   }
@@ -43,8 +43,13 @@ var renderLineChart = function(config) {
     margins.left = Math.floor((config.width - chartWidth) / 2);
     margins.right = margins.left;
   }
+  if (chartWidth > config.maxWidth) {
+    chartWidth = config.maxWidth;
+    margins.left = Math.floor((config.width - chartWidth) / 2);
+    margins.right = margins.left;
+  }
   var chartHeight = config.height - margins.top - margins.bottom;
-
+  
   // set up ticks and rounding
   var ticksX = isMobile.matches ? 5 : 10;
   var ticksY = isMobile.matches ? 5 : 5;
@@ -309,44 +314,43 @@ var renderLineChart = function(config) {
     .call(wrapText, (margins.right - 10), 20);
 
 //Display annotations on side
-chartElement
-    .append("g")
-    .attr("class", "annotations")
-    .selectAll("text")
-    .data(config.data)
-    .enter()
-    .append("text")
-    .attr("x", d => xScale(lastItem(d)[dateColumn]) - 240)
-    .attr("y", function(d) {
-      if (d.name == 'High') {
-        return yScale(lastItem(d)[valueColumn]) - 60;
-      }
-      else {
-        return yScale(lastItem(d)[valueColumn]) + 130;
-      }
-    })
-    .text(function(d) {
-      var annot;
-      if (d.name == 'High') {
-        annot = "Higher emissions, faster ice melt";
-      }
-      else if (d.name == 'Low') {
-        annot = "Lower emissions, slower ice melt";
-      }
-      return annot;
-    })
-    .attr("id", d => d.name)
-    //.call(wrapText, 40, 20);
-  };
+var annotations = chartElement
+  .append("g")
+  .attr("class", "annotations")
+  .selectAll("text")
+  .data(config.data)
+  .enter()
+  .append("text")
+  .attr("x", d => xScale(lastItem(d)[dateColumn]) - 20)
+  .attr("y", function(d) {
+    if (d.name == 'High') {
+      // return yScale(lastItem(d)[valueColumn]) - 40;
+      return yScale(13);
+    }
+    else {
+      return yScale(1.25);
+    }
+  })
+  .text(function(d) {
+    var annot;
+    if (d.name == 'High') {
+      annot = "Higher emissions, faster ice melt";
+    }
+    else if (d.name == 'Low') {
+      annot = "Lower emissions, slower ice melt";
+    }
+    return annot;
+  })
+  .attr("id", d => d.name);
+if (chartWidth < (config.minWidth + 100)) {
+  annotations.call(wrapText, (chartWidth * .6), 20);
+}
+
+}
 
 /*
  setup
  */
-
-//Initialize graphic
-var onWindowLoaded = function() {
-};
-
 //Format graphic data for processing by D3.
 var formatData = function(data) {
   var series = [];
@@ -388,11 +392,13 @@ var renderChartGalveston = function(data) {
     data,
     dateColumn: "date",
     valueColumn: "amt",
-    minWidth: 270
+    minWidth: 270,
+    maxWidth: 1000
   });
 };
 
-var chartGalvestonInit = function() {
+// init
+var setupChartGalveston = function() {
   var series = formatData(CHART_GALVESTON);
   renderChartGalveston(series);
 
@@ -402,7 +408,7 @@ var chartGalvestonInit = function() {
 //Initially load the graphic
 // don't do anything if this doesn't exist on the page;
 if (chartGalvestonSlide) {
-  window.addEventListener("load", chartGalvestonInit);
+  window.addEventListener("load", setupChartGalveston);
 }
 
 
