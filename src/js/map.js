@@ -185,12 +185,15 @@ function initialize_map() {
 	    .attr("stroke-width", "3px")
 	    .attr("fill","#eeeeee")
 
+    linebox = svg.append("g").attr("id","lineBox");
+
     labelBox = svg.append("g")
       .attr("id","labelBox");
 
     labels = labelBox.selectAll(".label")
       .data(MAP_LABELS).join("text")
         .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
+        .attr("id",d => d.id)
         .text(d => d.label)        
 
 	  let topology = mapdata;
@@ -202,7 +205,7 @@ function initialize_map() {
 
 
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
-      linebox = svg.append("g").attr("id","lineBox");
+      
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
@@ -327,19 +330,41 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 		document.getElementById('control_lng').value = newmapY;
 		document.getElementById('control_zoom').value = newmapScale;
 
-  //extra bracket from jacob? 
   }
 }
 
 function changeLabels(prevSlide,activeSlide) {
+  console.log("-------")
   console.log("leaving " + prevSlide)
   console.log("entering " + activeSlide)
+  var activeMapData = MAP_DATA.find(e => e.sceneID == activeSlide);
+
+  // get labels you need
+  var activeLabels = activeMapData.labels.replace(/\s/g, '').split(",");
+  
+  console.log(activeMapData)
+  console.log(activeLabels)
+  
+  d3.selectAll("#labelBox text").classed("active",false)
 
   console.log(MAP_DATA)
-  
-  // get labels you need
+      // show and hide labels and highlights based on if active
+  for (var i = 0; i < activeLabels.length; i++) {
+    // if (poi[i] == "") break;
+
+    let item = d3.select(`#labelBox text#${activeLabels[i]}`);
+    console.log(item)
+
+    item.classed("active",true)
+
+    // if (type == "add") {
+
+    // } else {
+      // item.classList.remove("active"),fadeTime
+    // }     
+  }
+
   // diff labels you need from labels on screen (or previous?)
-  // transition labels you don't want out
   // transition labels you do want in
 
   return "hello"
