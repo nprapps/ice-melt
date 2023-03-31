@@ -62,10 +62,6 @@ footer.closing {
       }
     }
 
-    hr { background-color: #999; }
-
-    .chatter { padding-bottom: 11px; }
-
     a {
       color: @white;
     }
@@ -125,17 +121,6 @@ footer.closing {
       background: fade(white, 20%);
       max-width: 100%;
     }
-
-    a {
-      font-weight: 900;
-      text-decoration: none;
-      -webkit-font-smoothing: antialiased;
-      display: block;
-
-      &:hover, &:active, &:focus {
-        // color: lighten(@more-stories,40%);
-      }
-    }
   }
 
   .social {
@@ -161,42 +146,6 @@ footer.closing {
         padding: 0;
       }
     }
-
-    .social-link {
-      border: 1px solid @gray-intermediate;
-      padding: 5px 10px;
-      text-decoration: none;
-      background: transparent;
-      color: white;
-      width: auto;
-      display: inline-block;
-      font-size: inherit;
-
-      &:hover, &:active, &:focus {
-        border-color: @gray-intermediate;
-        color: @gray-intermediate;
-
-        // img { opacity: 0.5; }
-      }
-
-      img, svg {
-        width: .9rem;
-        height: auto;
-        vertical-align: text-top;
-        margin-right: 3px;
-      }
-    }
-  }
-
-  .native-share {
-    display: none;
-    padding: 24px 0;
-    text-align: center;
-  }
-
-  .navigator-share-supported & {
-    .link-share { display: none; }
-    .native-share { display: block; }
   }
 
   .about {
@@ -241,6 +190,17 @@ footer.closing {
 
     @media @mobile {
       margin-bottom: 40px;
+    }
+
+    img.logo-airbus {
+      display: block;
+      height: 26px;
+      width: auto;
+      opacity: 0.5;
+      float: right;
+      margin-top: 5px;
+      border: 1px solid #454545;
+      padding: 7px;
     }
   }
 
