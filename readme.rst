@@ -144,3 +144,17 @@ Troubleshooting
 **Fatal error: Port 35729 is already in use by another process.**
 
 The live reload port is shared between this and other applications. If you're running another interactive-template project or Dailygraphics Next, they may collide. If that's the case, use ``--reload-port=XXXXX`` to set a different port for the live reload server. You can also specify a port for the webserver with ``--port=XXXX``, although the app will automatically find the first available port after 8000 for you.
+
+
+
+Map Testing
+---------------
+
+This repo includes an html page intended to help figure out the right zoom and center for a map transition at /maptool.html. 
+
+It's driven by a different markup doc--see which one is listed for maptool.html in the project.json file. 
+
+The controls -- which appear with a hideous papayawhip border on the bottom left -- allow you to reset the lat/lng and zoom level of the map. The arrow overlays can also be toggled on and off. 
+
+When scrolling through normally the controls are updated with the current map's data after each transition is complete. 
+

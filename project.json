@@ -19,14 +19,14 @@
   "scripts": {
     "src/js/main.js": "build/app.js"
   },
-  "title": "",
+  "title": "Ice Melt",
   "description": "",
-  "url": "",
+  "url": "https://apps.npr.org/ice-melt/",
   "image": "assets/logo.png",
   "analytics": {
-    "topicIDs": [],
-    "primaryTopic": "",
-    "secondaryTopics": []
+    "topicIDs": ["p1167","1001","1003","1004","1007","1025","1165"],
+    "primaryTopic": "climate",
+    "secondaryTopics": ["1001","1003","1004","1007","1025","1165","1167"]
   },
   "sheets": [ "1QI8gMLlZfuPGXgUWpal3ZSnU8KhNEmTpDHAAoq4H26k" ],
   "docs": {
@@ -34,7 +34,8 @@
     "alaska": "1S-kxXaIekaMqa2KwPgotvkt25_7AaQMTneyW3uTwu-4",
     "antarctica": "1UewnGInq_l8qgyABtPNGzoo0Bl2Ne06FY2Abtn9MLfg",
     "greenland": "15iZ1hKhs22-Rr9-VozIUWnbqpLAF3d_ur3It23S7rXk",
-    "nepal": "1eMVL88MHOx_TnX4Cy88MRE6IsY5ccqX-Yr5H8wUltJg"
+    "nepal": "1eMVL88MHOx_TnX4Cy88MRE6IsY5ccqX-Yr5H8wUltJg",
+    "maptool": "1iEHJRXcA1Wg0tjckYcIY9He_Qe8k9JnRd-7o0Opq7z4"
   },
   "embedded": false,
   "production": false

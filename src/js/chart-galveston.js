@@ -14,40 +14,79 @@ var d3 = {
 
 var { COLORS, classify, makeTranslate, wrapText } = require("./lib/helpers");
 var { yearFull, yearAbbrev } = require("./lib/helpers/formatDate");
-var { isMobile } = require("./lib/helpers/breakpoints");
+var { isMobile, isDesktop, isTablet } = require("./lib/helpers/breakpoints");
 
 // Render a line chart.
 var renderLineChart = function(config) {
   // Setup
   var { dateColumn, valueColumn } = config;
 
-  var aspectWidth = isMobile.matches ? 4 : 16;
-  var aspectHeight = isMobile.matches ? 3 : 9;
-
+  // figure out chart dimensions and margins
   var margins = {
-    top: 5,
-    right: 85,
-    bottom: 20,
-    left: 30
+    top: 75,
+    right: 200,
+    bottom: 100,
+    left: 200
   };
-
-  var ticksX = 10;
-  var ticksY = 10;
-  var roundTicksFactor = 5;
-
-  // Mobile
   if (isMobile.matches) {
-    ticksX = 5;
-    ticksY = 5;
-    margins.right = 25;
+    margins = {
+      top: 50,
+      right: 50,
+      bottom: 75,
+      left: 50
+    }
   }
 
-  // Calculate actual chart dimensions
   var chartWidth = config.width - margins.left - margins.right;
-  var chartHeight =
-    Math.ceil((config.width * aspectHeight) / aspectWidth) -
-    margins.top -
-    margins.bottom;
+  if (chartWidth < config.minWidth) {
+    chartWidth = config.minWidth;
+    margins.left = Math.floor((config.width - chartWidth) / 2);
+    margins.right = margins.left;
+  }
+  if (chartWidth > config.maxWidth) {
+    chartWidth = config.maxWidth;
+    margins.left = Math.floor((config.width - chartWidth) / 2);
+    margins.right = margins.left;
+  }
+  var chartHeight = config.height - margins.top - margins.bottom;
+  
+  // set up ticks and rounding
+  var ticksX = isMobile.matches ? 5 : 10;
+  var ticksY = isMobile.matches ? 5 : 5;
+  var roundTicksFactor = 2;
+
+  var tickValues = [
+    new Date(2020, 0, 1),
+    new Date(2050, 0, 1),
+    new Date(2070, 0, 1),
+    new Date(2090, 0, 1),
+    new Date(2110, 0, 1),
+    new Date(2130, 0, 1)
+  ];
+  if (isMobile.matches) {
+    tickValues = [
+      new Date(2020, 0, 1),
+      new Date(2050, 0, 1),
+      new Date(2090, 0, 1),
+      new Date(2130, 0, 1)
+    ]; 
+  }
+  if (isTablet.matches) {
+    tickValues = [
+      new Date(2020, 0, 1),
+      new Date(2030, 0, 1),
+      new Date(2040, 0, 1),
+      new Date(2050, 0, 1),
+      new Date(2060, 0, 1),
+      new Date(2070, 0, 1),
+      new Date(2080, 0, 1),
+      new Date(2090, 0, 1),
+      new Date(2100, 0, 1),
+      new Date(2110, 0, 1),
+      new Date(2120, 0, 1),
+      new Date(2130, 0, 1)
+    ];
+  }
 
   // Clear existing graphic (for redraw)
   var containerElement = d3.select(config.container);
@@ -65,7 +104,7 @@ var renderLineChart = function(config) {
     (acc, d) => acc.concat(d.values.map(v => v[valueColumn])),
     []
   );
-  console.log(values);
+  // console.log(values);
 
   var floors = values.map(
     v => Math.floor(v / roundTicksFactor) * roundTicksFactor
@@ -94,29 +133,26 @@ var renderLineChart = function(config) {
       })
     )
     .range([
-      COLORS.red3,
-      COLORS.yellow3,
-      COLORS.blue3,
-      COLORS.orange3,
-      COLORS.teal3
+      COLORS.blue6,
+      COLORS.blue4,
+      COLORS.blue2
     ]);
 
   // Render the HTML legend.
+  // var oneLine = config.data.length > 1 ? "" : " one-line";
 
-  var oneLine = config.data.length > 1 ? "" : " one-line";
+  // var legend = containerElement
+  //   .append("ul")
+  //   .attr("class", "key" + oneLine)
+  //   .selectAll("g")
+  //   .data(config.data)
+  //   .enter()
+  //   .append("li")
+  //   .attr("class", d => "key-item " + classify(d.name));
 
-  var legend = containerElement
-    .append("ul")
-    .attr("class", "key" + oneLine)
-    .selectAll("g")
-    .data(config.data)
-    .enter()
-    .append("li")
-    .attr("class", d => "key-item " + classify(d.name));
+  // legend.append("b").style("background-color", d => colorScale(d.name));
 
-  legend.append("b").style("background-color", d => colorScale(d.name));
-
-  legend.append("label").text(d => d.name);
+  // legend.append("label").text(d => d.name);
 
   // Create the root SVG element.
 
@@ -136,13 +172,11 @@ var renderLineChart = function(config) {
   var xAxis = d3
     .axisBottom()
     .scale(xScale)
-    .ticks(ticksX)
-    .tickFormat(function(d, i) {
-      if (isMobile.matches) {
-        return "\u2019" + yearAbbrev(d);
-      } else {
-        return yearFull(d);
-      }
+    // .ticks(ticksX)
+    .tickValues(tickValues)
+    .tickFormat(function(d) {
+      var thisYr = yearFull(d);
+      return thisYr;
     });
 
   var yAxis = d3
@@ -150,11 +184,10 @@ var renderLineChart = function(config) {
     .scale(yScale)
     .ticks(ticksY)
     .tickFormat(function(d, i) {
-      if (d == '14') {
-        return "14 ft";
-      }
-      else {
-        return d
+      if (d == 0) {
+        return d;
+      } else {
+        return "+" + d + " ft.";
       }
   });
 
@@ -228,12 +261,8 @@ var renderLineChart = function(config) {
     .append("path")
     .attr("class", d => "line1 " + classify(d.name))
     .attr("stroke", d => colorScale(d.name))
-    .attr("d", function(d) {
-      if (d.name == 'Intermediate') {
-        return line(d.values.slice(0, 3))
-      }
-      return
-    });
+    //First line part until 2050
+    .attr("d", d => line(d.values.slice(0, 4)));
   // Second line part 
   chartElement
     .append("g")
@@ -244,11 +273,11 @@ var renderLineChart = function(config) {
     .append("path")
     .attr("class", d => "line2") //+ classify(d.name)
     .attr("stroke", d => colorScale(d.name))
-    .attr("d", d => line(d.values.slice(2, d.values.length)));
-    console.log(values)
+    .attr("d", d => line(d.values.slice(3, d.values.length)));
+    // console.log(values)
   var lastItem = d => d.values[d.values.length - 1];
   
-  //Add event listener for second line part
+  /*Add event listener for second line part
   var chart = document.querySelector("#line-chart");
   var line2 = document.getElementsByClassName("line2")
   chart.addEventListener("click", (e) => {
@@ -258,7 +287,7 @@ var renderLineChart = function(config) {
     console.log(line2[0].classList);
     //e.stopPropagation();
     //e.preventDefault();
-})
+})*/
 
   //Display final values
   chartElement
@@ -268,31 +297,60 @@ var renderLineChart = function(config) {
     .data(config.data)
     .enter()
     .append("text")
-    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 5)
+    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 10)
     .attr("y", d => yScale(lastItem(d)[valueColumn]) + 3)
     .text(function(d) {
       var item = lastItem(d);
       var value = item[valueColumn];
-      var label = value.toFixed(1);
+      var label = value.toFixed(1) + " ft.";
 
       if (!isMobile.matches) {
-        label = d.name + ": " + label + ' ft';
+        label = d.name + ": " + label;
       }
 
       return label;
     })
-    .call(wrapText, 40, 20);
-};
+    .attr("id", d => d.name)
+    .call(wrapText, (margins.right - 10), 20);
 
+//Display annotations on side
+var annotations = chartElement
+  .append("g")
+  .attr("class", "annotations")
+  .selectAll("text")
+  .data(config.data)
+  .enter()
+  .append("text")
+  .attr("x", d => xScale(lastItem(d)[dateColumn]) - 20)
+  .attr("y", function(d) {
+    if (d.name == 'High') {
+      // return yScale(lastItem(d)[valueColumn]) - 40;
+      return yScale(13);
+    }
+    else {
+      return yScale(1.25);
+    }
+  })
+  .text(function(d) {
+    var annot;
+    if (d.name == 'High') {
+      annot = "Higher emissions, faster ice melt";
+    }
+    else if (d.name == 'Low') {
+      annot = "Lower emissions, slower ice melt";
+    }
+    return annot;
+  })
+  .attr("id", d => d.name);
+if (chartWidth < (config.minWidth + 100)) {
+  annotations.call(wrapText, (chartWidth * .6), 20);
+}
+
+}
 
 /*
  setup
  */
-
-//Initialize graphic
-var onWindowLoaded = function() {
-};
-
 //Format graphic data for processing by D3.
 var formatData = function(data) {
   var series = [];
@@ -324,9 +382,8 @@ var formatData = function(data) {
 var renderChartGalveston = function(data) {
   var container = "#line-chart";
   // var element = chartGalvestonSlide.querySelector(container);
-  var width = document.body.offsetWidth;
-  var height = document.body.offsetHeight;
-  // console.log("window width", width);
+  var width = window.innerWidth;
+  var height = window.innerHeight;
 
   renderLineChart({
     container,
@@ -334,11 +391,14 @@ var renderChartGalveston = function(data) {
     height,
     data,
     dateColumn: "date",
-    valueColumn: "amt"
+    valueColumn: "amt",
+    minWidth: 270,
+    maxWidth: 1000
   });
 };
 
-var chartGalvestonInit = function() {
+// init
+var setupChartGalveston = function() {
   var series = formatData(CHART_GALVESTON);
   renderChartGalveston(series);
 
@@ -348,7 +408,7 @@ var chartGalvestonInit = function() {
 //Initially load the graphic
 // don't do anything if this doesn't exist on the page;
 if (chartGalvestonSlide) {
-  window.addEventListener("load", chartGalvestonInit);
+  window.addEventListener("load", setupChartGalveston);
 }
 
 

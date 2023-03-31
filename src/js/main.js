@@ -1,6 +1,8 @@
 var $ = require("./lib/qsa")
 var track = require("./lib/tracking");
 require("./video");
+require("./quiz");
+require("./audio");
 require("./analytics");
 
 // setup map
@@ -32,45 +34,6 @@ var renderPlatform = here.searchParams.get("renderPlatform");
 var isOne = renderPlatform && renderPlatform.match(/nprone/i);
 if (isOne) {
   document.body.classList.add("nprone");
-}
-
-// quiz setup
-var onQuizButtonClicked = function(evt) {
-  // flag that this question has been answered
-  var qParent = this.parentNode.parentNode.parentNode;
-  qParent.dataset.answered = true;
-  qParent.dataset.correct = this.dataset.status;
-
-  // deactivate the buttons
-  var qBtns = qParent.querySelectorAll("button");
-  qBtns.forEach(function(btn) {
-    btn.removeEventListener("click", onQuizButtonClicked);
-    btn.disabled = true;
-  });
-
-  // flag if you got this right or wrong
-  switch(this.dataset.status) {
-    case "true":
-      this.innerHTML += ` <i>Right!</i>`;
-      break;
-    case "false":
-      this.innerHTML += ` <i>Wrong!</i>`;
-      break;
-  }
-
-  // smoothscroll to the next slide?
-  var nextSlide = document.getElementById(qParent.nextElementSibling.id);
-  setTimeout(() => {
-    nextSlide.scrollIntoView({ behavior: "smooth" })
-  }, 600);
-}
-
-var quizSlides = document.querySelectorAll(".quiz");
-if (quizSlides.length > 0) {
-  var qButtons = document.querySelectorAll(".quiz button");
-  qButtons.forEach(function(qb) {
-    qb.addEventListener("click", onQuizButtonClicked);
-  });
 }
 
 var active = null;
@@ -163,15 +126,28 @@ var onScroll = function() {
       if (slide.id == "chart-estimate") {
         var textBlocks = $("#chart-estimate .text");
         var chartWrapper = $.one("#chart-estimate #line-chart");
+        var line2 = document.getElementsByClassName("line2");
+        var annot = document.getElementsByClassName("annotations");
         textBlocks.forEach(function(frame, n) {
           var bounds = frame.getBoundingClientRect();
           if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
-            console.log("galveston sea level rise chart: " + frame.id + " is visible");
             frame.classList.add("active");
             chartWrapper.dataset.frame = frame.id;
-          } else {
-            frame.classList.remove("active");
+            
+            // if (frame.id == "galveston-chart-1") {
+            //   //hide second line part
+            //   //hide annotations
+            // }
+            // //show second line part and continue showing 
+            // else if (frame.id == "galveston-chart-2") {
+            // }
+            // //show annotations
+            // else if (frame.id == "galveston-chart-3") {
+            // }
           }
+        else {
+            frame.classList.remove("active");
+        }
         });
       }
 

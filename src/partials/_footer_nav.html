@@ -1,0 +1,26 @@
+<%
+  var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+%>
+
+<div class="more-stories" <% if (data[thisStory].bgimage) { %> style="background: url('./assets/synced/images/resized/<%= data[thisStory].bgimage %>') no-repeat; background-size: cover;"<% } %>>
+  <div class="constrained">
+    <h3><%= renderMarkdownText(data.overall.headline) %></h3>
+
+    <ul class="outbound">
+      <%
+        ["quiz", "alaska", "antarctica", "greenland", "nepal"].forEach(function(story) { 
+          if (story != thisStory) {
+      %>
+        <li>
+          <a href="<%= data[story].link %>">
+            <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
+            <%= renderMarkdownText(data[story].headline) %>
+          </a>
+        </li>
+      <% 
+          }
+        });
+      %>
+    </ul>
+  </div>
+</div>

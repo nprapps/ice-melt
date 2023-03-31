@@ -1,13 +1,28 @@
 <figure class="audio">
-  <figcaption><%= slide.audioLabel || "" %></figcaption>
   <audio
     id="<%= slide.id %>-audio"
     preload="metadata"
     src="./assets/synced/audio/resized/<%= slide.audio %>"
-    controls
   >
     <% if (slide.audioCaptions) { %>
     <track default kind="captions" src="./assets/synced/audio/<%= slide.audioCaptions %>"></track>
     <% } %>
   </audio>
+  <div class="player">
+    <div class="btns">
+      <button class="play">
+        <%= t.include("./assets/icons/play-circle.svg") %>
+        <i class="sr-only">Play</i>
+      </button>
+      <button class="pause">
+        <%= t.include("./assets/icons/pause-circle.svg") %>
+        <i class="sr-only">Pause</i>
+      </button>
+    </div>
+    <div class="meta">
+      <figcaption><%= slide.audioLabel || "" %></figcaption>
+      <div class="counter"><% if (slide.audioDuration) { %><%= slide.audioDuration %><% } %></div>
+    </div>
+  </div>
+  <div class="caption"></div>
 </figure>

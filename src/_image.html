@@ -31,12 +31,14 @@
 
 
   <% if (slide.diptych) { %>
-    <div class="diptych backdrop">
-      <% diptych.forEach(function(img) { %>
-        <div class="image-container">
-          <img src="./assets/synced/images/resized/<%= img %>" alt="">
-        </div>
-      <% }) %>
+    <div class="diptych-wrapper backdrop">
+      <div class="diptych">
+        <% diptych.forEach(function(img) { %>
+          <div class="image-container">
+            <img src="./assets/synced/images/resized/<%= img %>" alt="">
+          </div>
+        <% }) %>
+      </div>
     </div>
   <% } %>
     

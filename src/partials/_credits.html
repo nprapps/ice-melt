@@ -1,0 +1,58 @@
+<% 
+  var processCredit = function(c) {
+    var thisCredit = null;
+
+    if (typeof credits[c][thisStory] != "undefined" && credits[c][thisStory].length > 0) {
+      thisCredit = credits[c][thisStory];
+    } else if (typeof credits[c]["all"] != "undefined" && credits[c]["all"].length > 0) {
+      thisCredit = credits[c]["all"];
+    }
+
+    return thisCredit;
+  }
+%>
+
+<div class="about">
+  <div class="constrained">
+
+    <div class="side-by-side">
+
+      <div class="block">
+
+        <h4><%= credits["hed_credits"]["all"] %></h4>
+        <ul class="credits">
+          <% [ "reporting", "field_production", "photography", "editing", "illustration", "maps", "dev" ].forEach(credit => {
+            var thisCredit = processCredit(credit);
+          %>
+
+          <% if (thisCredit) { %><li><%= thisCredit %></li><% } %>
+
+          <% }); %>
+        </ul>
+
+      </div>
+
+      <div class="block">
+
+        <% 
+          var ackCredit = processCredit("acknowledgements");
+        %>
+        <% if (ackCredit) { %>
+          <h4><%= credits["hed_acknowledgements"]["all"] %></h4>
+          <%= t.renderMarkdown(ackCredit) %>
+        <% } %>
+
+        <% 
+          var dataCredit = processCredit("data");
+        %>
+        <% if (dataCredit) { %>
+          <h4><%= credits["hed_data"]["all"] %></h4>
+          <%= t.renderMarkdown(dataCredit) %>
+        <% } %>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

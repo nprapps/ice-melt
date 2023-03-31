@@ -8,7 +8,7 @@ console.log(MAP_LABELS)
 let mapdata;
 
 let width = 800, height = 600;
-let mapX=40; // 0 / 360 = Greenwhich England, values increase to the west
+let mapX=40; // 0 / 360 = Greenwich England, values increase to the west
 let mapY=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
 let mapscale = 200; // Initial scale, might be better to fit to screen
 
@@ -26,6 +26,8 @@ var lines;
 var lines_drawn = false;
 let segments_visible = [1,];
 
+let showTools = false;
+
 var sphere = ({type: "Sphere"});
 
 // parameter for simplification, slider at https://observablehq.com/d/bb265e5f8575d2b6 
@@ -33,20 +35,16 @@ var minArea = 1;
 
 let projection = d3.geoOrthographic().precision(0.1);
 
-let geoGenerator = d3.geoPath()
-.projection(projection);
+let geoGenerator = d3.geoPath().projection(projection);
 
-let graticule = d3.geoGraticule10()
+let graticule = d3.geoGraticule10();
 
 var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
 function addDiscreteListeners() {
-	console.log("addDiscreteListeners");
 	initialize_map();
-
 	var stepSel = d3.selectAll(".discrete");
-
 	enterView({
 		selector: stepSel.nodes(),
 		offset: 0,
@@ -99,7 +97,6 @@ var updateMap = {
 		segments_visible = [1];
 		drawlines();
 		zoomto(400, -45, 40, 1)
-
 	},
 	mapStepTwoBackwards: function () {
 		hidelines();
@@ -136,15 +133,30 @@ var updateMap = {
 	mapStepSixBackwards: function () {
 		segments_visible = [1,2,3,4];
 		zoomto(500, -60, 20, -1)
-
 	}
 }
 
+function runManualTransition() {
+	var newlat = document.getElementById('control_lat').value;
+	if (newlat < -90 || newlat > 90) {
+		alert("Latitude must be between -90 (north) and 90 (south)");
+		return false;
+	}
+	var newlng = document.getElementById('control_lng').value;
+	var newzoom = document.getElementById('control_zoom').value;
+	zoomto(newzoom, newlat, newlng, -1)
 
+	var showlines = document.getElementById('control_overlays').value == 'lines';
 
+	if (showlines && !lines_drawn) {
+		drawlines();
+	}
+	if (!showlines && lines_drawn) {
+		hidelines();
+	}
+}
 
 function initialize_map() {
-
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])
@@ -152,7 +164,6 @@ function initialize_map() {
 		    .attr("stroke", "currentColor")
 		    .attr("width", "100%")
 		    .attr("height", "100%");
-
 
 		svg.append("rect")
     		.style("fill", "white")
@@ -167,7 +178,8 @@ function initialize_map() {
 	  grid = svg.append("path")
 	    .attr("stroke-width","0.5px")
 	    .attr("stroke","#ddd")
-	  
+
+
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
 	    .attr("stroke-width", "3px")
@@ -182,10 +194,8 @@ function initialize_map() {
         .text(d => d.label)        
 
 	  let topology = mapdata;
-
 	  topology = topojson.presimplify(topology);
 	  topology = topojson.simplify(topology, minArea);
-
 	  land = topojson.feature(topology, topology.objects.land);
 
 
@@ -200,9 +210,15 @@ function initialize_map() {
 
 	    setmap(mapscale, mapX, mapY);
 	  }); 
-
-
 	});
+
+	// Setup tooling if the controls are present only
+	var controldiv = document.getElementById("controls");
+	if(controldiv) {
+	    controlbutton = document.getElementById("controlsubmit");
+	    controlbutton.onclick = runManualTransition;
+	    showTools = true;
+	}
 }
 
 function geoCurvePath(curve, projection, context) {
@@ -232,7 +248,6 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
-
 	if (segments_visible.includes(arg.properties.id)) {
 
 		if ( arg.properties.id == segment_tweened_in_id) {
@@ -252,22 +267,29 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 function drawlines() {
 	lines.attr("d", d => d);
 	lines_drawn = true;
+	if (showTools) {
+	  document.getElementById('control_overlays').value = 'lines';
+	 }
 }
 
 function hidelines() {
 	  lines_drawn = false;
 	  lines.attr("d", d => 0);
+	  if (showTools) {
+	  	document.getElementById('control_overlays').value = 'none';
+	  }
 }
 
 
-function  setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
+function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
 
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
-  projection.translate([width / 2, height / 2]) 
+  	projection.translate([width / 2, height / 2]) 
 
   	mapX = map_lng;
  	  mapY = map_lat;
+
   	mapscale = map_scale;
 
   	grid.attr("d", path(graticule));
@@ -280,34 +302,33 @@ function  setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_ar
 
   	if (lines_drawn) {
   		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
-  		}
+  	}
 }
 
 function interpolate(x0, x1, t) {
   return (x0 + t*(x1-x0));
 }
 
-async function zoomto(mapScale, newmaplat, newmapY, segment_tweened_in_id) {
+async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
+
   // console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   // console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
-          setmap(interpolate(mapscale, mapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
+          setmap(interpolate(mapscale, newmapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
         })
       .end();
-}
+   if (showTools) {
+   		document.getElementById('control_lat').value = newmaplat;
+		document.getElementById('control_lng').value = newmapY;
+		document.getElementById('control_zoom').value = newmapScale;
 
-function rundemo() {
-  console.log("\nRun transition");
-
-  var newmapY = 10+100*Math.random();
-  var newmaplat = -20-50*Math.random();
-
-  zoomto(mapscale, newmaplat, newmapY);
-
+  //extra bracket from jacob? 
+  }
 }
 
 function changeLabels(prevSlide,activeSlide) {
@@ -323,3 +344,4 @@ function changeLabels(prevSlide,activeSlide) {
 
   return "hello"
 }
+

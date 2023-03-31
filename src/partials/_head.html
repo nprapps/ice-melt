@@ -1,8 +1,20 @@
+<%
+  var storyTitle = social.title ? social.title : project.title;
+  var storySeotitle = social.seotitle ? social.seotitle : storyTitle;
+  var storyDesc = social.description ? social.description : project.description;
+  var projectURL = project.url;
+  var storyURL = projectURL;
+  if (social.file) {
+    storyURL += social.file;
+  }
+  var storyImg = projectURL + social.image;
+%>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title><%= project.seotitle %> : NPR</title>
-<meta name="description" content="<%= project.description %>">
+<title><%= storySeotitle %> : NPR</title>
+<meta name="description" content="<%= storyDesc %>">
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://media.npr.org/templates/favicon/favicon-180x180.png" />
@@ -20,19 +32,19 @@
 
 <!-- BEGIN TWITTER SUMMARY CARD -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="<%= project.title %>">
+<meta name="twitter:title" content="<%= storyTitle %>">
 <meta name="twitter:site" content="@nprviz">
-<meta name="twitter:url" content="<%= project.url %>">
-<meta name="twitter:image" content="<%= project.url + project.image %>">
-<meta name="twitter:description" content="<%= project.description %>">
+<meta name="twitter:url" content="<%= storyURL %>">
+<meta name="twitter:image" content="<%= storyImg %>">
+<meta name="twitter:description" content="<%= storyDesc %>">
 
 <!-- Social sharing meta -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="<%= project.title %>">
+<meta property="og:title" content="<%= storyTitle %>">
 <meta property="og:site_name" content="NPR">
-<meta property="og:url" content="<%= project.url %>">
-<meta property="og:image" content="<%= project.url + project.image %>">
-<meta property="og:description" content="<%= project.description %>">
+<meta property="og:url" content="<%= storyURL %>">
+<meta property="og:image" content="<%= storyImg %>">
+<meta property="og:description" content="<%= storyDesc %>">
 
 <!-- Facebook-specific meta -->
 <meta property="fb:app_id" content="138837436154588">
@@ -47,12 +59,12 @@
   "@type": "NewsArticle",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "<%= project.url %>"
+    "@id": "<%= storyURL %>"
   },
-  "headline": "<%= project.title %>",
+  "headline": "<%= storyTitle %>",
   "image": {
     "@type": "ImageObject",
-    "url": "<%= project.url + project.image %>"
+    "url": "<%= storyImg %>"
   },
   "author": {
     "@type": "Person",
@@ -63,12 +75,12 @@
     "name": "NPR",
     "logo": {
       "@type": "ImageObject",
-      "url": "<%= project.url %>assets/logo.png",
+      "url": "<%= projectURL %>assets/logo.png",
       "width": 2176,
       "height": 725
     }
   },
-  "description": "<%= project.description %>",
+  "description": "<%= storyDesc %>",
   "datePublished": "<%= new Date().toISOString() %>"
 }
 </script>
