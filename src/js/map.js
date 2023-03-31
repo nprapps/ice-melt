@@ -1,8 +1,9 @@
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
-require("./map_helpers")
 
+console.log(MAP_DATA)
+console.log(MAP_LABELS)
 
 let mapdata;
 
@@ -14,6 +15,8 @@ let mapscale = 200; // Initial scale, might be better to fit to screen
 let transition_milliseconds = 1000;
 let svg;
 let linebox;
+let activeSlide;
+let prevSlide;
 
 var outline;
 var grid;
@@ -47,10 +50,25 @@ function addDiscreteListeners() {
 		offset: 0,
 		enter: el => {
 			const index = d3.select(el).attr('forward');
+
+      prevSlide = activeSlide;
+      activeSlide = d3.select(el).attr("slide");
+
+      console.log("leaving " + prevSlide )
+      console.log("entering " + activeSlide)
 			updateMap[index]();
+      changeLabels(prevSlide,activeSlide)
 		},
 		exit: el => {
+      console.log('in exit')
+      console.log(el)      
+      
 			let index = d3.select(el).attr('backward');
+      activeSlide = el.parentNode.previousElementSibling.id;
+      prevSlide = d3.select(el).attr("slide");      
+      console.log("leaving " + prevSlide )
+      console.log("entering " + activeSlide)
+
 			//check for multiple
 			if (!index.includes(" ")) {
 				updateMap[index]();
@@ -60,6 +78,7 @@ function addDiscreteListeners() {
 					updateMap[i]();
 				}
 			}
+      changeLabels(prevSlide,activeSlide)
 		}
 	});
 }
@@ -149,7 +168,7 @@ function initialize_map() {
 		svg.append("rect")
     		.style("fill", "white")
     		.attr('x', -400) 
-            .attr('y', -400) 
+        .attr('y', -400) 
     		.attr("width", 5000)
     		.attr("height", 5000);
 
@@ -160,22 +179,35 @@ function initialize_map() {
 	    .attr("stroke-width","0.5px")
 	    .attr("stroke","#ddd")
 
+
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
 	    .attr("stroke-width", "3px")
 	    .attr("fill","#eeeeee")
+
+    labelBox = svg.append("g")
+      .attr("id","labelBox");
+
+    labels = labelBox.selectAll(".label")
+      .data(MAP_LABELS).join("text")
+        .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
+        .text(d => d.label)        
 
 	  let topology = mapdata;
 	  topology = topojson.presimplify(topology);
 	  topology = topojson.simplify(topology, minArea);
 	  land = topojson.feature(topology, topology.objects.land);
 
+
+
+
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
-	    linebox = svg.append("g").attr("id","lineBox");
+      linebox = svg.append("g").attr("id","lineBox");
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
 	        .attr("class",d => `lines ${d.properties.class}`)
+
 	    setmap(mapscale, mapX, mapY);
 	  }); 
 	});
@@ -248,18 +280,26 @@ function hidelines() {
 	  }
 }
 
+
 function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
+
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
   	projection.translate([width / 2, height / 2]) 
 
   	mapX = map_lng;
- 	mapY = map_lat;
+ 	  mapY = map_lat;
+
   	mapscale = map_scale;
 
   	grid.attr("d", path(graticule));
   	outline.attr("d", path(sphere));
   	feature.attr("d", path(land));
+
+    labels.attr("transform", d => `translate(${projection([d.lon,d.lat])})`)
+      .attr("dy", ".35em")
+
+
   	if (lines_drawn) {
   		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
   	}
@@ -272,8 +312,10 @@ function interpolate(x0, x1, t) {
 async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
-  console.log("Zoomfrom currentMapX " + currentMapX + " currentMapY " + currentMapY + " scale: " + mapscale); 
-  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY + " scale: " + newmapScale); 
+
+  // console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
+  // console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
@@ -285,5 +327,21 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 		document.getElementById('control_lng').value = newmapY;
 		document.getElementById('control_zoom').value = newmapScale;
 
-   }
+  //extra bracket from jacob? 
+  }
 }
+
+function changeLabels(prevSlide,activeSlide) {
+  console.log("leaving " + prevSlide)
+  console.log("entering " + activeSlide)
+
+  console.log(MAP_DATA)
+  
+  // get labels you need
+  // diff labels you need from labels on screen (or previous?)
+  // transition labels you don't want out
+  // transition labels you do want in
+
+  return "hello"
+}
+
