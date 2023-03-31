@@ -71,10 +71,21 @@ g#labelBox {
 
 	text {
 		display: none;
-	}
+		text-anchor: middle;
 
-	text.active {
-		display: block;
+		&.active {
+			display: block;
+		}
+
+		&.annotation {
+			text-anchor: start;
+		}
+
+		&.water {
+	    font-family: Georgia;
+	    font-style: italic;
+	    font-size: 18px;
+		}
 	}
 }
 

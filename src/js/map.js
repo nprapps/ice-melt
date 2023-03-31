@@ -59,16 +59,13 @@ function addDiscreteListeners() {
 			updateMap[index]();
       changeLabels(prevSlide,activeSlide)
 		},
-		exit: el => {
-      console.log('in exit')
-      console.log(el)      
-      
+		exit: el => {       
 			let index = d3.select(el).attr('backward');
       activeSlide = el.parentNode.previousElementSibling.id;
-      prevSlide = d3.select(el).attr("slide");      
+      prevSlide = d3.select(el).attr("slide");
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
-
+      
 			//check for multiple
 			if (!index.includes(" ")) {
 				updateMap[index]();
@@ -78,7 +75,11 @@ function addDiscreteListeners() {
 					updateMap[i]();
 				}
 			}
-      changeLabels(prevSlide,activeSlide)
+
+      // don't run changeLabels on non-map
+      if (activeSlide) {
+        changeLabels(prevSlide,activeSlide)
+      }      
 		}
 	});
 }
@@ -334,9 +335,6 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 }
 
 function changeLabels(prevSlide,activeSlide) {
-  console.log("-------")
-  console.log("leaving " + prevSlide)
-  console.log("entering " + activeSlide)
   var activeMapData = MAP_DATA.find(e => e.sceneID == activeSlide);
 
   // get labels you need
@@ -350,23 +348,11 @@ function changeLabels(prevSlide,activeSlide) {
   console.log(MAP_DATA)
       // show and hide labels and highlights based on if active
   for (var i = 0; i < activeLabels.length; i++) {
-    // if (poi[i] == "") break;
 
     let item = d3.select(`#labelBox text#${activeLabels[i]}`);
-    console.log(item)
 
     item.classed("active",true)
 
-    // if (type == "add") {
-
-    // } else {
-      // item.classList.remove("active"),fadeTime
-    // }     
   }
-
-  // diff labels you need from labels on screen (or previous?)
-  // transition labels you do want in
-
-  return "hello"
 }
 
