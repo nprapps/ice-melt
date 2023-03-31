@@ -51,16 +51,15 @@ function addDiscreteListeners() {
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
-      console.log('in enter')
-      console.log(el)
-      console.log("---------------------")
 			const index = d3.select(el).attr('forward');
+
       prevSlide = activeSlide;
       activeSlide = d3.select(el).attr("slide");
 
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
 			updateMap[index]();
+      changeLabels(prevSlide,activeSlide)
 		},
 		exit: el => {
       console.log('in exit')
@@ -81,6 +80,7 @@ function addDiscreteListeners() {
 					updateMap[i]();
 				}
 			}
+      changeLabels(prevSlide,activeSlide)
 		}
 	});
 }
@@ -308,4 +308,18 @@ function rundemo() {
 
   zoomto(mapscale, newmaplat, newmapY);
 
+}
+
+function changeLabels(prevSlide,activeSlide) {
+  console.log("leaving " + prevSlide)
+  console.log("entering " + activeSlide)
+
+  console.log(MAP_DATA)
+  
+  // get labels you need
+  // diff labels you need from labels on screen (or previous?)
+  // transition labels you don't want out
+  // transition labels you do want in
+
+  return "hello"
 }
