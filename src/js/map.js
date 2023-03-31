@@ -56,24 +56,34 @@ function addDiscreteListeners() {
 
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
-			updateMap[index]();
+      console.log(index)
+			// updateMap[index]();
+      updateMap("forward",activeSlide);
+
       changeLabels(prevSlide,activeSlide)
 		},
 		exit: el => {       
 			let index = d3.select(el).attr('backward');
+
       activeSlide = el.parentNode.previousElementSibling.id;
       prevSlide = d3.select(el).attr("slide");
+      
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
+
+      console.log(index)
       
+
 			//check for multiple
 			if (!index.includes(" ")) {
-				updateMap[index]();
+				updateMap("backward",activeSlide);
 			} else {
 				var indexes = index.split(" ");
-				for (var i of indexes) {
-					updateMap[i]();
-				}
+        console.log("you somehow have multiple indexes?????????/")
+        console.log(indexes)
+				// for (var i of indexes) {
+				// 	updateMap[i]();
+				// }
 			}
 
       // don't run changeLabels on non-map
@@ -86,7 +96,26 @@ function addDiscreteListeners() {
 
 
 // zoomto expects scale,lat,lng where n is lat<0
-var updateMap = {
+function updateMap(direction,config){
+  console.log(direction)
+  console.log(config)
+  var activeMapData = MAP_DATA.find(e => e.sceneID == config);
+  console.log(activeMapData)
+  var {zoom,lon,lat,linesPresent, linesActive} = activeMapData;
+  console.log(lon);
+  console.log(lat)
+  // get zoom
+  // get lat long
+  // has Segments? 
+  // call zoomto  
+  // zoomto(activeMapData)
+  
+  segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",");
+  
+  drawlines();
+  zoomto(zoom,lat,lon,linesActive)
+}
+var updateMap2 = {
 	mapStepOne: function () {
 		zoomto(300, -45, 40)
 	},
@@ -95,7 +124,7 @@ var updateMap = {
 
 	},
 	mapStepTwo: function () {
-		segments_visible = [1];
+		segments_visible = [1,2];
 		drawlines();
 		zoomto(400, -45, 40, 1)
 	},
@@ -104,11 +133,11 @@ var updateMap = {
 		zoomto(300, -45, 40, -1)
 	},
 	mapStepThree: function () {
-		segments_visible = [1,2];
+		segments_visible = [1,2,3];
 		zoomto(500, -60, 20, 2)
 	},
 	mapStepThreeBackwards: function () {
-		segments_visible = [1];
+		segments_visible = [1,2];
 		zoomto(400, -45, 40, -1)
 	},
 	mapStepFour: function () {
@@ -145,7 +174,7 @@ function runManualTransition() {
 	}
 	var newlng = document.getElementById('control_lng').value;
 	var newzoom = document.getElementById('control_zoom').value;
-	zoomto(newzoom, newlat, newlng, -1)
+	zoomto(newzoom, newlat, newlng, [-1])
 
 	var showlines = document.getElementById('control_overlays').value == 'lines';
 
@@ -253,22 +282,25 @@ var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 	if (segments_visible.includes(arg.properties.id)) {
+    for (var i = 0; i < segment_tweened_in_id.length; i++) {
+      if ( arg.properties.id == segment_tweened_in_id[i]) {
+        var num_coords = arg.geometry.coordinates.length;
+        var desired_coordinate_count = Math.floor(num_coords * tween_arg);
+        // can we afford this? 
+        var arg_copy = JSON.parse(JSON.stringify(arg));
+        arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(0, desired_coordinate_count);
 
-		if ( arg.properties.id == segment_tweened_in_id) {
-			var num_coords = arg.geometry.coordinates.length;
-			var desired_coordinate_count = Math.floor(num_coords * tween_arg);
-			// can we afford this? 
-			var arg_copy = JSON.parse(JSON.stringify(arg));
-			arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(0, desired_coordinate_count);
+        return path2(arg_copy);
+      } else {
+        return path2(arg);  
+      } 
 
-			return path2(arg_copy);
-		} else {
-			return path2(arg);	
-		}
+    }		
 	} 
 }
 
 function drawlines() {
+  console.log(lines)
 	lines.attr("d", d => d);
 	lines_drawn = true;
 	if (showTools) {
@@ -285,7 +317,7 @@ function hidelines() {
 }
 
 
-function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=-1, tween_arg=1) {
+function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_arg=1) {
 
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
@@ -317,8 +349,8 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
 
-  // console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
-  // console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
+  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
 
   await d3.transition()
         .duration(transition_milliseconds)
