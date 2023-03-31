@@ -1,4 +1,6 @@
-<% 
+<%
+  var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+
   var processCredit = function(c) {
     var thisCredit = null;
 
@@ -25,7 +27,7 @@
             var thisCredit = processCredit(credit);
           %>
 
-          <% if (thisCredit) { %><li><%= thisCredit %></li><% } %>
+          <% if (thisCredit) { %><li><%= renderMarkdownText(thisCredit) %></li><% } %>
 
           <% }); %>
         </ul>

@@ -1,4 +1,17 @@
 .slide.quiz {
+  &.opposing {
+    .backdrop {
+      object-fit: cover;
+      height: 100%;
+    }
+
+    @media @mobile-above {
+      .backdrop {
+        max-width: unset;
+      }
+    }
+  }  
+
   .text {
     background: fade(darken(@true, 25%), 90%);
 
