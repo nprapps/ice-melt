@@ -2,9 +2,6 @@ var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
 
-console.log(MAP_DATA)
-console.log(MAP_LABELS)
-
 let mapdata;
 
 let width = 800, height = 600;
@@ -54,6 +51,7 @@ function addDiscreteListeners() {
       prevSlide = activeSlide;
       activeSlide = d3.select(el).attr("slide");
 
+      console.log("----------enter-----------")
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
       console.log(index)
@@ -68,9 +66,9 @@ function addDiscreteListeners() {
       activeSlide = el.parentNode.previousElementSibling.id;
       prevSlide = d3.select(el).attr("slide");
       
+      console.log("----------exit-----------")
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
-
       console.log(index)
       
 
@@ -96,14 +94,11 @@ function addDiscreteListeners() {
 
 
 // zoomto expects scale,lat,lng where n is lat<0
-function updateMap(direction,config){
-  console.log(direction)
-  console.log(config)
+function updateMap(direction,config){  
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-  console.log(activeMapData)
+  
   var {zoom,lon,lat,linesPresent, linesActive} = activeMapData;
-  console.log(lon);
-  console.log(lat)
+  
   // get zoom
   // get lat long
   // has Segments? 
@@ -112,9 +107,13 @@ function updateMap(direction,config){
   
   segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",");
   
+  console.log(activeMapData)
+  console.log(linesActive)
+
   drawlines();
   zoomto(zoom,lat,lon,linesActive)
 }
+
 var updateMap2 = {
 	mapStepOne: function () {
 		zoomto(300, -45, 40)
@@ -301,7 +300,11 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 
 function drawlines() {
   console.log(lines)
-	lines.attr("d", d => d);
+	lines.attr("d", function(d){
+    console.log(d);
+    return d;
+  })
+
 	lines_drawn = true;
 	if (showTools) {
 	  document.getElementById('control_overlays').value = 'lines';
@@ -321,24 +324,24 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
 
 	projection.scale(map_scale);
  	projection.rotate([map_lat, map_lng])
-  	projection.translate([width / 2, height / 2]) 
+	projection.translate([width / 2, height / 2]) 
 
-  	mapX = map_lng;
- 	  mapY = map_lat;
+	mapX = map_lng;
+	  mapY = map_lat;
 
-  	mapscale = map_scale;
+	mapscale = map_scale;
 
-  	grid.attr("d", path(graticule));
-  	outline.attr("d", path(sphere));
-  	feature.attr("d", path(land));
+	grid.attr("d", path(graticule));
+	outline.attr("d", path(sphere));
+	feature.attr("d", path(land));
 
-    labels.attr("transform", d => `translate(${projection([d.lon,d.lat])})`)
-      .attr("dy", ".35em")
+  labels.attr("transform", d => `translate(${projection([d.lon,d.lat])})`)
+    .attr("dy", ".35em")
 
 
-  	if (lines_drawn) {
-  		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
-  	}
+	if (lines_drawn) {
+		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
+	}
 }
 
 function interpolate(x0, x1, t) {
@@ -358,8 +361,8 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
           setmap(interpolate(mapscale, newmapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
         })
       .end();
-   if (showTools) {
-   		document.getElementById('control_lat').value = newmaplat;
+  if (showTools) {
+   	document.getElementById('control_lat').value = newmaplat;
 		document.getElementById('control_lng').value = newmapY;
 		document.getElementById('control_zoom').value = newmapScale;
 
@@ -372,13 +375,9 @@ function changeLabels(prevSlide,activeSlide) {
   // get labels you need
   var activeLabels = activeMapData.labels.replace(/\s/g, '').split(",");
   
-  console.log(activeMapData)
-  console.log(activeLabels)
-  
   d3.selectAll("#labelBox text").classed("active",false)
 
-  console.log(MAP_DATA)
-      // show and hide labels and highlights based on if active
+  // show and hide labels and highlights based on if active
   for (var i = 0; i < activeLabels.length; i++) {
 
     let item = d3.select(`#labelBox text#${activeLabels[i]}`);
