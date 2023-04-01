@@ -56,7 +56,7 @@ function addDiscreteListeners() {
       console.log("----------enter-----------")
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
-      console.log(index)			
+      
       updateMap("forward",activeSlide);
 
       changeLabels(prevSlide,activeSlide)
@@ -69,13 +69,13 @@ function addDiscreteListeners() {
       
       console.log("----------exit-----------")
       console.log("leaving " + prevSlide )
-      console.log("entering " + activeSlide)
-      console.log(index)
-      
+      console.log("entering " + activeSlide)      
 
 			//check for multiple
 			if (!index.includes(" ")) {
-				updateMap("backward",activeSlide);
+        if (activeSlide) {
+				  updateMap("backward",activeSlide);
+        }
 			} else {
 				var indexes = index.split(" ");
         console.log("you somehow have multiple indexes?????????/")
@@ -104,8 +104,6 @@ function updateMap(direction,config){
   // get lat long
   // has Segments? 
   // call zoomto  
-  // zoomto(activeMapData)
-  
   segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",").map( Number );
 
   linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
@@ -185,9 +183,6 @@ function initialize_map() {
 	  topology = topojson.simplify(topology, minArea);
 	  land = topojson.feature(topology, topology.objects.land);
 
-
-
-
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
       
 	    lines = linebox.selectAll(".lines")
@@ -235,7 +230,6 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
-  console.log(arg)
 	if (segments_visible.includes(arg.properties.id)) {    
     if (segment_tweened_in_id.includes(arg.properties.id)) {
       var num_coords = arg.geometry.coordinates.length;
@@ -302,9 +296,6 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
-
-  console.log(segment_tweened_in_id)
-  console.log(segments_visible)
 
   await d3.transition()
         .duration(transition_milliseconds)
