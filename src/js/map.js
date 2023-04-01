@@ -1,3 +1,5 @@
+let ii = 0;
+
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
@@ -54,8 +56,7 @@ function addDiscreteListeners() {
       console.log("----------enter-----------")
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
-      console.log(index)
-			// updateMap[index]();
+      console.log(index)			
       updateMap("forward",activeSlide);
 
       changeLabels(prevSlide,activeSlide)
@@ -94,7 +95,7 @@ function addDiscreteListeners() {
 
 
 // zoomto expects scale,lat,lng where n is lat<0
-function updateMap(direction,config){  
+function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
   
   var {zoom,lon,lat,linesPresent, linesActive} = activeMapData;
@@ -105,64 +106,18 @@ function updateMap(direction,config){
   // call zoomto  
   // zoomto(activeMapData)
   
-  segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",");
-  
-  console.log(activeMapData)
-  console.log(linesActive)
+  segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",").map( Number );
 
-  drawlines();
+  linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
+
+  if (ii == 0) {
+    drawlines();  
+    ii++;
+  }
+  if (direction == "backward") {
+   linesActive = [-1] 
+  }
   zoomto(zoom,lat,lon,linesActive)
-}
-
-var updateMap2 = {
-	mapStepOne: function () {
-		zoomto(300, -45, 40)
-	},
-	mapStepOneBackwards: function () {
-		zoomto(200, -45, 40, -1)
-
-	},
-	mapStepTwo: function () {
-		segments_visible = [1,2];
-		drawlines();
-		zoomto(400, -45, 40, 1)
-	},
-	mapStepTwoBackwards: function () {
-		hidelines();
-		zoomto(300, -45, 40, -1)
-	},
-	mapStepThree: function () {
-		segments_visible = [1,2,3];
-		zoomto(500, -60, 20, 2)
-	},
-	mapStepThreeBackwards: function () {
-		segments_visible = [1,2];
-		zoomto(400, -45, 40, -1)
-	},
-	mapStepFour: function () {
-		segments_visible = [1,2,3];
-		zoomto(500, -65, 25, 3)
-	},
-	mapStepFourBackwards: function () {
-		segments_visible = [1,2];
-		zoomto(500, -60, 20, -1)
-	},
-	mapStepFive: function () {
-		segments_visible = [1,2,3,4];
-		zoomto(500, -40, 30, 4)
-	},
-	mapStepFiveBackwards: function () {
-		segments_visible = [1,2,3];
-		zoomto(500, -65, 25, -1)
-	},
-	mapStepSix: function () {
-		segments_visible = [1,2,3,4,5];
-		zoomto(500, -40, 30, 5)
-	},
-	mapStepSixBackwards: function () {
-		segments_visible = [1,2,3,4];
-		zoomto(500, -60, 20, -1)
-	}
 }
 
 function runManualTransition() {
@@ -280,30 +235,24 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
-	if (segments_visible.includes(arg.properties.id)) {
-    for (var i = 0; i < segment_tweened_in_id.length; i++) {
-      if ( arg.properties.id == segment_tweened_in_id[i]) {
-        var num_coords = arg.geometry.coordinates.length;
-        var desired_coordinate_count = Math.floor(num_coords * tween_arg);
-        // can we afford this? 
-        var arg_copy = JSON.parse(JSON.stringify(arg));
-        arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(0, desired_coordinate_count);
+  console.log(arg)
+	if (segments_visible.includes(arg.properties.id)) {    
+    if (segment_tweened_in_id.includes(arg.properties.id)) {
+      var num_coords = arg.geometry.coordinates.length;
+      var desired_coordinate_count = Math.floor(num_coords * tween_arg);
+      // can we afford this? 
+      var arg_copy = JSON.parse(JSON.stringify(arg));
+      arg_copy.geometry.coordinates = arg_copy.geometry.coordinates.slice(0, desired_coordinate_count);
 
-        return path2(arg_copy);
-      } else {
-        return path2(arg);  
-      } 
-
-    }		
+      return path2(arg_copy);
+    } else {
+      return path2(arg);  
+    }     
 	} 
 }
 
 function drawlines() {
-  console.log(lines)
-	lines.attr("d", function(d){
-    console.log(d);
-    return d;
-  })
+	lines.attr("d", d => d)
 
 	lines_drawn = true;
 	if (showTools) {
@@ -338,7 +287,6 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
   labels.attr("transform", d => `translate(${projection([d.lon,d.lat])})`)
     .attr("dy", ".35em")
 
-
 	if (lines_drawn) {
 		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
 	}
@@ -354,6 +302,9 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+
+  console.log(segment_tweened_in_id)
+  console.log(segments_visible)
 
   await d3.transition()
         .duration(transition_milliseconds)
