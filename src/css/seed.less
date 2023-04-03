@@ -25,11 +25,17 @@ body {
   // }
 
   @keyframes drop {
-    from { transform: translateY(0); }
-    to { transform: translateY(50%); }
+    from { 
+      transform: translateY(0); 
+      opacity: 1;
+    }
+    to { 
+      transform: translateY(60%) scale(1.2); 
+      opacity: 0;
+    }
   }
 
-  svg {
+  img {
     display: block;
     margin: 10px auto;
     animation: drop 2s ease-in-out infinite;

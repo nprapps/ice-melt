@@ -1,4 +1,5 @@
 .slide.quiz {
+
   &.opposing {
     .backdrop {
       object-fit: cover;
@@ -12,13 +13,26 @@
     }
   }  
 
+  .scroll-bug {
+    background: none;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+    width: 15px;
+  }
+
   .text {
-    background: fade(darken(@true, 25%), 90%);
+    @media @mobile-above {
+      background: none;
+      float: none;
+      box-shadow: none; 
+    }
 
     h3 {
       .sourceSansPro-header();
       font-size: 1rem;
       margin-top: 0;
+      color: @accent-light;
     }
   }
 
@@ -30,12 +44,12 @@
   button {
     .sourceSansPro();
     display: block;
-    border: 1px solid fade(#fff,0);
+    border: 1px solid fade(#fff,60%);
     border-radius: 4px;
     padding: 15px 22px;
     margin: 0;
     width: 100%;
-    background: @true;
+    background: @off-black;
     color: #ffffff;
     text-decoration: none;
     font-size: 1.2rem;
@@ -52,7 +66,7 @@
 
     &:hover,
     &:focus {
-      background: fade(@true, 20%);
+      background: fade(@white, 20%);
       outline: 1px solid fade(#fff, 60%);
     }
 
@@ -65,11 +79,12 @@
     pointer-events: none;
 
     &[data-status="true"] {
-      background: teal;
+      background: @white;
+      color: @accent-dark;
     }
     &[data-status="false"] {
-      background: #787878;
-      color: #ddd;
+      background: fade(@white, 10%);
+      color: @white;
     }
 
     i {
@@ -78,14 +93,15 @@
       font-style: normal;
       font-size: 0.85rem;
       background: #fff;
-      color: teal;
+      color: @accent-dark;
       padding: 2px 6px;
       border-radius: 4px;
+      border: 2px solid @accent-dark;
       margin-left: 8px;
     }
   }
 
-  .text {
-    border: 1px solid fade(#fff, 60%);
-  }
+  // .text {
+  //   border: 1px solid fade(#fff, 60%);
+  // }
 }

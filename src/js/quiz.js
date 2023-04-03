@@ -25,7 +25,7 @@ var onQuizButtonClicked = function(evt) {
   var nextSlide = document.getElementById(qParent.nextElementSibling.id);
   setTimeout(() => {
     nextSlide.scrollIntoView({ behavior: "smooth" })
-  }, 600);
+  }, 800);
 }
 
 var quizSlides = document.querySelectorAll(".quiz");
