@@ -258,11 +258,11 @@ var renderLineChart = function(config) {
     .selectAll("path")
     .data(config.data)
     .enter()
-    .append("path")
-    .attr("class", d => "line1 " + classify(d.name))
-    .attr("stroke", d => colorScale(d.name))
-    //First line part until 2050
-    .attr("d", d => line(d.values.slice(0, 4)));
+      .append("path")
+      .attr("class", d => "line1 " + classify(d.name))
+      .attr("stroke", d => colorScale(d.name))
+      //First line part until 2050
+      .attr("d", d => line(d.values.slice(0, 4)));
   // Second line part 
   chartElement
     .append("g")
@@ -270,10 +270,10 @@ var renderLineChart = function(config) {
     .selectAll("path")
     .data(config.data)
     .enter()
-    .append("path")
-    .attr("class", d => "line2") //+ classify(d.name)
-    .attr("stroke", d => colorScale(d.name))
-    .attr("d", d => line(d.values.slice(3, d.values.length)));
+      .append("path")
+      .attr("class", d => "line2") //+ classify(d.name)
+      .attr("stroke", d => colorScale(d.name))
+      .attr("d", d => line(d.values.slice(3, d.values.length)));
     // console.log(values)
   var lastItem = d => d.values[d.values.length - 1];
   
@@ -296,55 +296,62 @@ var renderLineChart = function(config) {
     .selectAll("text")
     .data(config.data)
     .enter()
-    .append("text")
-    .attr("x", d => xScale(lastItem(d)[dateColumn]) + 10)
-    .attr("y", d => yScale(lastItem(d)[valueColumn]) + 3)
-    .text(function(d) {
-      var item = lastItem(d);
-      var value = item[valueColumn];
-      var label = value.toFixed(1) + " ft.";
+      .append("text")
+      .attr("x", d => xScale(lastItem(d)[dateColumn]) + 10)
+      .attr("y", d => yScale(lastItem(d)[valueColumn]) + 3)
+      .text(function(d) {
+        var item = lastItem(d);
+        var value = item[valueColumn];
+        var label = value.toFixed(1) + " ft.";
 
-      if (!isMobile.matches) {
-        label = d.name + ": " + label;
-      }
+        if (!isMobile.matches) {
+          label = d.name + ": " + label;
+        }
 
-      return label;
-    })
-    .attr("id", d => d.name)
-    .call(wrapText, (margins.right - 10), 20);
+        return label;
+      })
+      .attr("class", d => classify(d.name))
+      .call(wrapText, (margins.right - 10), 20);
 
-//Display annotations on side
-var annotations = chartElement
-  .append("g")
-  .attr("class", "annotations")
-  .selectAll("text")
-  .data(config.data)
-  .enter()
-  .append("text")
-  .attr("x", d => xScale(lastItem(d)[dateColumn]) - 20)
-  .attr("y", function(d) {
-    if (d.name == 'High') {
-      // return yScale(lastItem(d)[valueColumn]) - 40;
-      return yScale(13);
+  //Display annotations on side
+  var annotations = chartElement
+    .append("g")
+    .attr("class", "annotations");
+  
+  config.data.forEach(function(level) {
+    var pos = level.values[level.values.length - 1];
+    var thisPos = [];
+    switch(level.name) {
+      case "High":
+        // thisPos = { "x": pos[dateColumn], "y": pos[valueColumn] };
+        thisPos = { "x": pos[dateColumn], "y": 13 };
+        annotations.append("text")
+          .text("Higher emissions")
+          .attr("class", "high emissions")
+          .attr("x", d => xScale(thisPos.x) - 20)
+          .attr("y", d => yScale(thisPos.y));
+        annotations.append("text")
+          .text("and faster ice melt")
+          .attr("class", "high ice")
+          .attr("x", d => xScale(thisPos.x) - 20)
+          .attr("y", d => yScale(thisPos.y) + 22);
+        break;
+      case "Low":
+        // thisPos = { "x": pos[dateColumn], "y": pos[valueColumn] };
+        thisPos = { "x": pos[dateColumn], "y": 1.25 };
+        annotations.append("text")
+          .text("Lower emissions")
+          .attr("class", "low emissions")
+          .attr("x", d => xScale(thisPos.x) - 20)
+          .attr("y", d => yScale(thisPos.y));
+        annotations.append("text")
+          .text("and slower ice melt")
+          .attr("class", "low ice")
+          .attr("x", d => xScale(thisPos.x) - 20)
+          .attr("y", d => yScale(thisPos.y) + 22);
+        break;
     }
-    else {
-      return yScale(1.25);
-    }
-  })
-  .text(function(d) {
-    var annot;
-    if (d.name == 'High') {
-      annot = "Higher emissions, faster ice melt";
-    }
-    else if (d.name == 'Low') {
-      annot = "Lower emissions, slower ice melt";
-    }
-    return annot;
-  })
-  .attr("id", d => d.name);
-if (chartWidth < (config.minWidth + 100)) {
-  annotations.call(wrapText, (chartWidth * .6), 20);
-}
+  });
 
 }
 

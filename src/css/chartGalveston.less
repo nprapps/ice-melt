@@ -21,28 +21,31 @@
     .value text {
       font-size: 12px;
       font-weight: bold;
-      fill: #ccc;
       transition: opacity 1s ease;
+      opacity: 0;
     }
 
     .annotations text {
       font-size: 16px;
-      fill: #ccc;
       transition: opacity 1s ease;
       font-style: italic;
       text-anchor: end;
+      opacity: 0;
     }
-    
-    #High {
-      fill: @blue4;
+
+    .value text,
+    .annotations text {
+      &.high {
+        fill: @blue4;
+      }
+      &.intermediate {
+        fill: @blue5;
+      }
+      &.low {
+        fill: @blue6;
+      }
     }
-    #Intermediate {
-      fill: @blue5;
-    }
-    #Low {
-      fill: @blue6;
-    }
-    
+        
     @media screen and @mobile {
       .value text {
         font-size: 11px;
@@ -96,7 +99,10 @@
     }
   }
   #line-chart[data-frame="galveston-chart-3"] {
-    .annotations text { 
+    .value text {
+      opacity: 1;
+    }
+    .annotations text.emissions { 
       opacity: 1;
     }
     .line1, .line2 {
@@ -104,6 +110,12 @@
     }
   }
   #line-chart[data-frame="galveston-chart-4"] {
+    .value text {
+      opacity: 1;
+    }
+    .annotations text { 
+      opacity: 1;
+    }
     .line1, .line2 {
       stroke-opacity: 1;
     }
