@@ -31,6 +31,16 @@
   }
 }
 
+@media screen and @mobile-above {
+  #mobile-sea-level-illo-1, #mobile-sea-level-illo-2 { display: none; }
+  #sea-level-illo { display: block; }
+}
+
+@media screen and @mobile {
+  #mobile-sea-level-illo-1, #mobile-sea-level-illo-2 { display: block; }
+  #sea-level-illo { display: none; }
+}
+
 // ai2html artboard sizes
 @media screen and (min-width: 729px) {
     #g-_sea-level-illo-small, #g-_sea-level-illo-medium { display: none; }
