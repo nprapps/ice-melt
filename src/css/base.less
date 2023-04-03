@@ -50,6 +50,14 @@ img:not([alt]) {
   }
 }
 
+.clearfix() {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 /* NPR standard partials */
 
 footer {
