@@ -4,6 +4,12 @@
         <%= t.include(`ai2html/_${slide.id}.html`, { slide }) %>
   </div>
 
+  <div class="watermark" alt="">
+    <% if (slide.credit) { %>
+      <%=slide.credit%>
+    <% } %>
+  </div>
+
   <div class="text">
     <div class="content">
       <%= t.renderMarkdown(slide.text) %>
@@ -14,7 +20,5 @@
     </div>
     <% } %>
   </div>
-
-  
 
 </section>
