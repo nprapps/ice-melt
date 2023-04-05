@@ -191,10 +191,10 @@ async function initialize_map() {
     var vectorBox = svg.append("g")
       .attr("id","vectorBox");
 
-    var labelBox = svg.append("g")
+    labelBox = svg.append("g")
       .attr("id","labelBox");
 
-    var labels = labelBox.selectAll(".label")
+    labels = labelBox.selectAll(".label")
       .data(MAP_LABELS).join("text")
         .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
         .attr("id",d => d.id)
