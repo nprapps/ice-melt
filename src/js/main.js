@@ -6,7 +6,10 @@ require("./audio");
 require("./analytics");
 
 // setup map
-var map = require("./map");
+if (THISSTORY != "nepal") {
+  var map = require("./map");  
+}
+
 var magicMap =  $("div.magic-map")[0];
 
 // setup ice illo animation
