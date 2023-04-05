@@ -1,5 +1,14 @@
 let ii = 0;
 
+var altVectors;
+
+// take all MAP_DATA vector items, and create an array of them (without spaces), flatten, and dedupe
+const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
+
+var vectorList = MAP_VECTORS.filter(d => {
+  return uniqueVectors.includes(d.id)
+});
+
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
@@ -19,9 +28,10 @@ let prevSlide;
 
 var outline;
 var grid;
-var feature ;
+var feature;
 var land;
 var lines;
+var altVectorSVG;
 var lines_drawn = false;
 let segments_visible = [1,];
 
@@ -30,7 +40,7 @@ let showTools = false;
 var sphere = ({type: "Sphere"});
 
 // parameter for simplification, slider at https://observablehq.com/d/bb265e5f8575d2b6 
-var minArea = 1;
+var minArea = 0.5;
 
 let projection = d3.geoOrthographic().precision(0.1);
 
@@ -41,15 +51,16 @@ let graticule = d3.geoGraticule10();
 var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
-function addDiscreteListeners() {
-	initialize_map();
-	var stepSel = d3.selectAll(".discrete");
+async function addDiscreteListeners() {
+
+  await initialize_map();
+	
+  var stepSel = d3.selectAll(".discrete");
 	enterView({
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
 			const index = d3.select(el).attr('forward');
-
       prevSlide = activeSlide;
       activeSlide = d3.select(el).attr("slide");
 
@@ -138,7 +149,9 @@ function runManualTransition() {
 	}
 }
 
-function initialize_map() {
+async function initialize_map() {
+  altVectors = await getAltVectors()
+
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])
@@ -169,6 +182,11 @@ function initialize_map() {
 
     linebox = svg.append("g").attr("id","lineBox");
 
+    // build vector data
+    altVectorSVG = {};
+    var vectorBox = svg.append("g")
+      .attr("id","vectorBox");
+
     labelBox = svg.append("g")
       .attr("id","labelBox");
 
@@ -176,12 +194,22 @@ function initialize_map() {
       .data(MAP_LABELS).join("text")
         .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
         .attr("id",d => d.id)
-        .text(d => d.label)        
+        .text(d => d.label)
 
 	  let topology = mapdata;
 	  topology = topojson.presimplify(topology);
 	  topology = topojson.simplify(topology, minArea);
 	  land = topojson.feature(topology, topology.objects.land);
+
+
+    for (const property in altVectors) {
+      if (property != "currents") {
+        altVectorSVG[property] = vectorBox.selectAll(`.${property}.${altVectors[property].type}`)
+          .data(altVectors[property].data.features)
+            .join("path")
+            .attr("class", `${property} ${altVectors[property].type}`)
+      }      
+    }
 
 	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
       
@@ -284,11 +312,30 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
 	if (lines_drawn) {
 		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
 	}
+
+  for (const property in altVectors) {
+      altVectorSVG[property].attr("d", d => path(d))
+  }
 }
 
 function interpolate(x0, x1, t) {
   return (x0 + t*(x1-x0));
 }
+
+async function getAltVectors () {
+  let obj = {};
+
+  for (var i = 0; i < vectorList.length; i++) {
+    var response = await fetch(`../assets/geo/${vectorList[i].path}`);
+
+    let data = await response.json();
+    obj[vectorList[i].id] = {
+      "type":vectorList[i].type,
+      "data":data
+    };
+  }
+  return obj;
+};
 
 async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;

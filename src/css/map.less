@@ -72,6 +72,8 @@ g#labelBox {
 	text {
 		display: none;
 		text-anchor: middle;
+		font-family: @sans;
+		fill: #333;
 
 		&.active {
 			display: block;
@@ -79,6 +81,14 @@ g#labelBox {
 
 		&.annotation {
 			text-anchor: start;
+		}
+
+		&.land {
+			font-size: 20px;
+			text-shadow: 0px 0px 1px #fff;
+	    stroke-width: 3px;
+	    stroke: #fff;
+	    paint-order: stroke;
 		}
 
 		&.water {
@@ -89,3 +99,8 @@ g#labelBox {
 	}
 }
 
+g#vectorBox {
+	.whales {
+
+	}
+}
