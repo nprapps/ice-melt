@@ -1,20 +1,10 @@
 <section class="map-block slide" id="<%= slide.id %>">
 
-  <% if (slide.labels) { %>
-
-  
-  <% } %>
-
   <% if (slide.credit) { %>
   <span class="watermark" alt=""><%=slide.credit%></span>
   <% } %>
 
-  <div class="text<%= slide.discrete ? ' discrete' : '' %><%= slide.time ? ` time${slide.time}` : '' %>"
-      <% if (slide.discrete) { %>
-      forward="<%= slide.forward %>"
-      backward="<%= slide.backward %>"
-      <% } %>
-    >
+  <div class="text discrete" slide="<%= slide.id%>">
     <div class="content">
       
       <%= t.renderMarkdown(slide.text) %>

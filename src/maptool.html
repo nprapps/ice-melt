@@ -115,6 +115,9 @@ grunt.data.json.project = Object.assign({}, grunt.data.json.project, doc.social)
     </footer>
 
     <script>
+        var MAP_DATA = <%= JSON.stringify(grunt.data.json.greenland_scenes) %>;
+        var MAP_VECTORS = <%= JSON.stringify(grunt.data.json.map_vectors) %>;
+        var MAP_LABELS = <%= JSON.stringify(grunt.data.json.map_labels) %>;
         window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
     </script>
     <script src="app.js" async></script>
