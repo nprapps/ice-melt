@@ -110,9 +110,7 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-  console.log("fart fart fart fart FART")
-  console.log(activeMapData)
-  var {zoom,lon,lat,linesPresent, linesActive, vectors} = activeMapData;
+   var {zoom,lon,lat,linesPresent, linesActive, vectors} = activeMapData;
   
   // get zoom
   // get lat long
@@ -121,7 +119,6 @@ function updateMap(direction,config){
   segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",").map( Number );
 
   vectors_visible = vectors.replaceAll(" ","").split(",");
-  console.log(vectors_visible)
 
   linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
 
@@ -365,8 +362,6 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
-
-  console.log(vectors_visible)
 
   await d3.transition()
         .duration(transition_milliseconds)
