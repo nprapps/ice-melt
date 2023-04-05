@@ -19,8 +19,8 @@ var topojson = require("topojson");
 let mapdata;
 
 let width = 800, height = 600;
-let mapX=40; // 0 / 360 = Greenwich England, values increase to the west
-let mapY=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
+let mapY=40; // 0 / 360 = Greenwich England, values increase to the west
+let mapX=-45; // -90 = N. Pole; 90 = S. Pole, 0 = equator
 let mapscale = 200; // Initial scale, might be better to fit to screen
 
 let transition_milliseconds = 1000;
@@ -102,8 +102,10 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-   var {zoom,lon,lat,linesPresent, linesActive, vectors} = activeMapData;
-  
+   var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
+  console.log(activeMapData)
+  console.log(lon)
+  console.log(lat)
   // get zoom
   // get lat long
   // has Segments? 
@@ -301,11 +303,11 @@ function hidelines() {
 function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_arg=1) {
 
 	projection.scale(map_scale);
- 	projection.rotate([map_lat, map_lng])
+ 	projection.rotate([map_lng,map_lat])
 	projection.translate([width / 2, height / 2]) 
 
 	mapX = map_lng;
-	  mapY = map_lat;
+	mapY = map_lat;
 
 	mapscale = map_scale;
 
