@@ -31,9 +31,11 @@ var grid;
 var feature;
 var land;
 var lines;
-var altVectorSVG;
+var altVectorSVG = {};
 var lines_drawn = false;
+var vectors_drawn = false;
 let segments_visible = [1,];
+let vectors_visible = [];
 
 let showTools = false;
 
@@ -108,8 +110,9 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-  
-  var {zoom,lon,lat,linesPresent, linesActive} = activeMapData;
+  console.log("fart fart fart fart FART")
+  console.log(activeMapData)
+  var {zoom,lon,lat,linesPresent, linesActive, vectors} = activeMapData;
   
   // get zoom
   // get lat long
@@ -117,10 +120,14 @@ function updateMap(direction,config){
   // call zoomto  
   segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",").map( Number );
 
+  vectors_visible = vectors.replaceAll(" ","").split(",");
+  console.log(vectors_visible)
+
   linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
 
   if (ii == 0) {
-    drawlines();  
+    drawlines(); 
+    drawVectors();
     ii++;
   }
   if (direction == "backward") {
@@ -150,7 +157,8 @@ function runManualTransition() {
 }
 
 async function initialize_map() {
-  altVectors = await getAltVectors()
+  // load the alt vectors into memory
+  altVectors = await getAltVectors();
 
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
 		svg = d3.select("#innerSVG")
@@ -182,8 +190,7 @@ async function initialize_map() {
 
     linebox = svg.append("g").attr("id","lineBox");
 
-    // build vector data
-    altVectorSVG = {};
+    // build vector data    
     var vectorBox = svg.append("g")
       .attr("id","vectorBox");
 
@@ -282,6 +289,15 @@ function drawlines() {
 	 }
 }
 
+function drawVectors() {
+  for (const property in altVectors) {
+    altVectorSVG[property]
+      .attr("d", d => d)
+  }  
+
+  vectors_drawn = true;
+}
+
 function hidelines() {
 	  lines_drawn = false;
 	  lines.attr("d", d => 0);
@@ -313,8 +329,14 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
 		lines.attr("d", d => linepath(d, segments_visible, segment_tweened_in_id, tween_arg))
 	}
 
-  for (const property in altVectors) {
-      altVectorSVG[property].attr("d", d => path(d))
+  if (vectors_drawn) {
+    for (const property in altVectors) {
+      altVectorSVG[property].attr("d", d => {          
+        if (vectors_visible.includes(property)) {
+          return path(d)  
+        }
+      })
+    }
   }
 }
 
@@ -343,6 +365,8 @@ async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
 
   console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
   console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
+
+  console.log(vectors_visible)
 
   await d3.transition()
         .duration(transition_milliseconds)
