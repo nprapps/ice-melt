@@ -6,6 +6,12 @@
         <div class="frame"><%= t.include(`ai2html/_${slide.id}-2.html`, { slide }) %></div>
   </div>
 
+  <div class="watermark" alt="">
+    <% if (slide.credit) { %>
+      <%=slide.credit%>
+    <% } %>
+  </div>
+
   <div class="text">
     <div class="content">
       <%= t.renderMarkdown(slide.text) %>
