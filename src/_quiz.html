@@ -1,21 +1,26 @@
 <section class="quiz slide align-<%= slide.align || "left" %> <%= slide.layout %> <% if (slide.image) { %>image<% } %> <% if (slide.video) { %>video<% } %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" <% if (slide.video) { %>data-type="video"<% } %>>
+
   <% if (slide.image) { %>
-  <img
-    src="./assets/synced/images/resized/<%= slide.image %>"
-    class="backdrop"
-    alt=""
-    style="<%= t.style({
-      "object-position": slide.anchor,
-      "object-fit": slide.constrain
-    }) %>"
-  >
+  <div class="half">
+    <img
+      src="./assets/synced/images/resized/<%= slide.image %>"
+      class="quiz-viz"
+      alt=""
+      style="<%= t.style({
+        "object-position": slide.anchor,
+        "object-fit": slide.constrain
+      }) %>"
+    >
+  </div>
   <% } %>
+
   <% if (slide.video) { %>
+  <div class="half">
     <div class="video-container">
     <video
       data-src="./assets/synced/video/resized/<%= slide.video %>"
       data-poster="./assets/synced/video/resized/<%= slide.video %>.jpg"
-      class="backdrop"
+      class="quiz-viz"
       autoplay
       playsinline
       muted
@@ -31,7 +36,10 @@
     <%=slide.credit%>
     <% } %>
   </div>
+</div>
   <% } %>
+
+<div class="half">
   <div class="text">
     <div class="scroll-bug" aria-hidden="true">
       <svg class="drop" viewBox="0 0 50 50" height="0">
@@ -58,4 +66,5 @@
     </div>
     <% } %>
   </div>
+</div>
 </section>

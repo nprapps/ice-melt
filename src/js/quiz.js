@@ -1,6 +1,6 @@
 var onQuizButtonClicked = function(evt) {
   // flag that this question has been answered
-  var qParent = this.parentNode.parentNode.parentNode;
+  var qParent = this.parentNode.parentNode.parentNode.parentNode;
   qParent.dataset.answered = true;
   qParent.dataset.correct = this.dataset.status;
 

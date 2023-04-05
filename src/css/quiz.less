@@ -1,17 +1,47 @@
+.slide.text + .slide .text {
+  margin-top: 0px;
+}
+
 .slide.quiz {
 
-  &.opposing {
-    .backdrop {
-      object-fit: cover;
+  .quiz-viz {
+    object-fit: cover;
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 599px) {
+    .quiz-viz {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
       height: 100%;
+      object-fit: contain;
+      position: fixed;
+      z-index: -10;
+      overflow: hidden;
     }
 
-    @media @mobile-above {
-      .backdrop {
-        max-width: unset;
-      }
+    &.active.backdrop {
+      display: block;
+      animation: fade-in 0.2s linear;
+      opacity: 1;
     }
-  }  
+  }
+
+  @media screen and (min-width: 600px) {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .half {
+      width: 50%;
+    }
+
+    .quiz-viz {
+      max-width: unset;
+    }
+  }
+ 
 
   .scroll-bug {
     background: none;
@@ -22,10 +52,13 @@
   }
 
   .text {
-    @media @mobile-above {
+    margin-top: 0px; 
+
+    @media screen and (min-width: 600px) {
       background: none;
       float: none;
       box-shadow: none; 
+      margin-top: 0px; 
     }
 
     h3 {
@@ -100,8 +133,21 @@
       margin-left: 8px;
     }
   }
+}
 
-  // .text {
-  //   border: 1px solid fade(#fff, 60%);
-  // }
+//ai2html styles
+@media screen and (min-width: 729px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium { display: none; }
+    #g-_ice-diagram-flood-wide {
+      padding: 20px;
+      padding-bottom: 50px;
+    }
+}
+
+@media screen and (max-width: 728px) and (min-width: 410px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-wide { display: none; }
+}
+
+@media screen and (max-width: 409px) {
+    #g-_ice-diagram-flood-medium, #g-_ice-diagram-flood-wide { display: none; }
 }
