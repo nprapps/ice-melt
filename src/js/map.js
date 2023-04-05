@@ -3,11 +3,14 @@ let ii = 0;
 var altVectors;
 
 // take all MAP_DATA vector items, and create an array of them (without spaces), flatten, and dedupe
-const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
+if (THISSTORY != "nepal") {
+  const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
 
-var vectorList = MAP_VECTORS.filter(d => {
-  return uniqueVectors.includes(d.id)
-});
+  var vectorList = MAP_VECTORS.filter(d => {
+    return uniqueVectors.includes(d.id)
+  });  
+}
+
 
 var d3 = require("d3");
 var enterView = require("enter-view");
@@ -62,7 +65,6 @@ async function addDiscreteListeners() {
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
-			const index = d3.select(el).attr('forward');
       prevSlide = activeSlide;
       activeSlide = d3.select(el).attr("slide");
 
@@ -75,7 +77,6 @@ async function addDiscreteListeners() {
       changeLabels(prevSlide,activeSlide)
 		},
 		exit: el => {       
-			let index = d3.select(el).attr('backward');
 
       activeSlide = el.parentNode.previousElementSibling.id;
       prevSlide = d3.select(el).attr("slide");
@@ -85,18 +86,9 @@ async function addDiscreteListeners() {
       console.log("entering " + activeSlide)      
 
 			//check for multiple
-			if (!index.includes(" ")) {
-        if (activeSlide) {
-				  updateMap("backward",activeSlide);
-        }
-			} else {
-				var indexes = index.split(" ");
-        console.log("you somehow have multiple indexes?????????/")
-        console.log(indexes)
-				// for (var i of indexes) {
-				// 	updateMap[i]();
-				// }
-			}
+      if (activeSlide) {
+			  updateMap("backward",activeSlide);
+      }
 
       // don't run changeLabels on non-map
       if (activeSlide) {
@@ -155,8 +147,10 @@ function runManualTransition() {
 
 async function initialize_map() {
   // load the alt vectors into memory
-  altVectors = await getAltVectors();
-
+  if (THISSTORY != "nepal") {
+    altVectors = await getAltVectors();  
+  }
+  
 	d3.json('./assets/land-110m.json').then(function(mapdata) {
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])

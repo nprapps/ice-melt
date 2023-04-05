@@ -7,8 +7,10 @@ require("./analytics");
 
 // setup map
 // if (THISSTORY != "nepal") {
-  var map = require("./map");
+  console.log(THISSTORY)
+require("./map");
 // }
+console.log(THISSTORY)
 
 var magicMap =  $("div.magic-map")[0];
 

@@ -45,6 +45,10 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 
     <script>
         var THISSTORY = "<%= thisStory %>";
+        var MAP_DATA,
+        MAP_VECTORS,
+        MAP_LABELS;
+        
         window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
     </script>
     <script src="app.js" async></script>
