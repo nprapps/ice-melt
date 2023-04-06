@@ -217,9 +217,16 @@ async function initialize_map() {
       }      
     }
 
+    let thisPath;
+    if (specialVector == undefined) {
+      console.log('hello')
+      thisPath = "greenland-currents.geojson";
+    } else {
+      console.log('no')
+      thisPath = specialVector[0].path;
+    }
 
-
-	  d3.json(`./assets/geo/${specialVector[0].path}`).then(function(linesRaw) {
+	  d3.json(`./assets/geo/${thisPath}`).then(function(linesRaw) {
       
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
