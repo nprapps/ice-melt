@@ -1,3 +1,7 @@
+<%
+  var loop = slide.loop || "yes";
+%>
+
 <section class="video slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
   <div class="video-container">
     <video
@@ -7,7 +11,7 @@
       autoplay
       playsinline
       muted
-      loop
+      <% if (loop == "yes") { %>loop<% } %>
     ></video>
   </div>
   <div class="watermark" alt="">
