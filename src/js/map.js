@@ -4,14 +4,15 @@ var altVectors,specialVector;
 
 // take all MAP_DATA vector items, and create an array of them (without spaces), flatten, and dedupe
 if (THISSTORY != "nepal") {
-
   const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
 
   specialVector = MAP_VECTORS.filter(d => d.chapter == THISSTORY && d.isMain == true);
 
   if (specialVector.length > 1) {
     // Throw an error
-    console.error("there is more than 1 special vector for this chapter. There should only be 1 special vector in google sheets");
+    console.error("There is more than 1 special vector for this chapter. There should only be 1 special vector in google sheets");
+  } else if (specialVector.length == 0) {
+    console.error("There is NO special vector")
   }
 
   // get list of all unique vectors that are NOT the special vector
