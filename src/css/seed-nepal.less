@@ -6,6 +6,13 @@
 .graphic img { pointer-events: none; }
 
 // ai2html artboard sizes
+@media screen and (min-width: 1206px) {
+  #g-_nepal-lake-small, #g-_nepal-lake-medium, #g-_nepal-lake-wide { display: none; }
+}
+@media screen and (max-width: 1205px) and (min-width: 729px) {
+  #g-_nepal-lake-small, #g-_nepal-lake-medium, #g-_nepal-lake-extraWide { display: none; }
+  #g-_nepal-lake-wide { margin: auto;}
+}
 @media screen and (min-width: 729px) {
     #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium, #g-_ice-diagram-lake-small, #g-_ice-diagram-lake-medium,
     #g-_ice-diagram-lake-0-small, #g-_ice-diagram-0-lake-medium,
@@ -23,6 +30,8 @@
     #g-_ice-diagram-lake-0-small, #g-_ice-diagram-lake-0-wide,
     #g-_ice-diagram-lake-1-small, #g-_ice-diagram-lake-1-wide,
     #g-_ice-diagram-lake-2-small, #g-_ice-diagram-lake-2-wide { display: none; }
+    #g-_nepal-lake-small, #g-_nepal-lake-wide, #g-_nepal-lake-extraWide { display: none; }
+    #g-_nepal-lake-medium { margin: auto;}
 }
 
 @media screen and (max-width: 409px) {
@@ -30,6 +39,8 @@
     #g-_ice-diagram-lake-0-medium, #g-_ice-diagram-lake-0-wide,
     #g-_ice-diagram-lake-1-medium, #g-_ice-diagram-lake-1-wide,
     #g-_ice-diagram-lake-2-medium, #g-_ice-diagram-lake-2-wide { display: none; }
+    #g-_nepal-lake-medium, #g-_nepal-lake-wide, #g-_nepal-lake-extraWide { display: none; }
+    #g-_nepal-lake-small { margin: auto;}
 }
 
   @keyframes post-appear {
