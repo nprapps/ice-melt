@@ -25,7 +25,7 @@ var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
 
-let mapdata;
+let mapdata,topology;
 
 let width = 800, height = 600;
 let mapY=40; // 0 / 360 = Greenwich England, values increase to the west
@@ -54,7 +54,7 @@ let showTools = false;
 var sphere = ({type: "Sphere"});
 
 // parameter for simplification, slider at https://observablehq.com/d/bb265e5f8575d2b6 
-var minArea = 0.1;
+var minArea = 1;
 
 let projection = d3.geoOrthographic().precision(0.1);
 
@@ -90,7 +90,7 @@ async function addDiscreteListeners() {
       activeSlide = el.parentNode.previousElementSibling.id;
       prevSlide = d3.select(el).attr("slide");
       
-      console.log("----------exit-----------")
+      console.log("----------exit-----------") 
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)      
 
@@ -111,7 +111,7 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-   var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
+  var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
   // get zoom
   // get lat long
   // has Segments? 
@@ -125,11 +125,26 @@ function updateMap(direction,config){
   if (ii == 0) {
     drawlines(); 
     drawVectors();
-    ii++;
+    ii++;  
   }
+  
   if (direction == "backward") {
    linesActive = [-1] 
   }
+
+  let newMinArea = activeMapData.minArea;
+  console.log(newMinArea)
+  console.log(minArea)
+
+  // if min area is diff, update
+  if (newMinArea != minArea) {    
+    topology2 = topojson.presimplify(topology);
+    topology2 = topojson.simplify(topology2, newMinArea);
+    land = topojson.feature(topology2, topology2.objects.land);  
+    minArea = newMinArea;
+  }
+  
+  
   zoomto(zoom,lat,lon,linesActive)
 }
 
@@ -202,10 +217,10 @@ async function initialize_map() {
         .attr("id",d => d.id)
         .text(d => d.label)
 
-	  let topology = mapdata;
-	  topology = topojson.presimplify(topology);
-	  topology = topojson.simplify(topology, minArea);
-	  land = topojson.feature(topology, topology.objects.land);
+	  topology = mapdata;
+	  topology2 = topojson.presimplify(topology);
+	  topology2 = topojson.simplify(topology2, minArea);
+	  land = topojson.feature(topology2, topology2.objects.land);
 
 
     for (const property in altVectors) {
@@ -219,10 +234,8 @@ async function initialize_map() {
 
     let thisPath;
     if (specialVector == undefined) {
-      console.log('hello')
       thisPath = "greenland-currents.geojson";
     } else {
-      console.log('no')
       thisPath = specialVector[0].path;
     }
 
@@ -245,7 +258,6 @@ async function initialize_map() {
 
 	    controlbutton.onclick = runManualTransition;
       copybutton.onclick = function(){
-        console.log('in click')
         // get all three
         
         let copylat = document.getElementById('control_lat').value;
@@ -384,9 +396,6 @@ async function getAltVectors () {
 async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
-
-  console.log("-zoomfrom-  currentMapX " + currentMapX + " currentMapY " + currentMapY); 
-  console.log("-zoomto-  newmaplat" + newmaplat + " newmaplng " + newmapY); 
 
   await d3.transition()
         .duration(transition_milliseconds)
