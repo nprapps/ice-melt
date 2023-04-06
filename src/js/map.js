@@ -382,7 +382,7 @@ async function getAltVectors () {
   let obj = {};
 
   for (var i = 0; i < vectorList.length; i++) {
-    var response = await fetch(`../assets/geo/${vectorList[i].path}`);
+    var response = await fetch(`./assets/geo/${vectorList[i].path}`);
 
     let data = await response.json();
     obj[vectorList[i].id] = {
