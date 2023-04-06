@@ -1,14 +1,23 @@
 let ii = 0;
 
-var altVectors;
+var altVectors,specialVector;
 
 // take all MAP_DATA vector items, and create an array of them (without spaces), flatten, and dedupe
 if (THISSTORY != "nepal") {
+
   const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
 
+  specialVector = MAP_VECTORS.filter(d => d.chapter == THISSTORY && d.isMain == true);
+
+  if (specialVector.length > 1) {
+    // Throw an error
+    console.error("there is more than 1 special vector for this chapter. There should only be 1 special vector in google sheets");
+  }
+
+  // get list of all unique vectors that are NOT the special vector
   var vectorList = MAP_VECTORS.filter(d => {
-    return uniqueVectors.includes(d.id)
-  });  
+    return uniqueVectors.includes(d.id) && d.id != specialVector[0].id;
+  });
 }
 
 
@@ -103,9 +112,6 @@ async function addDiscreteListeners() {
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
    var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
-  console.log(activeMapData)
-  console.log(lon)
-  console.log(lat)
   // get zoom
   // get lat long
   // has Segments? 
@@ -211,7 +217,9 @@ async function initialize_map() {
       }      
     }
 
-	  d3.json('./assets/lines_s_p.geojson').then(function(linesRaw) {
+
+
+	  d3.json(`./assets/geo/${specialVector[0].path}`).then(function(linesRaw) {
       
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
