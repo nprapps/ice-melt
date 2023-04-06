@@ -21,7 +21,6 @@ if (THISSTORY != "nepal") {
   });
 }
 
-
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
@@ -55,7 +54,7 @@ let showTools = false;
 var sphere = ({type: "Sphere"});
 
 // parameter for simplification, slider at https://observablehq.com/d/bb265e5f8575d2b6 
-var minArea = 0.5;
+var minArea = 0.1;
 
 let projection = d3.geoOrthographic().precision(0.1);
 
@@ -242,7 +241,21 @@ async function initialize_map() {
 	var controldiv = document.getElementById("controls");
 	if(controldiv) {
 	    controlbutton = document.getElementById("controlsubmit");
+      copybutton = document.getElementById("copyStuff");
+
 	    controlbutton.onclick = runManualTransition;
+      copybutton.onclick = function(){
+        console.log('in click')
+        // get all three
+        
+        let copylat = document.getElementById('control_lat').value;
+        let copylng = document.getElementById('control_lng').value;
+        let copyzoom = document.getElementById('control_zoom').value;
+        // concatenate
+        // copy to clipboard
+        let tabber = `${copyzoom},${copylat},${copylng}`;
+        navigator.clipboard.writeText(tabber);
+      };
 	    showTools = true;
 	}
 }
