@@ -134,8 +134,6 @@ function updateMap(direction,config){
   }
 
   let newMinArea = activeMapData.minArea;
-  console.log(newMinArea)
-  console.log(minArea)
 
   // if min area is diff, update
   if (newMinArea != minArea) {    
@@ -174,7 +172,9 @@ async function initialize_map() {
     altVectors = await getAltVectors();  
   }
   
-	d3.json('./assets/land-110m.json').then(function(mapdata) {
+	// d3.json('./assets/land-110m.json').then(function(mapdata) {
+  d3.json('./assets/land-50m.json').then(function(mapdata) {
+    
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height])
 		    .attr("fill", "none")
@@ -190,12 +190,15 @@ async function initialize_map() {
     		.attr("height", 5000);
 
 	  outline = svg.append("path")  
-	    .attr("fill","white")
+	    // .attr("fill","white")
 	  
 	  grid = svg.append("path")
 	    .attr("stroke-width","0.5px")
 	    .attr("stroke","#ddd")
 
+    // build vector data    
+    var vectorBoxunder = svg.append("g")
+      .attr("id","vectorBoxunder");        
 
 	  feature = svg.append("path")
 	  	.attr("stroke","#000")
@@ -203,10 +206,9 @@ async function initialize_map() {
 	    .attr("fill","#eeeeee")
 
     linebox = svg.append("g").attr("id","lineBox");
-
-    // build vector data    
-    var vectorBox = svg.append("g")
-      .attr("id","vectorBox");
+    
+    var vectorBoxover = svg.append("g")
+      .attr("id","vectorBoxover");
 
     labelBox = svg.append("g")
       .attr("id","labelBox");
@@ -224,12 +226,18 @@ async function initialize_map() {
 
 
     for (const property in altVectors) {
-      if (property != "currents") {
-        altVectorSVG[property] = vectorBox.selectAll(`.${property}.${altVectors[property].type}`)
-          .data(altVectors[property].data.features)
-            .join("path")
-            .attr("class", `${property} ${altVectors[property].type}`)
-      }      
+      
+      let thisBoxID = altVectors[property].underOver ? altVectors[property].underOver : "over";
+      let thisBox = thisBoxID == "under" ? vectorBoxunder : vectorBoxover;
+
+      altVectorSVG[property] = thisBox.selectAll(`.${property}.${altVectors[property].type}`)
+        .data(altVectors[property].data.features)
+          .join("path")
+          .attr("class", d => {
+            let addClass;
+            addClass = d.properties[altVectors[property].classID];
+            return`${property} ${altVectors[property].type} custom-${addClass}`
+          })      
     }
 
     let thisPath;
@@ -387,7 +395,9 @@ async function getAltVectors () {
     let data = await response.json();
     obj[vectorList[i].id] = {
       "type":vectorList[i].type,
-      "data":data
+      "data":data,
+      "classID":vectorList[i].classID,
+      "underOver":vectorList[i].underOver
     };
   }
   return obj;
