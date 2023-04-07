@@ -372,10 +372,18 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
 	}
 
   if (vectors_drawn) {
-    for (const property in altVectors) {
-      altVectorSVG[property].attr("d", d => {          
+    for (const property in altVectors) {      
+      altVectorSVG[property].attr("d", d => {        
         if (vectors_visible.includes(property)) {
-          return path(d)  
+          console.log(property)
+          console.log(altVectors[property])
+          // if (tween_arg == 1 || altVectors[property].delayTween == false) {
+            return path(d)  
+          // } else {
+          //   return d
+          // }
+        } else {
+          return d;
         }
       })
     }
@@ -397,7 +405,8 @@ async function getAltVectors () {
       "type":vectorList[i].type,
       "data":data,
       "classID":vectorList[i].classID,
-      "underOver":vectorList[i].underOver
+      "underOver":vectorList[i].underOver,
+      "delayTween":vectorList[i].delayTween
     };
   }
   return obj;
