@@ -48,6 +48,7 @@ var lines_drawn = false;
 var vectors_drawn = false;
 let segments_visible = [1,];
 let vectors_visible = [];
+let vectors_previous = [];
 
 let showTools = false;
 
@@ -117,7 +118,7 @@ function updateMap(direction,config){
   // has Segments? 
   // call zoomto  
   segments_visible = Number.isInteger(linesPresent) ? [linesPresent] : linesPresent.split(",").map( Number );
-
+  vectors_previous = vectors_visible;
   vectors_visible = vectors.replaceAll(" ","").split(",");
 
   linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
@@ -252,7 +253,7 @@ async function initialize_map() {
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
-	        .attr("class",d => `lines ${d.properties.class}`)
+	        .attr("class",d => `lines ${d.properties.styleClass}`)
 
 	    setmap(mapscale, mapY, mapX);
 	  }); 
@@ -307,8 +308,8 @@ var path = geoCurvePath(d3.curveBasisClosed, projection);
 var path2 = geoCurvePath(d3.curveLinear, projection);
 
 function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
-	if (segments_visible.includes(arg.properties.id)) {    
-    if (segment_tweened_in_id.includes(arg.properties.id)) {
+	if (segments_visible.includes(arg.properties.groupID)) {    
+    if (segment_tweened_in_id.includes(arg.properties.groupID)) {
       var num_coords = arg.geometry.coordinates.length;
       var desired_coordinate_count = Math.floor(num_coords * tween_arg);
       // can we afford this? 
@@ -375,13 +376,11 @@ function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_a
     for (const property in altVectors) {      
       altVectorSVG[property].attr("d", d => {        
         if (vectors_visible.includes(property)) {
-          console.log(property)
-          console.log(altVectors[property])
-          // if (tween_arg == 1 || altVectors[property].delayTween == false) {
+          if (tween_arg == 1 || altVectors[property].delayTween == false) {
             return path(d)  
-          // } else {
-          //   return d
-          // }
+          } else {
+            return d
+          }
         } else {
           return d;
         }
