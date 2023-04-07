@@ -1,3 +1,7 @@
+@hot: #ffaa00;
+@cooler: #C6F1FC;
+@cold: #5291B1;
+
 div.magic-map.outer {
 	position: fixed;
 	opacity: 0;
@@ -37,7 +41,11 @@ div.magic-map.outer {
 	}
 }
 
-
+defs {
+	#arrowhead-hot {fill: @hot;}
+	#arrowhead-cold {fill: @cold;}
+	#arrowhead-cooler {fill: @cooler;}
+}
 
 g#lineBox {
   /* filter: url(#pencilTexture); */
@@ -50,17 +58,19 @@ g#lineBox {
 
 .hot {
   /* filter: url(#shadow); */   
-  stroke: #df6927;
+  stroke: @hot;
   marker-end: url(#arrowhead-hot); 
+}
 
+.cooler {
+   /* filter: drop-shadow(0px 1px 1px #333); */
+  stroke: @cooler;
+  marker-end: url(#arrowhead-cooler); 
 }
 
 .cold {
-   /* filter: drop-shadow(0px 1px 1px #333); */
-  stroke: #6b8bec;
-  marker-end: url(#arrowhead-cool); 
-
-/*     stroke-width:10px; */
+	stroke: @cold;
+	marker-end: url(#arrowhead-cold);
 }
 
 g#labelBox {
