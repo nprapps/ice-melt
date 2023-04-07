@@ -246,7 +246,7 @@ async function initialize_map() {
 	        .join("path")
 	        .attr("class",d => `lines ${d.properties.class}`)
 
-	    setmap(mapscale, mapX, mapY);
+	    setmap(mapscale, mapY, mapX);
 	  }); 
 	});
 
@@ -393,19 +393,19 @@ async function getAltVectors () {
   return obj;
 };
 
-async function zoomto(newmapScale, newmaplat, newmapY, segment_tweened_in_id) {
+async function zoomto(newmapScale, newmaplat, newmaplon, segment_tweened_in_id) {
   currentMapX = mapX;
   currentMapY = mapY;
 
   await d3.transition()
         .duration(transition_milliseconds)
         .tween("render", () => t => {
-          setmap(interpolate(mapscale, newmapScale, t), interpolate(currentMapY, newmapY, t), interpolate(currentMapX, newmaplat, t), segment_tweened_in_id, t);
+          setmap(interpolate(mapscale, newmapScale, t), interpolate(currentMapY, newmaplat, t), interpolate(currentMapX, newmaplon, t), segment_tweened_in_id, t);
         })
       .end();
   if (showTools) {
    	document.getElementById('control_lat').value = newmaplat;
-		document.getElementById('control_lng').value = newmapY;
+		document.getElementById('control_lng').value = newmaplon;
 		document.getElementById('control_zoom').value = newmapScale;
 
   }
