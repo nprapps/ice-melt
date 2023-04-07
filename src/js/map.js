@@ -122,7 +122,8 @@ function updateMap(direction,config){
 
   linesActive = Number.isInteger(linesActive) ? [linesActive] : linesActive.split(",").map(Number);
 
-  if (ii == 0) {
+  // only do this if there are vectors to draw
+  if (ii == 0 && activeMapData.vectors != "") {
     drawlines(); 
     drawVectors();
     ii++;  
@@ -143,7 +144,6 @@ function updateMap(direction,config){
     land = topojson.feature(topology2, topology2.objects.land);  
     minArea = newMinArea;
   }
-  
   
   zoomto(zoom,lat,lon,linesActive)
 }
@@ -416,16 +416,19 @@ function changeLabels(prevSlide,activeSlide) {
 
   // get labels you need
   var activeLabels = activeMapData.labels.replace(/\s/g, '').split(",");
-  
-  d3.selectAll("#labelBox text").classed("active",false)
 
-  // show and hide labels and highlights based on if active
-  for (var i = 0; i < activeLabels.length; i++) {
+  // only do this if there are actually active labels
+  if (activeMapData.labels != "") {
+    d3.selectAll("#labelBox text").classed("active",false)
 
-    let item = d3.select(`#labelBox text#${activeLabels[i]}`);
+    // show and hide labels and highlights based on if active
+    for (var i = 0; i < activeLabels.length; i++) {
 
-    item.classed("active",true)
+      let item = d3.select(`#labelBox text#${activeLabels[i]}`);
 
+      item.classed("active",true)
+
+    }
   }
 }
 
