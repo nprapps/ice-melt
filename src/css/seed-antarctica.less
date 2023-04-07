@@ -31,20 +31,39 @@
   }
 }
 
+// mobile styles for illo
 @media screen and @mobile-above {
   #mobile-sea-level-illo-1, #mobile-sea-level-illo-2 { display: none; }
   #sea-level-illo { display: block; }
 }
 
 @media screen and @mobile {
-  #mobile-sea-level-illo-1, #mobile-sea-level-illo-2 { display: block; }
+  #mobile-sea-level-illo-1, #mobile-sea-level-illo-2 { 
+    display: block; 
+
+    img {
+      padding: 20px;
+    }
+  }
   #sea-level-illo { display: none; }
 }
 
-// ai2html artboard sizes
+// desktop ai2html artboard sizes for illo
 @media screen and (min-width: 729px) {
     #g-_sea-level-illo-small, #g-_sea-level-illo-medium { display: none; }
-    #g-_sea-level-illo-wide { padding: 30px; }
+    #g-_sea-level-illo-box { 
+      width: 50%;
+      height: 100%;
+      float: right;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 20px; 
+    }
+    #g-_sea-level-illo-wide {
+      min-width: 100% !important; 
+    }
 }
 
 @media screen and (max-width: 728px) and (min-width: 410px) {
