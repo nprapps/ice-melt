@@ -344,7 +344,7 @@ function hidelines() {
 function setmap(map_scale, map_lat, map_lng, segment_tweened_in_id=[-1], tween_arg=1) {
 
 	projection.scale(map_scale);
- 	projection.rotate([map_lng,map_lat])
+ 	projection.rotate([map_lng*-1,map_lat*-1])
 	projection.translate([width / 2, height / 2]) 
 
 	mapX = map_lng;
