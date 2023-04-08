@@ -6,11 +6,7 @@ require("./audio");
 require("./analytics");
 
 // setup map
-// if (THISSTORY != "nepal") {
-  console.log(THISSTORY)
 require("./map");
-// }
-console.log(THISSTORY)
 
 var magicMap =  $("div.magic-map")[0];
 
@@ -56,7 +52,7 @@ var activateSlide = function(slide) {
     //also remove magic map depending on slide type
     if(exiting.classList.contains("map-block") && !slide.classList.contains("map-block")) {
       magicMap.classList.remove("active");
-      magicMap.classList.add("exiting");
+      magicMap.classList.add("exiting");      
       setTimeout(() => magicMap.classList.remove("exiting"), 1000);
     }
 
@@ -88,6 +84,7 @@ var activateSlide = function(slide) {
   //also activate magic map depending on slide type
   if(slide.classList.contains("map-block")) {
     magicMap.classList.add("active");
+    magicMap.dataset.name = slide.id;
     magicMap.classList.remove("exiting");
   }
 

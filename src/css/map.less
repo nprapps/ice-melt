@@ -48,30 +48,36 @@ defs {
 }
 
 g#lineBox {
-  /* filter: url(#pencilTexture); */
-}
+ .hot, .hotter {
+	  /* filter: url(#shadow); */   
+	  stroke: @hot;
+	  marker-end: url(#arrowhead-hot); 
+	}
 
+	.cooler {
+	   /* filter: drop-shadow(0px 1px 1px #333); */
+	  stroke: @cooler;
+	  marker-end: url(#arrowhead-cooler); 
+	}
+
+	.cold {
+		stroke: @cold;
+		marker-end: url(#arrowhead-cold);
+	} 
+
+
+}
 .lines {
   stroke-width: 4px;
   stroke-linecap: round;
 }
-
-.hot {
-  /* filter: url(#shadow); */   
-  stroke: @hot;
-  marker-end: url(#arrowhead-hot); 
+[data-name="map-ocean-currents-7"] {
+	g#lineBox .hot {
+		opacity: 0.3;
+	}
 }
 
-.cooler {
-   /* filter: drop-shadow(0px 1px 1px #333); */
-  stroke: @cooler;
-  marker-end: url(#arrowhead-cooler); 
-}
 
-.cold {
-	stroke: @cold;
-	marker-end: url(#arrowhead-cold);
-}
 
 g#labelBox {
 	.label {
