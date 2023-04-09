@@ -1,6 +1,7 @@
 @hot: #ffaa00;
 @cooler: #C6F1FC;
 @cold: #5291B1;
+@mapGrey: #666666;
 
 div.magic-map.outer {
 	position: fixed;
@@ -36,6 +37,37 @@ div.magic-map.outer {
 
 			path {
 				vector-effect: non-scaling-stroke;
+			}
+		}
+	}
+
+	// base map styles
+	#innerSVG {
+		fill: none;
+		stroke: @mapGrey;
+		width: 100%;
+		height: 100%;
+
+		rect {
+			fill: @off-black;
+			width: 5000;
+			height: 5000;
+		}
+
+		path {
+			&.outline {
+				fill: @off-black;
+			}
+
+			&.grid {
+				stroke-width: 0.5px;
+				stroke: @mapGrey;
+			}
+
+			&.feature {
+				stroke: @off-black; 
+				stroke-width: 2px;
+				fill: @mapGrey;
 			}
 		}
 	}
@@ -101,16 +133,23 @@ g#labelBox {
 
 		&.land {
 			font-size: 20px;
-			text-shadow: 0px 0px 1px #fff;
-	    stroke-width: 3px;
-	    stroke: #fff;
-	    paint-order: stroke;
+			text-transform: uppercase;
+			font-weight: bold; 
+			font-family: Lato;
+			// text-shadow: 0px 0px 1px #fff;
+	    // stroke-width: 3px;
+	    // stroke: #fff;
+	    // paint-order: stroke;
+	    fill: white;
 		}
 
 		&.water {
 	    font-family: Georgia;
 	    font-style: italic;
 	    font-size: 18px;
+	    fill: white;
+	    // stroke-width: 1px;
+	    // stroke: #fff;
 		}
 	}
 }

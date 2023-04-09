@@ -177,34 +177,24 @@ async function initialize_map() {
   d3.json('./assets/land-50m.json').then(function(mapdata) {
     
 		svg = d3.select("#innerSVG")
-		    .attr("viewBox", [0, 0, width , height])
-		    .attr("fill", "none")
-		    .attr("stroke", "currentColor")
-		    .attr("width", "100%")
-		    .attr("height", "100%");
+		    .attr("viewBox", [0, 0, width , height]);
 
 		svg.append("rect")
-    		.style("fill", "white")
     		.attr('x', -400) 
-        .attr('y', -1000) 
-    		.attr("width", 5000)
-    		.attr("height", 5000);
+        .attr('y', -1000); 
 
 	  outline = svg.append("path")  
-	    .attr("fill","white")
+    .attr("class", "outline");
 	  
 	  grid = svg.append("path")
-	    .attr("stroke-width","0.5px")
-	    .attr("stroke","#ddd")
+      .attr("class", "grid");
 
     // build vector data    
     var vectorBoxunder = svg.append("g")
       .attr("id","vectorBoxunder");        
 
 	  feature = svg.append("path")
-	  	.attr("stroke","#000")
-	    .attr("stroke-width", "3px")
-	    .attr("fill","#eeeeee")
+      .attr("class", "feature");
 
     linebox = svg.append("g").attr("id","lineBox");
     
