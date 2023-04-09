@@ -42,16 +42,16 @@
     &.exiting {
      .quiz-viz {
        display: block;
-       opacity: 0;
-        // animation: fade-out .2s linear;
+        animation: fade-out .2s linear;
+        opacity: 0;
       }
     }
   
     &.active {
       .quiz-viz {
         display: block;
+        animation: fade-in .2s linear;
         opacity: 1;
-        // animation: fade-in .2s linear;
       }
     }
   }

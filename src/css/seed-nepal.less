@@ -20,16 +20,34 @@
       //background-size: cover;
   }
 }
+
+// ice diagram illustration artboard styles
 @media screen and (min-width: 729px) {
     #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium, #g-_ice-diagram-lake-small, #g-_ice-diagram-lake-medium,
     #g-_ice-diagram-lake-0-small, #g-_ice-diagram-0-lake-medium,
     #g-_ice-diagram-lake-1-small, #g-_ice-diagram-lake-1-medium,
     #g-_ice-diagram-lake-2-small, #g-_ice-diagram-lake-2-medium { display: none; }
-    #g-_ice-diagram-flood-wide, #g-_ice-diagram-lake-wide,
-    #g-_ice-diagram-lake-0-wide, #g-_ice-diagram-lake-1-wide, #g-_ice-diagram-lake-2-wide {
-    	padding: 20px;
-    	padding-bottom: 50px;
+    // #g-_ice-diagram-flood-wide, #g-_ice-diagram-lake-wide,
+    // #g-_ice-diagram-lake-0-wide, #g-_ice-diagram-lake-1-wide, #g-_ice-diagram-lake-2-wide {
+    // 	padding: 20px;
+    // 	padding-bottom: 50px;
+    // }
+
+    #g-_ice-diagram-lake-0-box, #g-_ice-diagram-lake-1-box, #g-_ice-diagram-lake-2-box, #g-_ice-diagram-lake-box, #g-_ice-diagram-flood-box {
+      width: 60%;
+      height: 100vh;
+      float: left;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
     }
+
+    #g-_ice-diagram-lake-0-wide, #g-_ice-diagram-lake-1-wide, #g-_ice-diagram-lake-2-wide, #g-_ice-diagram-lake-wide, #g-_ice-diagram-flood-wide {
+      min-width: 100% !important; 
+    }
+
 }
 
 @media screen and (max-width: 728px) and (min-width: 410px) {
