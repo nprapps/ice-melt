@@ -243,8 +243,8 @@ async function initialize_map() {
 	    lines = linebox.selectAll(".lines")
 	      .data(linesRaw.features.reverse())
 	        .join("path")
-	        .attr("class",d => `lines ${d.properties.styleClass}`)
-
+	        .attr("class",d => `lines ${d.properties.styleClass}`);
+      
 	    setmap(mapscale, mapY, mapX);
 	  }); 
 	});
@@ -314,10 +314,16 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 }
 
 function drawlines() {
-  console.log("true")
-	lines.attr("d", d => d)
-
-	lines_drawn = true;
+  console.log("drawlines true")
+  if (lines) {
+    // lines.attr("d", d => d);
+    lines.attr("d", function(d) {
+      return d;
+    });
+    lines_drawn = true;
+  } else {
+    "lines undefined. drawlines didn't happen"
+  }
 	if (showTools) {
 	  document.getElementById('control_overlays').value = 'lines';
 	 }
