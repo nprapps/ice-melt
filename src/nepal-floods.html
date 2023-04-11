@@ -16,7 +16,11 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
       <%
         doc.sequence.forEach(function(slide) {
           if (slide.type == "skip") return;
-          print(t.include(`_${slide.type || "image"}.html`, { slide }));
+          if (slide.type == "titlecard") {
+            print(t.include(`_${slide.type || "image"}.html`, { "slide": slide, "thisStory": thisStory, "credits": grunt.data.json.credits }));
+          } else {
+            print(t.include(`_${slide.type || "image"}.html`, { slide }));
+          }
         });
       %>
 

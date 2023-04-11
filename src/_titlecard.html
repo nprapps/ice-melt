@@ -1,3 +1,19 @@
+<%
+  var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+
+  var processCredit = function(c) {
+    var thisCredit = null;
+
+    if (typeof credits[c][thisStory] != "undefined" && credits[c][thisStory].length > 0) {
+      thisCredit = credits[c][thisStory];
+    } else if (typeof credits[c]["all"] != "undefined" && credits[c]["all"].length > 0) {
+      thisCredit = credits[c]["all"];
+    }
+
+    return thisCredit;
+  }
+%>
+
 <section class="<% if (slide.video) { %>video<% } %> <% if (slide.image) { %>image<% } %> splash titlecard slide align-<%= slide.align || "right" %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
   <% if (slide.video) { %>
   <video
@@ -34,6 +50,16 @@
       <img class="logo" src="./assets/logo-outline.svg" alt="NPR" />
       <h1><%= slide.headline %></h1>
       <%= t.renderMarkdown(slide.text) %>
+    
+      <hr>
+
+      <div class="bylines">
+        <% [ "reporting" ].forEach(credit => {
+          var thisCredit = processCredit(credit);
+        %>  
+        <% if (thisCredit) { %><%= t.renderMarkdown(thisCredit) %><% } %>
+        <% }); %>
+      </div>
     </div>
 
     <div class="scroll-bug" aria-hidden="true">
