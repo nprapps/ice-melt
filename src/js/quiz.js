@@ -1,3 +1,5 @@
+var track = require("./lib/tracking");
+
 var onQuizButtonClicked = function(evt) {
   // flag that this question has been answered
   var qParent = this.parentNode.parentNode.parentNode.parentNode;
@@ -20,6 +22,9 @@ var onQuizButtonClicked = function(evt) {
       this.innerHTML += ` <i>Wrong!</i>`;
       break;
   }
+
+  // track clicks
+  track("ice melt quiz clicked", qParent.id, this.dataset.status)
 
   // smoothscroll to the next slide?
   var nextSlide = document.getElementById(qParent.nextElementSibling.id);
