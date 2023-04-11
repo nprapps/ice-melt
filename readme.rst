@@ -158,3 +158,11 @@ The controls -- which appear with a hideous papayawhip border on the bottom left
 
 When scrolling through normally the controls are updated with the current map's data after each transition is complete. 
 
+
+Custom events
+-------------
+
+This project fires some custom GA events:
+
+* ``ice melt quiz clicked`` - For the quiz story, logs clicks on the quiz questions, including the question ID and whether they got it right (true) or wrong (false)
+* ``click`` - User clicked anything with a data-tracker attribute (which provides the event label). Used mostly for footer links.
