@@ -12,7 +12,7 @@
           if (story != thisStory) {
       %>
         <li>
-          <a href="<%= data[story].link %>">
+          <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
             <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
             <%= renderMarkdownText(data[story].headline) %>
           </a>
