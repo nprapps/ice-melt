@@ -101,9 +101,15 @@ var activateSlide = function(slide) {
 var onScroll = function() {
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];    
+    var postTitle = i <= 1 ? null : slides[i + 1];
+    var isAfterTitleCard = (postTitle && postTitle.classList.contains("titlecard")) ? true : false;
     var bounds = slide.getBoundingClientRect();
-    if (bounds.top < window.innerHeight * .9 && bounds.bottom > 0) {
 
+    // tweaking slide toggle tolerances if this is the first card after a titlecard
+    if (
+      (isAfterTitleCard && (bounds.top < window.innerHeight && bounds.bottom > 0)) ||
+      (!isAfterTitleCard && (bounds.top < window.innerHeight * .9 && bounds.bottom > 0))
+      ) {
       // trigger nepal ice illo animation
       if (slide == lakeAnimSlide && !reducedMotion.matches) {
         lakeAnimFrames = lakeAnimFrames.filter(function(frame, n) {
