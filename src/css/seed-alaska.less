@@ -15,3 +15,46 @@
     margin-top: -15px;
   }  
 }
+
+// ai2htmml styles for globe map
+@media screen and (min-width: 729px) {
+    #g-_alaska-globe-1-small, #g-_alaska-globe-1-medium,
+    #g-_alaska-globe-2-small, #g-_alaska-globe-2-medium,
+    #g-_alaska-globe-3-small, #g-_alaska-globe-3-medium,
+    #g-_alaska-globe-4-small, #g-_alaska-globe-4-medium { display: none; }
+
+    #g-_alaska-globe-1-box,
+    #g-_alaska-globe-2-box,
+    #g-_alaska-globe-3-box,
+    #g-_alaska-globe-4-box { 
+      // width: 50%;
+      height: 100vh;
+      // float: right;
+      // display: flex;
+      // flex-direction: row;
+      // justify-content: flex-end;
+      // align-items: center;
+      // padding-right: 20px; 
+    }
+
+    #g-_alaska-globe-1-wide,
+    #g-_alaska-globe-2-wide,
+    #g-_alaska-globe-3-wide,
+    #g-_alaska-globe-4-wide {
+      min-height: 100% !important; 
+    }
+}
+
+@media screen and (max-width: 728px) and (min-width: 410px) {
+    #g-_alaska-globe-1-small, #g-_alaska-globe-1-wide,
+    #g-_alaska-globe-2-small, #g-_alaska-globe-2-wide,
+    #g-_alaska-globe-3-small, #g-_alaska-globe-3-wide,
+    #g-_alaska-globe-4-small, #g-_alaska-globe-4-wide { display: none; }
+}
+
+@media screen and (max-width: 409px) {
+    #g-_alaska-globe-1-medium, #g-_alaska-globe-1-wide,
+    #g-_alaska-globe-2-medium, #g-_alaska-globe-2-wide,
+    #g-_alaska-globe-3-medium, #g-_alaska-globe-3-wide,
+    #g-_alaska-globe-4-medium, #g-_alaska-globe-4-wide { display: none; }
+}
