@@ -80,11 +80,9 @@ async function addDiscreteListeners() {
       activeSlide = d3.select(el).attr("slide");
       mapBlockList.push(activeSlide)
 
-
       console.log("----------enter-----------")
       console.log("leaving " + prevSlide )
-      console.log("entering " + activeSlide)
-      console.log(mapBlockList) 
+      console.log("entering " + activeSlide)    
       
       updateMap("forward",activeSlide);
       changeLabels(prevSlide,activeSlide)
@@ -104,13 +102,10 @@ async function addDiscreteListeners() {
           mapBlockList.pop();        
         }
 
-        console.log(mapBlockList)          
         console.log("----------exit-----------") 
         console.log("leaving " + prevSlide )
         console.log("entering " + activeSlide)  
-        console.log(el)            
     
-      
 			  updateMap("backward",activeSlide);
         changeLabels(prevSlide,activeSlide)
       }
@@ -234,7 +229,7 @@ async function initialize_map() {
       let thisBox = thisBoxID == "under" ? vectorBoxunder : vectorBoxover;
 
       altVectorSVG[property] = thisBox.selectAll(`.${property}.${altVectors[property].type}`)
-        .data(altVectors[property].data.features)
+        .data(altVectors[property].data.features.sort((a,b)=> b.properties.order - a.properties.order))
           .join("path")
           .attr("class", d => {
             let addClass;

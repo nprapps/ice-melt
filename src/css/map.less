@@ -77,20 +77,20 @@ defs {
 	#arrowhead-whale  {fill: @whales;}
 }
 
-g#lineBox {
- .hot, .hotter {
+g#lineBox, g#vectorBoxover {
+ .hot, .hotter, .custom-hot, .custom-hotter {
 	  /* filter: url(#shadow); */   
 	  stroke: @hot;
 	  marker-end: url(#arrowhead-hot); 
 	}
 
-	.cooler {
+	.cooler, .custom-cooler  {
 	   /* filter: drop-shadow(0px 1px 1px #333); */
 	  stroke: @cooler;
 	  marker-end: url(#arrowhead-cooler); 
 	}
 
-	.cold, .labrador {
+	.cold, .custom-cold {
 		stroke: @cold;
 		marker-end: url(#arrowhead-cold);
 	} 
@@ -114,15 +114,9 @@ g#lineBox {
     stroke-width: 2px;
   }
 }
-.lines {
+body#quiz #vectorBoxover .line, .lines {
   stroke-width: 4px;
   stroke-linecap: round;
-}
-
-[data-name="map-ocean-currents-7"] {
-	g#lineBox .hot {
-		opacity: 0.3;
-	}
 }
 
 [data-name="map-whale-routes"] {
@@ -131,6 +125,11 @@ g#lineBox {
 	}
 }
 
+body#quiz #vectorBoxover {
+	.custom-whales, .custom-whales1 {
+		display: none;
+	}
+}
 
 g#labelBox {
 	.label {

@@ -9,7 +9,7 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
     <%= t.include("partials/_head.html", { "project": grunt.data.json.project, "social": doc.social }) %>
     <link rel="stylesheet" type="text/css" href="<%= thisStory %>.css">
   </head>
-  <body>
+  <body id="<%= thisStory %>">
 
     <%= t.include("_map.html") %>
     
