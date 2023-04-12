@@ -24,3 +24,32 @@
 #intro-wildfire .text {
   .first-slide-text();
 }
+
+// ai2html styles for illo
+@media screen and (min-width: 729px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium { display: none; }
+
+    #g-_ice-diagram-flood-box {
+      width: 50%;
+      height: 100vh;
+      float: left;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #g-_ice-diagram-flood-wide {
+      min-width: 100% !important; 
+    }
+
+}
+
+@media screen and (max-width: 728px) and (min-width: 410px) {
+    #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-wide { display: none; }
+}
+
+@media screen and (max-width: 409px) {
+    #g-_ice-diagram-flood-medium, #g-_ice-diagram-flood-wide { display: none; }
+}
