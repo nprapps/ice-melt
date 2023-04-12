@@ -241,9 +241,9 @@ async function initialize_map() {
 	  d3.json(`./assets/geo/${thisPath}`).then(function(linesRaw) {
       
 	    lines = linebox.selectAll(".lines")
-	      .data(linesRaw.features.reverse())
+	      .data(linesRaw.features.sort((a,b)=> b.properties.order - a.properties.order))
 	        .join("path")
-	        .attr("class",d => `lines ${d.properties.styleClass}`);
+	        .attr("class",d => `lines ${d.properties.styleClass} order-${d.properties.order}`);
       
 	    setmap(mapscale, mapY, mapX);
 	  }); 
@@ -314,7 +314,6 @@ function linepath(arg, segments_visible, segment_tweened_in_id, tween_arg) {
 }
 
 function drawlines() {
-  console.log("drawlines true")
   if (lines) {
     // lines.attr("d", d => d);
     lines.attr("d", function(d) {
