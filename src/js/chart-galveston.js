@@ -25,7 +25,7 @@ var renderLineChart = function(config) {
   var margins = {
     top: 75,
     right: 200,
-    bottom: 130,
+    bottom: 170,
     left: 200
   };
   if (isMobile.matches) {
