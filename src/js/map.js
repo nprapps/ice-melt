@@ -49,6 +49,7 @@ var vectors_drawn = false;
 let segments_visible = [1,];
 let vectors_visible = [];
 let vectors_previous = [];
+let mapBlockList = [];
 
 let showTools = false;
 
@@ -75,35 +76,44 @@ async function addDiscreteListeners() {
 		selector: stepSel.nodes(),
 		offset: 0,
 		enter: el => {
-      prevSlide = activeSlide;
+      prevSlide = activeSlide;      
       activeSlide = d3.select(el).attr("slide");
+      mapBlockList.push(activeSlide)
+
 
       console.log("----------enter-----------")
       console.log("leaving " + prevSlide )
       console.log("entering " + activeSlide)
+      console.log(mapBlockList) 
       
       updateMap("forward",activeSlide);
-
       changeLabels(prevSlide,activeSlide)
 		},
 		exit: el => {       
+      if (activeSlide) {
+        // if the previous node is a map-block, do what you're supposed to do. 
+        if (el.parentNode.previousElementSibling.classList.contains("map-block")) {
+          activeSlide = el.parentNode.previousElementSibling.id;
+          prevSlide = d3.select(el).attr("slide");
+          mapBlockList.pop();        
+        }
+        else {
+          // get second most recent map to display
+          activeSlide = mapBlockList[mapBlockList.length-2];
+          prevSlide = d3.select(el).attr("slide");
+          mapBlockList.pop();        
+        }
 
-      activeSlide = el.parentNode.previousElementSibling.id;
-      prevSlide = d3.select(el).attr("slide");
+        console.log(mapBlockList)          
+        console.log("----------exit-----------") 
+        console.log("leaving " + prevSlide )
+        console.log("entering " + activeSlide)  
+        console.log(el)            
+    
       
-      console.log("----------exit-----------") 
-      console.log("leaving " + prevSlide )
-      console.log("entering " + activeSlide)      
-
-			//check for multiple
-      if (activeSlide) {
 			  updateMap("backward",activeSlide);
-      }
-
-      // don't run changeLabels on non-map
-      if (activeSlide) {
         changeLabels(prevSlide,activeSlide)
-      }      
+      }
 		}
 	});
 }
@@ -112,6 +122,8 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
+  console.log(direction)
+  console.log(config)
   var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
   // get zoom
   // get lat long
