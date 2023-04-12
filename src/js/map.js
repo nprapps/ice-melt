@@ -24,6 +24,7 @@ if (THISSTORY != "nepal") {
 var d3 = require("d3");
 var enterView = require("enter-view");
 var topojson = require("topojson");
+const wrapText = require("./lib/helpers/wrapText");
 
 let mapdata,topology;
 
@@ -215,8 +216,8 @@ async function initialize_map() {
       .data(MAP_LABELS).join("text")
         .attr("class",d => `label ${d.classes.split(",").join(" ")}`)
         .attr("id",d => d.id)
-        .text(d => d.label)
-
+        .text(d => d.label);
+    
 	  topology = mapdata;
 	  topology2 = topojson.presimplify(topology);
 	  topology2 = topojson.simplify(topology2, minArea);

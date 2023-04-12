@@ -50,10 +50,12 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
     </footer>
 
     <script>
+        <% var filteredMapLabels = grunt.data.json.map_labels.filter(d => d.chapter == thisStory); %>
+
         var THISSTORY = "<%= thisStory %>";
         var MAP_DATA = <%= JSON.stringify(grunt.data.json.antarctica_scenes) %>;
         var MAP_VECTORS = <%= JSON.stringify(grunt.data.json.map_vectors) %>;
-        var MAP_LABELS = <%= JSON.stringify(grunt.data.json.map_labels) %>;
+        var MAP_LABELS = <%= JSON.stringify(filteredMapLabels) %>;
         window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
     </script>
     <script src="app.js" async></script>

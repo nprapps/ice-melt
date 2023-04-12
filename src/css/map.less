@@ -108,11 +108,6 @@ g#lineBox, g#vectorBoxover {
 		stroke-dasharray: 5;
 		marker-end: url(#arrowhead-whale);
 	}
-
-  .secondary {
-    opacity: 0.5;
-    stroke-width: 2px;
-  }
 }
 body#quiz #vectorBoxover .line, .lines {
   stroke-width: 4px;
@@ -129,6 +124,24 @@ body#quiz #vectorBoxover {
 	.custom-whales, .custom-whales1 {
 		display: none;
 	}
+}
+
+[data-name="map-ocean-currents-1"] g#lineBox {
+  .secondary {
+    opacity: 0.4;
+    stroke-width: 2px;
+  }
+}
+
+[data-name="map-ocean-currents-2"] g#lineBox {
+  .hot, .cold, .cooler {
+    opacity: 0.4;
+    stroke-width: 2px;
+  }
+  .primary {
+    opacity: 1;
+    stroke-width: 8px;
+  }
 }
 
 g#labelBox {
@@ -191,6 +204,20 @@ g#labelBox {
 	    paint-order: stroke;
 		}
 	}
+}
+
+[data-name="map-ocean-currents-1"],
+[data-name="map-ocean-currents-2"] {
+  @media screen and @mobile-above {
+    g#labelBox text {
+      &.land {
+        font-size: 18px;
+      }
+      &.water {
+        font-size: 15px;
+      }
+    }
+  }
 }
 
 g#vectorBox,g#vectorBoxunder,g#vectorBoxover {
