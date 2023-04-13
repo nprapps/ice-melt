@@ -279,12 +279,38 @@
     }
   }
   .content + .caption {
-    margin-top: 40px;
-    border-top: 1px solid @gray-medium;
+    // margin-top: 40px;
+    // border-top: 1px solid @gray-medium;
+
+    &:before {
+      content: ""; 
+      display: block; 
+      height: 4px;
+      background-image: url("./assets/synced/illos/scribble.svg"); 
+      background-repeat: no-repeat;
+      background-image: contain; 
+      position: relative;
+      width: 100%;
+      padding-bottom: 30px; 
+      left: -20px;
+    }
   }
   .audio + .caption {
-    margin-top: 30px;
-    border-top: 1px solid @gray-medium;
+    // margin-top: 30px;
+    // border-top: 4px solid @gray-medium;
+
+    &:before {
+      content: ""; 
+      display: block; 
+      height: 4px;
+      background-image: url("./assets/synced/illos/scribble.svg"); 
+      background-repeat: no-repeat;
+      background-image: contain; 
+      position: relative;
+      width: 100%;
+      padding-bottom: 30px; 
+      left: -20px;
+    }
   }
 
   &.image {
