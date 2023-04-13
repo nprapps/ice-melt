@@ -38,6 +38,15 @@
       <div class="block credits">
 
         <% 
+          var abtCredit = processCredit("about");
+        %>
+        <% if (abtCredit) { %>
+          <h4><%= credits["hed_about"]["all"] %></h4>
+          <%= t.renderMarkdown(abtCredit) %>
+        <% } %>
+
+
+        <% 
           var ackCredit = processCredit("acknowledgements");
         %>
         <% if (ackCredit) { %>
