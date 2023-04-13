@@ -30,9 +30,9 @@ var renderLineChart = function(config) {
   };
   if (isMobile.matches) {
     margins = {
-      top: 50,
+      top: 40,
       right: 50,
-      bottom: 100,
+      bottom: 130,
       left: 50
     }
   }
