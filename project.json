@@ -6,7 +6,7 @@
     },
     "live": {
       "bucket": "apps.npr.org",
-      "path": "ice-melt"
+      "path": "arctic-ice-melting-climate-change"
     }
   },
   "styles": {
@@ -21,7 +21,7 @@
   },
   "title": "Ice Melt",
   "description": "",
-  "url": "https://apps.npr.org/ice-melt/",
+  "url": "https://apps.npr.org/arctic-ice-melting-climate-change/",
   "image": "assets/logo.png",
   "analytics": {
     "topicIDs": ["p1167","1001","1003","1004","1007","1025","1165"],
