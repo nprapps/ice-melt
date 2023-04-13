@@ -25,8 +25,9 @@
   .first-slide-text();
 }
 
-// ai2html styles for illo
+// ai2html styles 
 @media screen and (min-width: 729px) {
+    // illo
     #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-medium { display: none; }
 
     #g-_ice-diagram-flood-box {
@@ -44,12 +45,32 @@
       min-width: 100% !important; 
     }
 
+
+    // alaska map
+    #g-_alaska-globe-4-small, #g-_alaska-globe-4-medium { display: none; }
+
+    #g-_alaska-globe-4-box { 
+      height: 100vh;
+    }
+
+    #g-_alaska-globe-4-wide {
+      min-height: 100% !important; 
+    }
+
 }
 
 @media screen and (max-width: 728px) and (min-width: 410px) {
+    // illo
     #g-_ice-diagram-flood-small, #g-_ice-diagram-flood-wide { display: none; }
+
+    // alaska map
+    #g-_alaska-globe-4-small, #g-_alaska-globe-4-wide { display: none; }
 }
 
 @media screen and (max-width: 409px) {
+    // illo
     #g-_ice-diagram-flood-medium, #g-_ice-diagram-flood-wide { display: none; }
+
+    // alaska map
+    #g-_alaska-globe-4-medium, #g-_alaska-globe-4-wide { display: none; }
 }
