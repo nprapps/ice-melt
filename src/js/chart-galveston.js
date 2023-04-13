@@ -32,7 +32,7 @@ var renderLineChart = function(config) {
     margins = {
       top: 80,
       right: 50,
-      bottom: 150,
+      bottom: 120,
       left: 50
     }
   }
