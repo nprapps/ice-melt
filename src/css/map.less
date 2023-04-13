@@ -126,24 +126,37 @@ body#quiz #vectorBoxover {
 	}
 }
 
-[data-name="map-ocean-currents-1"] g#lineBox {
-  .secondary {
+// antarctica maps
+// [data-name="map-ocean-currents-1"] g#lineBox,
+[data-name="map-ocean-currents-3"] g#lineBox,
+[data-name="antarctica-4"] g#lineBox {
+  .lines {
     opacity: 0.4;
     stroke-width: 2px;
+  }
+  .gulf {
+    opacity: 1;
+    stroke-width: 3px;
   }
 }
-
-[data-name="antarctica-4"] g#lineBox,
-[data-name="map-ocean-currents-2"] g#lineBox {
-  .hot, .cold, .cooler {
+[data-name="map-ocean-currents-2"] g#lineBox,
+[data-name="antarctica-4"] g#lineBox {
+  .lines {
     opacity: 0.4;
     stroke-width: 2px;
   }
-  .primary {
+  .cycle {
     opacity: 1;
+    stroke-width: 3px;
+  }
+}
+[data-name="map-ocean-currents-3"] g#lineBox,
+[data-name="antarctica-4"] g#lineBox {
+  .cycle.gulf {
     stroke-width: 8px;
   }
 }
+
 
 g#labelBox {
 	.label {
