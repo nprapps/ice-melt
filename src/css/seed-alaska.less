@@ -3,6 +3,30 @@
 @import "map";
 @import "map_block";
 
+// colors
+@low: #97a9ba;
+@warm: #d98a36;
+@jet: white;
+@sunlight: #e9c759;
+
+span {
+  &.sunlight {
+    color: @sunlight;
+  }
+
+  &.warm {
+    color: @warm;
+  }
+
+  &.low {
+    color: @low;
+  }
+
+  &.jet {
+    font-weight: bold; 
+  }
+}
+
 #acres-burned .text {
   .first-slide-text();
 }
