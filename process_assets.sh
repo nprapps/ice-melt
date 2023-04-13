@@ -52,8 +52,8 @@ for video in *.mp4; do
     -preset veryslow \
     -strict -2 \
     -pix_fmt yuv420p \
-    -crf 29 \
-    -vf scale=1500:-2 \
+    -crf 25 \
+    -vf scale=1600:-2 \
     -movflags +faststart \
     resized/$video;
   fi
@@ -67,7 +67,7 @@ for video in *.mp4; do
     -preset veryslow \
     -strict -2 \
     -pix_fmt yuv420p \
-    -crf 29 \
+    -crf 25 \
     -vf scale=800:-2 \
     -movflags +faststart \
     resized/mobile-$video;
