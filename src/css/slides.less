@@ -278,47 +278,13 @@
       padding-top: 10px;
     }
   }
+  
   .content + .caption {
-    // margin-top: 40px;
-    // border-top: 1px solid @gray-medium;
-
-    &:before {
-      content: ""; 
-      display: block; 
-      height: 4px;
-      background-image: url("./assets/synced/illos/scribble.svg"); 
-      background-repeat: no-repeat;
-      background-image: contain; 
-      position: relative;
-      width: 100%;
-      padding-bottom: 30px; 
-      left: -20px;
-
-      @media @mobile {
-        left: 0px;
-      }
-    }
+    .sketchy-divider();
   }
   .audio + .caption {
-    // margin-top: 30px;
-    // border-top: 4px solid @gray-medium;
-
-    &:before {
-      content: ""; 
-      display: block; 
-      height: 4px;
-      background-image: url("./assets/synced/illos/scribble.svg"); 
-      background-repeat: no-repeat;
-      background-image: contain; 
-      position: relative;
-      width: 100%;
-      padding-bottom: 30px; 
-      left: -20px;
-
-      @media @mobile {
-        left: 0px;
-      }
-    }
+    .sketchy-divider();
+    margin-top: 0;
   }
 
   &.image {
@@ -368,9 +334,8 @@
 }
 
 figure.audio {
-  margin: 1.5rem 0 0.5rem 0;
-  border-top: 1px solid @gray-medium;
-  padding-top: 1.5rem;
+  .sketchy-divider();
+  margin: 25px 0 0 0;
 
   figcaption {
     .sourceSansPro-header();
