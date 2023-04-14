@@ -24,7 +24,10 @@
     loop
     playsinline
     autoplay
-  ></video>
+    style="<%= t.style({
+      "object-position": slide.anchor,
+      "object-fit": slide.constrain
+    }) %>"></video>
   <% } %>
 
   <% if (slide.image) { %>
