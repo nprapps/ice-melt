@@ -10,8 +10,10 @@
       <ul class="outbound">
         <li class="quiz">
             <a href="<%= data.quiz.link %>" data-track="footer" data-label="quiz">
-              <img src="./assets/synced/images/resized/<%= data.quiz.thumbnail %>" alt="">
-              <%= renderMarkdownText(data.quiz.headline) %>
+              <div class="img-wrapper">
+                <img src="./assets/synced/images/resized/<%= data.quiz.thumbnail %>" alt="">
+              </div>
+              <span><%= renderMarkdownText(data.quiz.headline) %></span>
             </a>
           </li>
       </ul>
@@ -21,18 +23,23 @@
       <h3><%= renderMarkdownText(data.other_hed.headline) %></h3>
       <ul class="outbound">
         <%
-          ["quiz", "alaska", "antarctica", "greenland", "nepal"].forEach(function(story) { 
-            if (story != thisStory) {
+          ["alaska", "antarctica", "greenland", "nepal"].forEach(function(story) { 
+           var display = (story != thisStory) ? "show" : "fade"; 
         %>
-          <li>
-            <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
-              <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
-              <%= renderMarkdownText(data[story].headline) %>
-            </a>
+          <li class="<%= display %>">
+            <% if (display == "show") { %>
+              <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
+            <% } %>
+                <div class="img-wrapper">
+                  <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
+                </div>
+                <span><%= renderMarkdownText(data[story].headline) %></span>
+            <% if (display == "show") { %>
+              </a>
+            <% } %>
           </li>
         <% 
-            }
-          });
+        });
         %>
       </ul>
     </div>
