@@ -32,6 +32,8 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
       
       <%= t.include("partials/_footer_nav.html", { "data": grunt.data.json.footer_nav, "thisStory": thisStory }) %>
 
+      <hr>
+
       <%= t.include("partials/_credits.html", { "credits": grunt.data.json.credits, "thisStory": thisStory }) %>
 
       <div class="constrained">

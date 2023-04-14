@@ -2,25 +2,39 @@
   var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 %>
 
-<div class="more-stories" <% if (data[thisStory].bgimage) { %> style="background: url('./assets/synced/images/resized/<%= data[thisStory].bgimage %>') no-repeat; background-size: cover;"<% } %>>
+<div class="more-stories">
   <div class="constrained">
-    <h3><%= renderMarkdownText(data.overall.headline) %></h3>
+    <!-- <h3><%= renderMarkdownText(data.overall.headline) %></h3> -->
+    <div class="half">
+      <h3><%= renderMarkdownText(data.quiz_hed.headline) %></h3>
+      <ul class="outbound">
+        <li class="quiz">
+            <a href="<%= data.quiz.link %>" data-track="footer" data-label="quiz">
+              <img src="./assets/synced/images/resized/<%= data.quiz.thumbnail %>" alt="">
+              <%= renderMarkdownText(data.quiz.headline) %>
+            </a>
+          </li>
+      </ul>
+    </div>
 
-    <ul class="outbound">
-      <%
-        ["quiz", "alaska", "antarctica", "greenland", "nepal"].forEach(function(story) { 
-          if (story != thisStory) {
-      %>
-        <li>
-          <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
-            <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
-            <%= renderMarkdownText(data[story].headline) %>
-          </a>
-        </li>
-      <% 
-          }
-        });
-      %>
-    </ul>
+    <div class="half">
+      <h3><%= renderMarkdownText(data.other_hed.headline) %></h3>
+      <ul class="outbound">
+        <%
+          ["quiz", "alaska", "antarctica", "greenland", "nepal"].forEach(function(story) { 
+            if (story != thisStory) {
+        %>
+          <li>
+            <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
+              <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
+              <%= renderMarkdownText(data[story].headline) %>
+            </a>
+          </li>
+        <% 
+            }
+          });
+        %>
+      </ul>
+    </div>
   </div>
 </div>
