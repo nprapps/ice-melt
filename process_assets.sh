@@ -107,14 +107,15 @@ done
 # done
 
 # convert thumbnails
-# cd ../thumbnails
-# mkdir -p resized
-# for img in *.jpg; do
-#   echo "Processing $img..."
-#   # if [ ! -f $img ]; then
-#     magick convert $img -resize 600x600\> -quality 75 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
-#   # fi
-# done
+cd ../thumbnails
+mkdir -p resized
+for img in *.jpg; do
+  echo "Processing $img..."
+  # if [ ! -f $img ]; then
+    magick convert $img -resize 800x800\> -quality 70 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
+  # fi
+done
+
 # for img in *.jpeg; do
 #   echo "Processing $img..."
 #   # if [ ! -f $img ]; then

@@ -13,7 +13,7 @@
             <a href="<%= data.quiz.link %>" data-track="footer" data-label="quiz">
           <% } %>
               <div class="img-wrapper">
-                <img src="./assets/synced/images/resized/<%= data.quiz.thumbnail %>" alt="">
+                <img src="./assets/synced/thumbnails/resized/<%= data.quiz.thumbnail %>" alt="">
               </div>
               <span><%= renderMarkdownText(data.quiz.headline) %></span>
             </a>
@@ -33,7 +33,7 @@
               <a href="<%= data[story].link %>" data-track="footer" data-label="<%= story %>">
             <% } %>
                 <div class="img-wrapper">
-                  <img src="./assets/synced/images/resized/<%= data[story].thumbnail %>" alt="">
+                  <img src="./assets/synced/thumbnails/resized/<%= data[story].thumbnail %>" alt="">
                 </div>
                 <span><%= renderMarkdownText(data[story].headline) %></span>
             <% if (display == "show") { %>
