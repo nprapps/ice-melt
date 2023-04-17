@@ -3,7 +3,7 @@ let ii = 0;
 var altVectors,specialVector;
 
 // take all MAP_DATA vector items, and create an array of them (without spaces), flatten, and dedupe
-if (THISSTORY != "nepal") {
+if (THISSTORY != "nepal" && THISSTORY != "alaska") {
   const uniqueVectors = [...new Set(MAP_DATA.map(x => x.vectors.replaceAll(" ","").split(",")).flat())];
 
   specialVector = MAP_VECTORS.filter(d => d.chapter == THISSTORY && d.isMain == true);
@@ -69,6 +69,9 @@ var oldOnload = window.onload;
 window.onload = (typeof window.onload != 'function') ? addDiscreteListeners : function() { oldOnload(); addDiscreteListeners(); };
 
 async function addDiscreteListeners() {
+  if (THISSTORY == "nepal" || THISSTORY == "alaska") {
+    return;
+  }
 
   await initialize_map();
 	
@@ -177,7 +180,7 @@ function runManualTransition() {
 
 async function initialize_map() {
   // load the alt vectors into memory
-  if (THISSTORY != "nepal") {
+  if (THISSTORY != "nepal" && THISSTORY != "alaska") {
     altVectors = await getAltVectors();  
   }
   
