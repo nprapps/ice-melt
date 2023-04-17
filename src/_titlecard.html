@@ -59,8 +59,8 @@
       <div class="bylines">
         <% [ "reporting" ].forEach(credit => {
           var thisCredit = processCredit(credit);
-          // slice off trailing period
-          thisCredit = thisCredit.slice(0, -1);
+          // // slice off trailing period
+          // thisCredit = thisCredit.slice(0, -1);
         %>  
         <% if (thisCredit) { %><%= t.renderMarkdown(thisCredit) %><% } %>
         <% }); %>
