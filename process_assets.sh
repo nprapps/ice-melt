@@ -96,15 +96,15 @@ for audio in *.mp3; do
   fi
 done
 
-# convert satellite images
-# cd ../map-images
-# mkdir -p resized
-# for img in *.jpg; do
-#   echo "Processing $img..."
-#   # if [ ! -f $img ]; then
-#     magick convert $img -resize 2500x2500\> -quality 75 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
-#   # fi
-# done
+# convert ai2html images
+cd ../ai-img
+mkdir -p resized
+for img in *.jpg; do
+  echo "Processing $img..."
+  # if [ ! -f $img ]; then
+    magick convert $img -resize 1600x1600\> -quality 75 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
+  # fi
+done
 
 # convert thumbnails
 cd ../thumbnails
