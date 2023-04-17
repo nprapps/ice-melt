@@ -52,11 +52,13 @@ var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
 
 
     <script>
-        var THISSTORY = "<%= thisStory %>";
-        var MAP_DATA = <%= JSON.stringify(grunt.data.json.greenland_scenes) %>;
-        var MAP_VECTORS = <%= JSON.stringify(grunt.data.json.map_vectors) %>;
-        var MAP_LABELS = <%= JSON.stringify(grunt.data.json.map_labels) %>;
-        window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
+      <% var filteredMapLabels = grunt.data.json.map_labels.filter(d => d.chapter == thisStory); %>
+
+      var THISSTORY = "<%= thisStory %>";
+      var MAP_DATA = <%= JSON.stringify(grunt.data.json.greenland_scenes) %>;
+      var MAP_VECTORS = <%= JSON.stringify(grunt.data.json.map_vectors) %>;
+      var MAP_LABELS = <%= JSON.stringify(filteredMapLabels) %>;
+      window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
     </script>
     <script src="app.js" async></script>
     <%= t.include("partials/_analytics.html") %>
