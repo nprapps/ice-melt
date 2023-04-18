@@ -3,6 +3,7 @@
 var playAudio = function(evt) {
   var p = this.closest("figure.audio");
   var player = p.querySelector("audio");
+  player.load();
   player.play();
   p.dataset.status = "play";
 }
