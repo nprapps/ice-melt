@@ -5,6 +5,11 @@
 
 .graphic img { pointer-events: none; }
 
+span.trail {
+  font-weight: bold; 
+  color: #FF7F6C;
+}
+
 // ai2html artboard sizes
 @media screen and (min-width: 1206px) {
   #g-_nepal-lake-small, #g-_nepal-lake-medium, #g-_nepal-lake-wide { display: none; }
@@ -155,6 +160,27 @@
 
   #dateline {
     .first-slide-text();
+
+    h4 {
+      margin-bottom: 11px; 
+    }
+
+    &:after {
+      content: ""; 
+      display: block; 
+      height: 4px;
+      background-image: url("./assets/synced/illos/scribble.svg"); 
+      background-repeat: no-repeat;
+      background-image: contain; 
+      position: relative;
+      width: 100%;
+      padding-bottom: 20px; 
+      // left: -10px;
+
+      @media @mobile {
+        left: 0px;
+      }
+    }
   }
   
   h4 {
