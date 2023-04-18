@@ -13,7 +13,7 @@ var magicMap =  $("div.magic-map")[0];
 // setup ice illo animation
 var lakeAnimSlide = $.one(".ice-diagram-lake.slide");
 var lakeAnimFrames = $(".ice-diagram-lake.slide .frame");
-console.log(lakeAnimFrames)
+// console.log(lakeAnimFrames)
 
 // setup galveston chart
 require("./chart-galveston.js");

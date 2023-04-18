@@ -84,9 +84,9 @@ async function addDiscreteListeners() {
       activeSlide = d3.select(el).attr("slide");
       mapBlockList.push(activeSlide)
 
-      console.log("----------enter-----------")
-      console.log("leaving " + prevSlide )
-      console.log("entering " + activeSlide)    
+      // console.log("----------enter-----------")
+      // console.log("leaving " + prevSlide )
+      // console.log("entering " + activeSlide)    
       
       updateMap("forward",activeSlide);
       changeLabels(prevSlide,activeSlide)
@@ -106,9 +106,9 @@ async function addDiscreteListeners() {
           mapBlockList.pop();        
         }
 
-        console.log("----------exit-----------") 
-        console.log("leaving " + prevSlide )
-        console.log("entering " + activeSlide)  
+        // console.log("----------exit-----------") 
+        // console.log("leaving " + prevSlide )
+        // console.log("entering " + activeSlide)  
     
 			  updateMap("backward",activeSlide);
         changeLabels(prevSlide,activeSlide)
@@ -121,8 +121,8 @@ async function addDiscreteListeners() {
 // zoomto expects scale,lat,lng where n is lat<0
 function updateMap(direction,config){
   var activeMapData = MAP_DATA.find(e => e.sceneID == config);
-  console.log(direction)
-  console.log(config)
+  // console.log(direction)
+  // console.log(config)
   var {zoom,lat,lon,linesPresent, linesActive, vectors} = activeMapData;
   // get zoom
   // get lat long
