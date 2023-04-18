@@ -1,6 +1,4 @@
-<%
-  var loop = slide.loop || "yes";
-%>
+<% var loop = slide.loop || "yes"; %>
 
 <section class="video slide align-<%= slide.align || "right" %> <%= slide.layout %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" data-type="video">
   <div class="video-container">
@@ -32,8 +30,8 @@
   // Load next video based on current screen width
   // It won't get reloaded if resized, YOLO
   if (window.innerWidth < 501) {
-      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/mobile-<%= slide.video %>");
-    } else {
-      document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/<%= slide.video %>");
-    }
+    document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/mobile-<%= slide.video %>");
+  } else {
+    document.getElementById("video-<%= slide.id %>").setAttribute('data-src', "./assets/synced/video/resized/<%= slide.video %>");
+  }
 </script>
