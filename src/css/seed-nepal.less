@@ -98,14 +98,38 @@
 }
 
 #ice-diagram-lake {
+  .frame-wrapper {
+    position: relative;
+  }
+
     .frame {
+        position: absolute;
+        top: 0;
+        left: 0; 
+        width: 100%;
+        height: 100%;
         display: none;
+        transition: 0.3s ease-in;
 
         &.show { 
             display: block;
-            animation: post-appear 0.5s ease-in;
+            transition: 0.3s ease-in;
+            // animation: post-appear 0.5s ease-in;
         }
     }
+
+  .frame-0 {
+    z-index: 9; 
+    display: block;
+  }
+
+  .frame-1 {
+    z-index: 10; 
+  }
+
+  .frame-2 {
+    z-index: 15; 
+  }
 }
 
 

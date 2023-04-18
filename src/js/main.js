@@ -100,6 +100,7 @@ var activateSlide = function(slide) {
   // }
 }
 
+var timer = null; 
 var onScroll = function() {
   for (var i = 0; i < slides.length; i++) {
     var slide = slides[i];    
@@ -114,22 +115,35 @@ var onScroll = function() {
       ) {
       // trigger nepal ice illo animation
       if (slide == lakeAnimSlide && !reducedMotion.matches) {
-        lakeAnimFrames = lakeAnimFrames.filter(function(frame, n) {
-          var bounds = frame.getBoundingClientRect();
-          if (bounds.top < window.innerHeight  * .8) {
-            setTimeout(function(){ 
-                frame.classList.add('show'); 
-              }, n == 0 ? 100 : n * 600);
+          lakeAnimFrames = lakeAnimFrames.filter(function(frame, n) {
+            var bounds = frame.getBoundingClientRect();
+            if (bounds.top < window.innerHeight  * .8) {
 
-            if (n < 2) {
-              setTimeout(function(){ 
-                  frame.classList.remove('show'); 
-                }, n == 0 ? 600 : n * 1200);
+              var animate = function() {
+                // console.log("we animating!!");
+                frame.classList.remove('show'); 
+
+                setTimeout(function(){ 
+                    frame.classList.add('show'); 
+                  }, n == 0 ? 100 : n * 700);
+
+                // if (n < 2) {
+                //   setTimeout(function(){ 
+                //       frame.classList.remove('show'); 
+                //     }, n == 0 ? 600 : n * 1200);
+                // }
+
+                timer = setTimeout(animate, 3000);
+                // return false;
+              }
+              animate();
             }
-            return false;
-          }
-          return true; 
-        })
+            // return true; 
+            // setTimeout(() => clearTimeout(timer), 30000);
+          })
+        
+      } else {
+        clearTimeout(timer);
       }
 
       // galveston sea level estimate charts
