@@ -148,7 +148,8 @@ function updateMap(direction,config){
   let newMinArea = activeMapData.minArea;
 
   // if min area is diff, update
-  if (newMinArea != minArea) {    
+  if (newMinArea != minArea) {
+    // topology2 = topology;
     topology2 = topojson.presimplify(topology);
     topology2 = topojson.simplify(topology2, newMinArea);
     land = topojson.feature(topology2, topology2.objects.land);  
@@ -185,7 +186,7 @@ async function initialize_map() {
   }
   
 	// d3.json('./assets/land-110m.json').then(function(mapdata) {
-  d3.json('./assets/land-50m.json').then(function(mapdata) {
+  d3.json('./assets/land-50m-optimized.json').then(function(mapdata) {
     
 		svg = d3.select("#innerSVG")
 		    .attr("viewBox", [0, 0, width , height]);
@@ -222,6 +223,7 @@ async function initialize_map() {
         .text(d => d.label);
     
 	  topology = mapdata;
+    // topology2 = topology;
 	  topology2 = topojson.presimplify(topology);
 	  topology2 = topojson.simplify(topology2, minArea);
 	  land = topojson.feature(topology2, topology2.objects.land);
