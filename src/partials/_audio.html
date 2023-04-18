@@ -2,8 +2,9 @@
   <audio
     id="<%= slide.id %>-audio"
     preload="metadata"
-    src="./assets/synced/audio/resized/<%= slide.audio %>"
+    <% if (slide.audioDuration) { %>data-duration="<%= slide.audioDuration %>"<% } %>
   >
+    <source src="./assets/synced/audio/resized/<%= slide.audio %>" type="audio/mpeg">
     <% if (slide.audioCaptions) { %>
     <track default kind="captions" src="./assets/synced/audio/<%= slide.audioCaptions %>"></track>
     <% } %>

@@ -14,6 +14,11 @@ var pauseAudio = function() {
   p.dataset.status = "pause";
 }
 
+var resetPlayer = function() {
+  var p = this.closest("figure.audio");
+  var player = p.querySelector("audio");
+}
+
 var audioSlides = document.querySelectorAll("figure.audio");
 if (audioSlides.length > 0)  {
   audioSlides.forEach(function(s) {
@@ -30,17 +35,22 @@ if (audioSlides.length > 0)  {
     var a = s.querySelector("audio");
 
     // display audio duration onload
-    a.addEventListener("loadedmetadata", (evt) => {
-      var p = evt.target.closest("figure.audio");
-      var counter = p.querySelector("div.counter");
-      counter.innerHTML = Math.round(evt.target.duration) + " sec.";
-    });
+    // a.addEventListener("loadedmetadata", (evt) => {
+    //   var p = evt.target.closest("figure.audio");
+    //   var counter = p.querySelector("div.counter");
+    //   counter.innerHTML = Math.round(evt.target.duration) + " sec.";
+    // });
 
     // when playing, show time remaining
     a.addEventListener("timeupdate", (evt) => {
+      var durationPreset = parseInt(evt.target.dataset.duration);
+
       var p = evt.target.closest("figure.audio");
       var currentTime = evt.target.currentTime;
       var duration = evt.target.duration;
+      if (duration == Infinity || isNaN(duration)) {
+        duration = durationPreset;
+      }
       var remainingTime = Math.round(duration - currentTime);
       var counter = p.querySelector("div.counter");
       counter.innerHTML = `${ remainingTime } sec. remaining`;
@@ -49,8 +59,9 @@ if (audioSlides.length > 0)  {
     // when audio is over, reset
     a.addEventListener("ended", (evt) => {
       var p = evt.target.closest("figure.audio");
+
       var counter = p.querySelector("div.counter");
-      counter.innerHTML = Math.round(evt.target.duration) + " sec.";
+      counter.innerHTML = evt.target.dataset.duration;
 
       var caption = p.querySelector(".caption");
       caption.innerHTML = "";
@@ -78,5 +89,6 @@ if (audioSlides.length > 0)  {
     // a.audioTrackList.addEventListener("removetrack", (evt) => {
     //   console.log("removetrack", evt);
     // });
- });
+
+  });
 }
