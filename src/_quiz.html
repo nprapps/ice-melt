@@ -1,4 +1,8 @@
-<section class="quiz slide align-<%= slide.align || "left" %> <%= slide.layout %> <% if (slide.image) { %>image<% } %> <% if (slide.video) { %>video<% } %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" <% if (slide.video) { %>data-type="video"<% } %>>
+<%
+  var renderMarkdownText = text => t.renderMarkdown(text).replace(/<\/?p>/g, "");
+%>
+
+  <section class="quiz slide align-<%= slide.align || "left" %> <%= slide.layout %> <% if (slide.image) { %>image<% } %> <% if (slide.video) { %>video<% } %> <%= slide.classes %> <%= slide.constrain %>" id="<%= slide.id %>" <% if (slide.video) { %>data-type="video"<% } %>>
 
   <% if (slide.image) { %>
   <div class="half">
@@ -41,15 +45,19 @@
 
 <div class="half">
   <div class="text">
-    <div class="scroll-bug" aria-hidden="true">
-      <svg class="drop" viewBox="0 0 50 50" height="0">
-        <!-- <path d="M 0,0 L 25,25 50,0"></path> -->
-        <img src="./assets/synced/illos/water-drop.svg" width="20">
-      </svg>
-    </div>
 
     <div class="content">
+
+      <h2>
+        <%= renderMarkdownText(slide.title) %>
+
+        <div class="scroll-bug" aria-hidden="true">
+          <img src="./assets/synced/illos/water-drop.svg" alt="">
+        </div>
+      </h2>
+
       <%= t.renderMarkdown(slide.text) %>
+
     </div>
 
     <% if (slide.answers) { %>
