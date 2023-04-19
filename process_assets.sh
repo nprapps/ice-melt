@@ -100,20 +100,20 @@ done
 cd ../ai-img
 mkdir -p resized
 for img in *.jpg; do
-  echo "Processing $img..."
-  # if [ ! -f $img ]; then
+  if [ ! -f resized/$img ]; then
+    echo "Processing $img..."
     magick convert $img -resize 1600x1600\> -quality 75 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
-  # fi
+  fi
 done
 
 # convert thumbnails
 cd ../thumbnails
 mkdir -p resized
 for img in *.jpg; do
-  echo "Processing $img..."
-  # if [ ! -f $img ]; then
+  if [ ! -f resized/$img ]; then
+    echo "Processing $img..."
     magick convert $img -resize 800x800\> -quality 70 -strip -sampling-factor 4:2:0 -define jpeg:dct-method=float -interlace Plane resized/$img;
-  # fi
+  fi
 done
 
 # for img in *.jpeg; do
