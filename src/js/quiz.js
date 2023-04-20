@@ -24,7 +24,7 @@ var onQuizButtonClicked = function(evt) {
   }
 
   // track clicks
-  track("ice melt quiz clicked", qParent.id, this.dataset.status)
+  track("quiz", qParent.id, this.dataset.status == "true" ? 1 : 0);
 
   // smoothscroll to the next slide?
   var nextSlide = document.getElementById(qParent.nextElementSibling.id);
