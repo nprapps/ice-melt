@@ -1,11 +1,15 @@
 // informed by: https://developer.mozilla.org/en-US/docs/Web/Guide/Audio_and_video_delivery/Cross-browser_audio_basics
 
+var track = require("./lib/tracking");
+
 var playAudio = function(evt) {
   var p = this.closest("figure.audio");
   var player = p.querySelector("audio");
   player.load();
   player.play();
   p.dataset.status = "play";
+
+  track("audio-play", p.parentNode.parentNode.id);
 }
 
 var pauseAudio = function() {
@@ -68,6 +72,8 @@ if (audioSlides.length > 0)  {
       caption.innerHTML = "";
 
       p.dataset.status = "pause";
+
+      track("audio-complete", p.parentNode.parentNode.id);
     });
 
     // set up captions
